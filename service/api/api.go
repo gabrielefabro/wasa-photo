@@ -38,11 +38,8 @@ package api
 
 import (
 	"errors"
-<<<<<<< HEAD
-=======
 	"net/http"
 
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
 	"git.gabrielefabro.it/service/database"
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
