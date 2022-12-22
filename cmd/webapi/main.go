@@ -28,17 +28,27 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+<<<<<<< HEAD
 	"git.gabrielefabro.it/service/api"
 	"git.gabrielefabro.it/service/database"
 	"git.gabrielefabro.it/service/globaltime"
 	"github.com/ardanlabs/conf"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sirupsen/logrus"
+=======
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
 	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"git.gabrielefabro.it/service/api"
+	"git.gabrielefabro.it/service/database"
+	"git.gabrielefabro.it/service/globaltime"
+	"github.com/ardanlabs/conf"
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/sirupsen/logrus"
 )
 
 // main is the program entry point. The only purpose of this function is to call run() and set the exit code if there is

@@ -1,9 +1,15 @@
 package api
 
 import (
+<<<<<<< HEAD
 	"git.gabrielefabro.it/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
+=======
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
 	"net/http"
+
+	"git.gabrielefabro.it/service/api/reqcontext"
+	"github.com/julienschmidt/httprouter"
 )
 
 // getContextReply is an example of HTTP endpoint that returns "Hello World!" as a plain text. The signature of this

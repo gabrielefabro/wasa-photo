@@ -122,7 +122,11 @@ components:
       description: Profile's username, CAPS is not allowed
       type: string
       pattern: '^[a-z0-9._]{1,15}$'
+<<<<<<< HEAD
       example: "git.gabrielefabro.it/wasa-photo"
+=======
+      example: "gabrielefabro"
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       minLength: 1
       maxLength: 15
     ID:
@@ -165,21 +169,33 @@ components:
       description: List of followings
       type: array
       minItems: 0
+<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
+=======
+      example: [gabrielefabro, giuliaoros]
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
     Follower:
       description: List of followers
       type: array
       minItems: 0
+<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
+=======
+      example: [gabrielefabro, giuliaoros]
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
     Blocked:
       description: List of blocked users
       type: array
       minItems: 0
+<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
+=======
+      example: [gabrielefabro, giuliaoros]
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
     Authorization:
@@ -201,14 +217,22 @@ components:
       description: The list of profiles that like your photo
       type: array
       minLength: 0
+<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
+=======
+      example: [gabrielefabro, giuliaoros]
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
 
     commentsList:
       description: The comments on your post
       type: array
+<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
+=======
+      example: [gabrielefabro, giuliaoros]
+>>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/Comment"
     
