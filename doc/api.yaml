@@ -2,12 +2,9 @@ openapi: 3.0.3
 servers:
   - url: "http://localhost:3000"
 info:
-  title: WASA Photo
+  title: Wasa Photo
   description: Wasa Photo is a photo sharing platform. It allows users to upload photo of their best moment. 
   version: 1.0.0
-  contact:
-    name: "Fabro Gabriele"
-    email: "1934872@studenti.uniroma1.it"
 tags:
   - name: "Login"
     description: "Everything about your session"
@@ -17,20 +14,6 @@ tags:
     description: "Everything about your Posts"
 components:
   schemas:
-    StatusInfo:
-      title: Status Info
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-            - info
-            - warning
-            - critical
-            - ""
-        title: { type: string }
-        message: { type: string }
-        url: { type: string }
     Profile:
       title: Profile
       description: An object that rapresent a profile
@@ -40,16 +23,16 @@ components:
         ID: { $ref: "#/components/schemas/ID"}
         Bio:
           title: Bio
-          description: Bio of the user
+          description: Bio of the profile
           type: string
           example: "Questo è il miglior profilo del mondo, SIUM!!"
           pattern: '^[^\/\\]{1,64}$'
           minLength: 1
           maxLength: 64
-        postList: { $ref: "#/components/schemas/postList"}
-        followingList: { $ref: "#/components/schemas/Following"}
-        followerList: { $ref: "#/components/schemas/Follower"}
-        blockedList: { $ref: "#/components/schemas/Blocked"}
+        posts: { $ref: "#/components/schemas/postList"}
+        followings: { $ref: "#/components/schemas/Following"}
+        followers: { $ref: "#/components/schemas/Follower"}
+        blocked: { $ref: "#/components/schemas/Blocked"}
         postCount:
           description: Amount of posted photos on your profile
           type: integer
@@ -122,11 +105,7 @@ components:
       description: Profile's username, CAPS is not allowed
       type: string
       pattern: '^[a-z0-9._]{1,15}$'
-<<<<<<< HEAD
-      example: "git.gabrielefabro.it/wasa-photo"
-=======
       example: "gabrielefabro"
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       minLength: 1
       maxLength: 15
     ID:
@@ -169,33 +148,21 @@ components:
       description: List of followings
       type: array
       minItems: 0
-<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
-=======
-      example: [gabrielefabro, giuliaoros]
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
     Follower:
       description: List of followers
       type: array
       minItems: 0
-<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
-=======
-      example: [gabrielefabro, giuliaoros]
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
     Blocked:
       description: List of blocked users
       type: array
       minItems: 0
-<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
-=======
-      example: [gabrielefabro, giuliaoros]
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
     Authorization:
@@ -217,22 +184,14 @@ components:
       description: The list of profiles that like your photo
       type: array
       minLength: 0
-<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
-=======
-      example: [gabrielefabro, giuliaoros]
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/User"
 
     commentsList:
       description: The comments on your post
       type: array
-<<<<<<< HEAD
       example: [git.gabrielefabro.it/wasa-photo, giuliaoros]
-=======
-      example: [gabrielefabro, giuliaoros]
->>>>>>> 5033aecb7252cddff4feb7043a08e39618e1a68b
       items: 
         $ref: "#/components/schemas/Comment"
     
