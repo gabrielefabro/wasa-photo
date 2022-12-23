@@ -3,7 +3,7 @@ servers:
   - url: "http://localhost:3000"
 info:
   title: Wasa Photo
-  description: Wasa Photo is a photo sharing platform. It allows users to upload photo of their best moment. 
+  description: Wasa Photo is a photo sharing platform. It allows users to upload photo of their best moment!!. 
   version: 1.0.0
 tags:
   - name: "Login"
