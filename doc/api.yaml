@@ -3,8 +3,11 @@ servers:
   - url: "http://localhost:3000"
 info:
   title: Wasa Photo
-  description: Wasa Photo is a photo sharing platform. It allows users to upload photo of their best moment!!. 
+  description: |-
+    Wasa Photo is a photo sharing platform. It allows users to upload photo of their best moment.
+
   version: 1.0.0
+
 tags:
   - name: "Login"
     description: "Everything about your session"
@@ -24,17 +27,20 @@ components:
         posts: { $ref: "#/components/schemas/Posts"}
         postCount:
           description: Amount of posted photos on your profile
-          type: integer
+          type: number
+          format: decimal128
           example: 5
           minimum: 0
         followingCount:
           description: The amount of person that you follow
-          type: integer
+          type: number
+          format: decimal128
           example: 200
           minimum: 0
         followerCount: 
           description: The amount of person that follow you
-          type: integer
+          type: number
+          format: decimal128
           example: 200
           minimum: 0
     Post:
@@ -43,16 +49,18 @@ components:
       type: object
       properties:
         user: { $ref: "#/components/schemas/User"}
-        publicationTime: { $ref: "#/components/schemas/publicationTime"}
+        publicationTime: { $ref: "#/components/schemas/PublicationTime"}
         bio: { $ref: "#/components/schemas/Bio"}
         likeCount:
           description: Il numero di like della foto
-          type: integer
+          type: number
+          format: decimal128
           example: 139495
           minimum: 0
         commentCount:
           description: The amount of comments on the post
-          type: integer
+          type: number
+          format: decimal128
           example: 139495
           minimum: 0
         photoURL: { $ref: "#/components/schemas/ImgURL" }
@@ -73,7 +81,7 @@ components:
           pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
           minLength: 19
           maxLength: 19     
-    userName: 
+    UserName: 
       title: userName
       description: Profile's username, CAPS is not allowed
       type: string
@@ -95,7 +103,7 @@ components:
       type: object
       properties:
         ID: { $ref: "#/components/schemas/ID" }
-        username: { $ref: "#/components/schemas/userName" }
+        username: { $ref: "#/components/schemas/UserName" }
     Bio:
           title: Bio
           description: Description of post or profile
@@ -112,7 +120,7 @@ components:
       example: "0123456789"
       minLength: 10
       maxLength: 10
-    postID: 
+    PostID: 
       title: PostID 
       description: unic ID for a post
       type: string
@@ -125,7 +133,7 @@ components:
       description: List of posted photos
       type: array
       minItems: 0
-      example: [oggettoFoto1, oggettoFoto2, oggettoFoto2]
+      maxItems: 100
       items: 
         $ref: "#/components/schemas/Post"
     Followings:
@@ -133,7 +141,7 @@ components:
       description: List of followings
       type: array
       minItems: 0
-      example: [gabrielefabro, giuliaoros]
+      maxItems: 100
       items: 
         $ref: "#/components/schemas/User"
     Followers:
@@ -141,7 +149,7 @@ components:
       description: List of followers
       type: array
       minItems: 0
-      example: [gabrielefabro, giuliaoros]
+      maxItems: 100
       items: 
         $ref: "#/components/schemas/User"
     Bans:
@@ -149,7 +157,7 @@ components:
       description: List of blocked usersstring
       type: array
       minItems: 0
-      example: [gabrielefabro, giuliaoros]
+      maxItems: 100
       items: 
         $ref: "#/components/schemas/User"
     Authorization:
@@ -160,7 +168,7 @@ components:
       example: "12345"
       minLength: 5
       maxLength: 5
-    publicationTime: 
+    PublicationTime: 
       title: Pubblication Time 
       type: string
       format: date-time
@@ -171,15 +179,15 @@ components:
       title: Like List
       description: The list of profiles that like your photo
       type: array
-      minLength: 0
-      example: [gabrielefabro, giuliaoros]
+      minItems: 0
       items: 
         $ref: "#/components/schemas/User"
     Comments:
       title: Comments List
       description: The comments on your post
       type: array
-      example: [gabrielefabro, giuliaoros]
+      minItems: 0
+      maxItems: 100
       items: 
         $ref: "#/components/schemas/Comment" 
     ImgURL:
@@ -225,7 +233,7 @@ components:
   securitySchemes:
     bearerAuth:    
       type: http
-      scheme: bearer  
+      scheme: Bearer  
 paths:
   /session:
     post:
@@ -244,7 +252,7 @@ paths:
               description: The username of the user who wants to login
               type: object
               properties:
-                username: { $ref: "#/components/schemas/userName" }
+                username: { $ref: "#/components/schemas/UserName" }
         required: true
       responses:
         "201":
@@ -259,8 +267,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Authorization" }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
   /profiles/{profile_ID}:
     parameters:
       - name: profile_ID
@@ -289,11 +295,6 @@ paths:
         description: The ID of the profile that want to change the userName
         schema: { $ref: "#/components/schemas/ID"}
         required: true
-      - name: newUsername
-        in: path
-        description: The new userName
-        schema: { $ref: "#/components/schemas/userName"}
-        required: true
     put:
       tags: ["Profile"]
       operationId: setMyUserName
@@ -309,7 +310,7 @@ paths:
               description: The new username of the user
               type: object
               properties:
-                username: { $ref: "#/components/schemas/userName" }
+                username: { $ref: "#/components/schemas/UserName" }
         required: true     
       responses:
         "200":
@@ -552,7 +553,7 @@ paths:
       - name: post_ID
         in: path
         description: The ID of the post that you want to see
-        schema: { $ref: "#/components/schemas/postID"}
+        schema: { $ref: "#/components/schemas/PostID"}
         required: true
     get:
       tags: ["Post"]
@@ -604,7 +605,7 @@ paths:
                 caption:
                   description: The description of the post 
                   type: string
-                  pattern: "^[^\/\\]{1,100}$"
+                  pattern: ^[^\\]{1,100}$
                   example: "A simple nice photo"
                   minLength: 1
                   maxLength: 100
@@ -632,7 +633,7 @@ paths:
       - name: post_ID
         in: path
         description: The ID of the post that you want to see the comments
-        schema: { $ref: "#/components/schemas/postID"}
+        schema: { $ref: "#/components/schemas/PostID"}
         required: true
     get:
       tags: ["Post"]
@@ -672,7 +673,7 @@ paths:
         - name: post_ID
           in: path
           description: The ID of the post from you want to post/delete a comment
-          schema: { $ref: "#/components/schemas/postID"}
+          schema: { $ref: "#/components/schemas/PostID"}
           required: true
         - name: comment_ID 
           in: path
