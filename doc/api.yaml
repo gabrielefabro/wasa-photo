@@ -27,20 +27,17 @@ components:
         Posts: { $ref: "#/components/schemas/Posts"}
         PostCount:
           description: Amount of posted photos on your profile
-          type: number
-          format: decimal128
+          type: integer
           example: 5
           minimum: 0
         FollowingCount:
           description: The amount of person that you follow
-          type: number
-          format: decimal128
+          type: integer
           example: 200
           minimum: 0
         FollowerCount: 
           description: The amount of person that follow you
-          type: number
-          format: decimal128
+          type: integer
           example: 200
           minimum: 0
     Post:
@@ -53,14 +50,12 @@ components:
         Bio: { $ref: "#/components/schemas/Bio"}
         LikeCount:
           description: Il numero di like della foto
-          type: number
-          format: decimal128
+          type: integer
           example: 139495
           minimum: 0
         CommentCount:
           description: The amount of comments on the post
-          type: number
-          format: decimal128
+          type: integer
           example: 139495
           minimum: 0
         PhotoURL: { $ref: "#/components/schemas/ImgUrl" }
@@ -71,16 +66,51 @@ components:
       properties:
         User: { $ref: "#/components/schemas/User"}
         Text:
+          description: text of comment
           type: string
           example: "SUPER PHOTO!!"
           pattern: '^.{1,100}$'
         CommentId: {$ref: "#/components/schemas/CommentId"}
-        TimeComment: 
+        TimeComment:
+          description: time of comment
           type: string
           format: date-time 
           pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
           minLength: 19
           maxLength: 19     
+    UsersList:
+      title: Users List
+      description: A list of users for many responses.
+      type: array
+      items:
+        type: object
+        description: User
+        properties:
+          user: { $ref: "#/components/schemas/User" }
+      minItems: 0
+      maxItems: 100
+    LikeList:
+      title: Like List
+      description: A list of like
+      type: array
+      items:
+        type: object
+        description: User
+        properties:
+          user: { $ref: "#/components/schemas/User" }
+      minItems: 0
+      maxItems: 99999999999999999999999
+    CommentList:
+      title: Comment List
+      description: A list of comments
+      type: array
+      items:
+        type: object
+        description: Comment
+        properties:
+          user: { $ref: "#/components/schemas/Comment" }
+      minItems: 0
+      maxItems: 500
     UserName: 
       title: userName
       description: Profile's username, CAPS is not allowed
@@ -131,34 +161,26 @@ components:
     Posts:
       title: Posts List
       description: List of posts
-      type: array
+      type: object
       items: { $ref: "#/components/schemas/Post" }
-      minItems: 0
-      maxItems: 100
     Followings:
       title: Following List
       description: List of followings
-      type: array
-      minItems: 0
-      maxItems: 100
+      type: object
       items: 
-        $ref: "#/components/schemas/User"
+        $ref: "#/components/schemas/UsersList"
     Followers:
       title: Followers List
       description: List of followers
-      type: array
-      minItems: 0
-      maxItems: 100
+      type: object
       items: 
-        $ref: "#/components/schemas/User"
+        $ref: "#/components/schemas/UsersList"
     Bans:
       title: Banned List
       description: List of blocked usersstring
-      type: array
-      minItems: 0
-      maxItems: 100
+      type: object
       items: 
-        $ref: "#/components/schemas/User"
+        $ref: "#/components/schemas/UsersList"
     Authorization:
       title: Authorization
       description: The authorization code is the user_id.
@@ -184,23 +206,20 @@ components:
     Likes:
       title: Like List
       description: The list of profiles that like your photo
-      type: array
-      minItems: 0
+      type: object
       items: 
-        $ref: "#/components/schemas/User"
+        $ref: "#/components/schemas/UsersList"
     Comments:
       title: Comments List
       description: The comments on your post
-      type: array
-      minItems: 0
-      maxItems: 100
+      type: object
       items: 
-        $ref: "#/components/schemas/Comment" 
+        $ref: "#/components/schemas/CommentList" 
     ImgUrl:
       title: Img Url
       description: Image URL specification.
       type: string
-      format: uri
+      format: url
       pattern: '^https:\/\/[a-zA-Z.-_\/]*\/users\/[0-9]{5}\/(propic|posts)\/[a-zA-Z]{3}\.jpg$'
       minLength: 34
       maxLength: 128
