@@ -22,20 +22,20 @@ components:
       description: An object that rapresent a profile
       type: object
       properties: 
-        User: { $ref: "#/components/schemas/User"}
-        Bio: { $ref: "#/components/schemas/Bio"}
-        Posts: { $ref: "#/components/schemas/Posts"}
-        PostCount:
+        user: { $ref: "#/components/schemas/User"}
+        bio: { $ref: "#/components/schemas/Bio"}
+        posts: { $ref: "#/components/schemas/Posts"}
+        post_count:
           description: Amount of posted photos on your profile
           type: integer
           example: 5
           minimum: 0
-        FollowingCount:
+        following_ount:
           description: The amount of person that you follow
           type: integer
           example: 200
           minimum: 0
-        FollowerCount: 
+        follower_count: 
           description: The amount of person that follow you
           type: integer
           example: 200
@@ -45,33 +45,33 @@ components:
       description: An object that rapresent a post
       type: object
       properties:
-        User: { $ref: "#/components/schemas/User"}
-        PublicationTime: { $ref: "#/components/schemas/PublicationTime"}
-        Bio: { $ref: "#/components/schemas/Bio"}
-        LikeCount:
+        user: { $ref: "#/components/schemas/User"}
+        publication_time: { $ref: "#/components/schemas/PublicationTime"}
+        bio: { $ref: "#/components/schemas/Bio"}
+        like_count:
           description: Il numero di like della foto
           type: integer
           example: 139495
           minimum: 0
-        CommentCount:
+        comment_count:
           description: The amount of comments on the post
           type: integer
           example: 139495
           minimum: 0
-        PhotoURL: { $ref: "#/components/schemas/ImgUrl" }
+        photo_url: { $ref: "#/components/schemas/ImgUrl" }
     Comment:
       title: Comment
       description: A comment under a post
       type: object
       properties:
-        User: { $ref: "#/components/schemas/User"}
-        Text:
+        user: { $ref: "#/components/schemas/User"}
+        text:
           description: text of comment
           type: string
           example: "SUPER PHOTO!!"
           pattern: '^.{1,100}$'
-        CommentId: {$ref: "#/components/schemas/CommentId"}
-        TimeComment:
+        comment_id: {$ref: "#/components/schemas/CommentId"}
+        time_comment:
           description: time of comment
           type: string
           format: date-time 
@@ -132,7 +132,7 @@ components:
       description: User
       type: object
       properties:
-        ID: { $ref: "#/components/schemas/UserId" }
+        id: { $ref: "#/components/schemas/UserId" }
         username: { $ref: "#/components/schemas/UserName" }
     Bio:
           title: Bio
@@ -277,7 +277,7 @@ paths:
               description: The username of the user who wants to login
               type: object
               properties:
-                UserName: { $ref: "#/components/schemas/UserName" }
+                user_name: { $ref: "#/components/schemas/UserName" }
         required: true
       responses:
         "201":
@@ -292,9 +292,9 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
-  /profiles/{profile_ID}:
+  /profiles/{profile_id}:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: User that you want to search
         schema: { $ref: "#/components/schemas/UserId"}
@@ -313,9 +313,9 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/Profile"}
         "404": { $ref: "#/components/responses/NotFound"}
-  /profiles/{profile_ID}/username:
+  /profiles/{profile_id}/username:
     parameters:
-      - name: profile_ID 
+      - name: profile_id
         in: path
         description: The ID of the profile that want to change the userName
         schema: { $ref: "#/components/schemas/UserId"}
@@ -343,9 +343,9 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/responses/Success" }
-  /feeds/{profile_ID}: 
+  /feeds/{profile_id}: 
     parameters:
-      - name: profile_ID 
+      - name: profile_id
         in: path
         description: ID of profile that asks the stream
         schema: { $ref: "#/components/schemas/UserId"}
@@ -364,9 +364,9 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/Posts"}
         "404": { $ref: "#/components/responses/NotFound"}
-  /profiles/{profile_ID}/followers:
+  /profiles/{profile_id}/followers:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that is returning his followers
         schema: { $ref: "#/components/schemas/UserId"}
@@ -384,9 +384,9 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Followers"} 
-  /profiles/{profile_ID}/followings: 
+  /profiles/{profile_id}/followings: 
     parameters:
-        - name: profile_ID
+        - name: profile_id
           in: path
           description: The ID of the profile that is returning his followings
           schema: { $ref: "#/components/schemas/UserId"}
@@ -404,14 +404,14 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Followings"}
-  /profiles/{profile_ID}/followings/{second_profile_ID}:
+  /profiles/{profile_id}/followings/{second_profile_id}:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that (un)followed someone
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: second_profile_ID
+      - name: second_profile_id
         in: path
         description: The ID of the profile that you want to (un)follow 
         schema: { $ref: "#/components/schemas/UserId"}
@@ -442,9 +442,9 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/responses/Success" }
-  /profiles/{profile_ID}/bans:
+  /profiles/{profile_id}/bans:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that is returning his bans 
         schema: { $ref: "#/components/schemas/UserId"}
@@ -462,14 +462,14 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Bans"}  
-  /profiles/{profile_ID}/bans/{second_profile_ID}:
+  /profiles/{profile_id}/bans/{second_profile_id}:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that is (un)blocking someone
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: second_profile_ID
+      - name: second_profile_id
         in: path
         description: The ID of the profile that you want to (un)block  
         schema: { $ref: "#/components/schemas/UserId"}
@@ -500,14 +500,14 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/responses/Success" }            
-  /profiles/{profile_ID}/posts/{post_ID}/likes:
+  /profiles/{profile_id}/posts/{post_id}/likes:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that you want to like a post
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: post_ID
+      - name: post_id
         in: path
         description: The post that you like
         schema: { $ref: "#/components/schemas/Post"}
@@ -525,19 +525,19 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Likes" }
-  /profiles/{profile_ID}/posts/{post_ID}/likeList/{second_profile_ID}:
+  /profiles/{profile_id}/posts/{post_id}/likeList/{second_profile_id}:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that you want to (un)like a post
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: post_ID
+      - name: post_id
         in: path
         description: The post that you (un)like
         schema: { $ref: "#/components/schemas/Post"} 
         required: true
-      - name: second_profile_ID  
+      - name: second_profile_id 
         in: path
         description: The profile that need to be added at the list
         schema: { $ref: "#/components/schemas/User"} 
@@ -568,14 +568,14 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/responses/Success" }
-  /profiles/{profile_ID}/posts/{post_ID}:
+  /profiles/{profile_id}/posts/{post_id}:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that you want to see
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: post_ID
+      - name: post_id
         in: path
         description: The ID of the post that you want to see
         schema: { $ref: "#/components/schemas/PostId"}
@@ -606,9 +606,9 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/responses/Success" }  
-  /profiles/{profile_ID}/posts:
+  /profiles/{profile_id}/posts:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that you want to see
         schema: { $ref: "#/components/schemas/UserId"}
@@ -648,14 +648,14 @@ paths:
               schema: { $ref: "#/components/responses/Success" }
         "404":
           description: The link or the userName aren't found on the server
-  /profiles/{profile_ID}/posts/{post_ID}/comments:
+  /profiles/{profile_id}/posts/{post_id}/comments:
     parameters:
-      - name: profile_ID
+      - name: profile_id
         in: path
         description: The ID of the profile that you want to see the comments
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: post_ID
+      - name: post_id
         in: path
         description: The ID of the post that you want to see the comments
         schema: { $ref: "#/components/schemas/PostId"}
@@ -688,19 +688,19 @@ paths:
               schema: { $ref: "#/components/responses/Success"}
         "404":
           description: The post_ID or the profile_ID aren't found on the server
-  /profiles/{profile_ID}/posts/{post_ID}/comments/{comment_ID}:
+  /profiles/{profile_id}/posts/{post_id}/comments/{comment_id}:
     parameters:
-        - name: profile_ID
+        - name: profile_id
           in: path
           description: The ID of the profile from you want to post/delete a comment
           schema: { $ref: "#/components/schemas/UserId"}
           required: true
-        - name: post_ID
+        - name: post_id
           in: path
           description: The ID of the post from you want to post/delete a comment
           schema: { $ref: "#/components/schemas/PostId"}
           required: true
-        - name: comment_ID 
+        - name: comment_id
           in: path
           description: The ID of the comment you want to post/delete
           schema: { $ref: "#/components/schemas/CommentId"}
