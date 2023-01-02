@@ -161,7 +161,9 @@ components:
     Posts:
       title: Posts List
       description: List of posts
-      type: object
+      type: array
+      minItems: 0
+      maxItems: 500
       items: { $ref: "#/components/schemas/Post" }
     Followings:
       title: Following List
@@ -525,7 +527,7 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Likes" }
-  /profiles/{profile_id}/posts/{post_id}/likeList/{second_profile_id}:
+  /profiles/{profile_id}/posts/{post_id}/likes/{second_profile_id}:
     parameters:
       - name: profile_id
         in: path
