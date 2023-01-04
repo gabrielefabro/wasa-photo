@@ -108,7 +108,18 @@ components:
         type: object
         description: Comment
         properties:
-          user: { $ref: "#/components/schemas/Comment" }
+          comment: { $ref: "#/components/schemas/Comment" }
+      minItems: 0
+      maxItems: 500
+    PostList:
+      title: Post List
+      description: A list of posts
+      type: array
+      items:
+        type: object
+        description: Post
+        properties:
+          post: { $ref: "#/components/schemas/Post" }
       minItems: 0
       maxItems: 500
     UserName: 
@@ -161,28 +172,27 @@ components:
     Posts:
       title: Posts List
       description: List of posts
-      type: array
-      minItems: 0
-      maxItems: 500
-      items: { $ref: "#/components/schemas/Post" }
+      type: object
+      properties:
+        posts: { $ref: "#/components/schemas/PostList" }
     Followings:
       title: Following List
       description: List of followings
       type: object
-      items: 
-        $ref: "#/components/schemas/UsersList"
+      properties: 
+        followings: {  $ref: "#/components/schemas/UsersList"  }
     Followers:
       title: Followers List
       description: List of followers
       type: object
-      items: 
-        $ref: "#/components/schemas/UsersList"
+      properties: 
+        followers: {  $ref: "#/components/schemas/UsersList"  }
     Bans:
       title: Banned List
       description: List of blocked usersstring
       type: object
-      items: 
-        $ref: "#/components/schemas/UsersList"
+      properties: 
+        bans: {  $ref: "#/components/schemas/UsersList"  }
     Authorization:
       title: Authorization
       description: The authorization code is the user_id.
@@ -209,14 +219,14 @@ components:
       title: Like List
       description: The list of profiles that like your photo
       type: object
-      items: 
-        $ref: "#/components/schemas/UsersList"
+      properties: 
+        likes: {  $ref: "#/components/schemas/UsersList"  }
     Comments:
       title: Comments List
       description: The comments on your post
       type: object
-      items: 
-        $ref: "#/components/schemas/CommentList" 
+      properties: 
+        comments: {  $ref: "#/components/schemas/CommentList"  } 
     ImgUrl:
       title: Img Url
       description: Image URL specification.
