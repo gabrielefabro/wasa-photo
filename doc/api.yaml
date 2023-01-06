@@ -235,7 +235,12 @@ components:
       pattern: '^https:\/\/[a-zA-Z.-_\/]*\/users\/[0-9]{5}\/(propic|posts)\/[a-zA-Z]{3}\.jpg$'
       minLength: 34
       maxLength: 128
-      example: "https://www.example.com/users/00001/posts/aAk.jpg"   
+      example: "https://www.example.com/users/00001/posts/aAk.jpg"  
+    Success:
+      title: Success
+      description: The resource is returned successfully
+      type: string
+      example: returned successfully
   responses:
     Unauthorized:
       description: The access token is missing or it's expired.
@@ -265,8 +270,6 @@ components:
           schema:
             type: string
             example: "Not Found"
-    Success:
-      description: The resource is returned successfully
   securitySchemes:
     bearerAuth:    
       type: http
@@ -354,7 +357,7 @@ paths:
           description: User name updated successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
   /feeds/{profile_id}: 
     parameters:
       - name: profile_id
@@ -440,7 +443,7 @@ paths:
           description: User followed successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
     delete:
       tags: ["Profile"]
       operationId: unfollowUser
@@ -453,7 +456,7 @@ paths:
           description: User unfollowed successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
   /profiles/{profile_id}/bans:
     parameters:
       - name: profile_id
@@ -498,7 +501,7 @@ paths:
           description: User blocked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
     delete:
       tags: ["Profile"]
       operationId: unbanUser
@@ -511,7 +514,7 @@ paths:
           description: User unblocked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }            
+              schema: { $ref: "#/components/schemas/Success" }            
   /profiles/{profile_id}/posts/{post_id}/likes:
     parameters:
       - name: profile_id
@@ -566,7 +569,7 @@ paths:
           description: Post liked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }            
+              schema: { $ref: "#/components/schemas/Success" }            
     delete:
       tags: ["Post"]
       operationId: unlikePost
@@ -579,7 +582,7 @@ paths:
           description: Post unliked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
   /profiles/{profile_id}/posts/{post_id}:
     parameters:
       - name: profile_id
@@ -617,7 +620,7 @@ paths:
           description: Post deleted successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }  
+              schema: { $ref: "#/components/schemas/Success" }  
   /profiles/{profile_id}/posts:
     parameters:
       - name: profile_id
@@ -657,7 +660,7 @@ paths:
           description: Photo added successfully
           content:
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
         "404":
           description: The link or the userName aren't found on the server
   /profiles/{profile_id}/posts/{post_id}/comments:
@@ -697,7 +700,7 @@ paths:
           description: Comment added successfully
           content:
             application/json:
-              schema: { $ref: "#/components/responses/Success"}
+              schema: { $ref: "#/components/schemas/Success"}
         "404":
           description: The post_ID or the profile_ID aren't found on the server
   /profiles/{profile_id}/posts/{post_id}/comments/{comment_id}:
@@ -730,4 +733,4 @@ paths:
           description: Comment deleted successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
