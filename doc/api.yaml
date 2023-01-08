@@ -83,10 +83,7 @@ components:
       description: A list of users for many responses.
       type: array
       items:
-        type: object
-        description: User
-        properties:
-          user: { $ref: "#/components/schemas/User" }
+        $ref: "#/components/schemas/User"
       minItems: 0
       maxItems: 100
     LikeList:
@@ -94,10 +91,7 @@ components:
       description: A list of like
       type: array
       items:
-        type: object
-        description: User
-        properties:
-          user: { $ref: "#/components/schemas/User" }
+        $ref: "#/components/schemas/User"
       minItems: 0
       maxItems: 99999999999999999999999
     CommentList:
@@ -105,10 +99,7 @@ components:
       description: A list of comments
       type: array
       items:
-        type: object
-        description: Comment
-        properties:
-          comment: { $ref: "#/components/schemas/Comment" }
+        $ref: "#/components/schemas/Comment"
       minItems: 0
       maxItems: 500
     PostList:
@@ -116,10 +107,7 @@ components:
       description: A list of posts
       type: array
       items:
-        type: object
-        description: Post
-        properties:
-          post: { $ref: "#/components/schemas/Post" }
+        $ref: "#/components/schemas/Post"
       minItems: 0
       maxItems: 500
     UserName: 
@@ -210,6 +198,7 @@ components:
         auth: { $ref: "#/components/schemas/Authorization" }
     PublicationTime: 
       title: Pubblication Time 
+      description: Publication time of post or somenthing similar
       type: string
       format: date-time
       pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
@@ -268,6 +257,7 @@ components:
       content:
         text/plain:
           schema:
+            description: When something is not found from a research
             type: string
             example: "Not Found"
   securitySchemes:
@@ -301,12 +291,14 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
+              example: { "user_id" : "12345" , "Auth" : "12345" }
         "200":
           description: |-
             Log-in succesfull.
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
+              example: { "user_id" : "12345" , "Auth" : "12345" }
   /profiles/{profile_id}:
     parameters:
       - name: profile_id
@@ -327,6 +319,7 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Profile"}
+              example: { user: {user_id : "12345", UserName : "gabrielefabro"}, bio : "bel profilo", posts: {[post1, post2, post3]}, post_count : 10, following_count: 50, follower_count: 100}
         "404": { $ref: "#/components/responses/NotFound"}
   /profiles/{profile_id}/username:
     parameters:
