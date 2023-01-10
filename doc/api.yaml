@@ -86,14 +86,6 @@ components:
         $ref: "#/components/schemas/User"
       minItems: 0
       maxItems: 100
-    LikeList:
-      title: Like List
-      description: A list of like
-      type: array
-      items:
-        $ref: "#/components/schemas/User"
-      minItems: 0
-      maxItems: 99999999999999999999999
     CommentList:
       title: Comment List
       description: A list of comments
@@ -230,6 +222,12 @@ components:
       description: The resource is returned successfully
       type: string
       example: returned successfully
+    Session:
+      title: Success
+      description: Security schema 
+      type: object
+      properties:
+        user: { $ref: "#/components/schemas/User"}
   responses:
     Unauthorized:
       description: The access token is missing or it's expired.
@@ -252,18 +250,12 @@ components:
           schema:
             type: string
             example: "Internal Server Error"
-    NotFound:
-      description: The resource was not found.
-      content:
-        text/plain:
-          schema:
-            description: When something is not found from a research
-            type: string
-            example: "Not Found"
   securitySchemes:
     bearerAuth:    
       type: http
       scheme: Bearer  
+
+
 paths:
   /session:
     post:
@@ -279,10 +271,7 @@ paths:
         content:
           application/json:
             schema:
-              description: The username of the user who wants to login
-              type: object
-              properties:
-                user_name: { $ref: "#/components/schemas/UserName" }
+              $ref: "#/components/schemas/Session"
         required: true
       responses:
         "201":
@@ -319,8 +308,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Profile"}
-              example: { user: {user_id : "12345", UserName : "gabrielefabro"}, bio : "bel profilo", posts: {[post1, post2, post3]}, post_count : 10, following_count: 50, follower_count: 100}
-        "404": { $ref: "#/components/responses/NotFound"}
   /profiles/{profile_id}/username:
     parameters:
       - name: profile_id
@@ -340,10 +327,7 @@ paths:
         content:
           application/json:
             schema:
-              description: The new username of the user
-              type: object
-              properties:
-                username: { $ref: "#/components/schemas/UserName" }
+               $ref: "#/components/schemas/User"
         required: true     
       responses:
         "200":
@@ -371,7 +355,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Posts"}
-        "404": { $ref: "#/components/responses/NotFound"}
   /profiles/{profile_id}/followers:
     parameters:
       - name: profile_id
@@ -654,8 +637,6 @@ paths:
           content:
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-        "404":
-          description: The link or the userName aren't found on the server
   /profiles/{profile_id}/posts/{post_id}/comments:
     parameters:
       - name: profile_id
@@ -694,8 +675,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Success"}
-        "404":
-          description: The post_ID or the profile_ID aren't found on the server
   /profiles/{profile_id}/posts/{post_id}/comments/{comment_id}:
     parameters:
         - name: profile_id
