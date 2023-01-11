@@ -237,27 +237,6 @@ components:
       maxLength: 128
       example: "https://www.example.com/users/00001/posts/aAk.jpg"   
   responses:
-    Unauthorized:
-      description: The access token is missing or it's expired.
-      content:
-        text/plain:
-          schema:
-            type: string
-            example: "Unauthorized"
-    BadRequest:
-      description: The request was not compliant with the documentation (eg. missing fields, etc).
-      content:
-        text/plain:
-          schema:
-            type: string
-            example: "Bad Request"
-    InternalServerError:
-      description: The server encountered an internal error. Further info in server logs.
-      content:
-        text/plain:
-          schema:
-            type: string
-            example: "Internal Server Error"
     NotFound:
       description: The resource was not found.
       content:
