@@ -5,7 +5,6 @@ info:
   title: Wasa Photo
   description: |-
     Wasa Photo is a photo sharing platform. It allows users to upload photo of their best moment.
-
   version: 1.0.0
 
 tags:
@@ -83,32 +82,15 @@ components:
       description: A list of users for many responses.
       type: array
       items:
-        type: object
-        description: User
-        properties:
-          user: { $ref: "#/components/schemas/User" }
+        $ref: "#/components/schemas/User"
       minItems: 0
       maxItems: 100
-    LikeList:
-      title: Like List
-      description: A list of like
-      type: array
-      items:
-        type: object
-        description: User
-        properties:
-          user: { $ref: "#/components/schemas/User" }
-      minItems: 0
-      maxItems: 99999999999999999999999
     CommentList:
       title: Comment List
       description: A list of comments
       type: array
       items:
-        type: object
-        description: Comment
-        properties:
-          comment: { $ref: "#/components/schemas/Comment" }
+        $ref: "#/components/schemas/Comment"
       minItems: 0
       maxItems: 500
     PostList:
@@ -116,10 +98,7 @@ components:
       description: A list of posts
       type: array
       items:
-        type: object
-        description: Post
-        properties:
-          post: { $ref: "#/components/schemas/Post" }
+        $ref: "#/components/schemas/Post"
       minItems: 0
       maxItems: 500
     UserName: 
@@ -210,6 +189,7 @@ components:
         auth: { $ref: "#/components/schemas/Authorization" }
     PublicationTime: 
       title: Pubblication Time 
+      description: Publication time of post or somenthing similar
       type: string
       format: date-time
       pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
@@ -235,21 +215,46 @@ components:
       pattern: '^https:\/\/[a-zA-Z.-_\/]*\/users\/[0-9]{5}\/(propic|posts)\/[a-zA-Z]{3}\.jpg$'
       minLength: 34
       maxLength: 128
-      example: "https://www.example.com/users/00001/posts/aAk.jpg"   
+      example: "https://www.example.com/users/00001/posts/aAk.jpg"  
+    Success:
+      title: Success
+      description: The resource is returned successfully
+      type: string
+      example: returned successfully
+    Session:
+      title: Success
+      description: Security schema 
+      type: object
+      properties:
+        user: { $ref: "#/components/schemas/User"}
   responses:
-    NotFound:
-      description: The resource was not found.
+    Unauthorized:
+      description: The access token is missing or it's expired.
       content:
         text/plain:
           schema:
             type: string
-            example: "Not Found"
-    Success:
-      description: The resource is returned successfully
+            example: "Unauthorized"
+    BadRequest:
+      description: The request was not compliant with the documentation (eg. missing fields, etc).
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "Bad Request"
+    InternalServerError:
+      description: The server encountered an internal error. Further info in server logs.
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "Internal Server Error"
   securitySchemes:
     bearerAuth:    
       type: http
       scheme: Bearer  
+
+
 paths:
   /session:
     post:
@@ -265,10 +270,7 @@ paths:
         content:
           application/json:
             schema:
-              description: The username of the user who wants to login
-              type: object
-              properties:
-                user_name: { $ref: "#/components/schemas/UserName" }
+              $ref: "#/components/schemas/Session"
         required: true
       responses:
         "201":
@@ -277,12 +279,14 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
+              example: { "user_id" : "12345" , "Auth" : "12345" }
         "200":
           description: |-
             Log-in succesfull.
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
+              example: { "user_id" : "12345" , "Auth" : "12345" }
   /profiles/{profile_id}:
     parameters:
       - name: profile_id
@@ -303,7 +307,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Profile"}
-        "404": { $ref: "#/components/responses/NotFound"}
   /profiles/{profile_id}/username:
     parameters:
       - name: profile_id
@@ -323,17 +326,14 @@ paths:
         content:
           application/json:
             schema:
-              description: The new username of the user
-              type: object
-              properties:
-                username: { $ref: "#/components/schemas/UserName" }
+               $ref: "#/components/schemas/User"
         required: true     
       responses:
         "200":
           description: User name updated successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
   /feeds/{profile_id}: 
     parameters:
       - name: profile_id
@@ -354,7 +354,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Posts"}
-        "404": { $ref: "#/components/responses/NotFound"}
   /profiles/{profile_id}/followers:
     parameters:
       - name: profile_id
@@ -419,7 +418,7 @@ paths:
           description: User followed successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
     delete:
       tags: ["Profile"]
       operationId: unfollowUser
@@ -432,7 +431,7 @@ paths:
           description: User unfollowed successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
   /profiles/{profile_id}/bans:
     parameters:
       - name: profile_id
@@ -477,7 +476,7 @@ paths:
           description: User blocked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
     delete:
       tags: ["Profile"]
       operationId: unbanUser
@@ -490,7 +489,7 @@ paths:
           description: User unblocked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }            
+              schema: { $ref: "#/components/schemas/Success" }            
   /profiles/{profile_id}/posts/{post_id}/likes:
     parameters:
       - name: profile_id
@@ -545,7 +544,7 @@ paths:
           description: Post liked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }            
+              schema: { $ref: "#/components/schemas/Success" }            
     delete:
       tags: ["Post"]
       operationId: unlikePost
@@ -558,7 +557,7 @@ paths:
           description: Post unliked successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
   /profiles/{profile_id}/posts/{post_id}:
     parameters:
       - name: profile_id
@@ -596,7 +595,7 @@ paths:
           description: Post deleted successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }  
+              schema: { $ref: "#/components/schemas/Success" }  
   /profiles/{profile_id}/posts:
     parameters:
       - name: profile_id
@@ -636,9 +635,7 @@ paths:
           description: Photo added successfully
           content:
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
-        "404":
-          description: The link or the userName aren't found on the server
+              schema: { $ref: "#/components/schemas/Success" }
   /profiles/{profile_id}/posts/{post_id}/comments:
     parameters:
       - name: profile_id
@@ -676,9 +673,7 @@ paths:
           description: Comment added successfully
           content:
             application/json:
-              schema: { $ref: "#/components/responses/Success"}
-        "404":
-          description: The post_ID or the profile_ID aren't found on the server
+              schema: { $ref: "#/components/schemas/Success"}
   /profiles/{profile_id}/posts/{post_id}/comments/{comment_id}:
     parameters:
         - name: profile_id
@@ -709,4 +704,4 @@ paths:
           description: Comment deleted successfully
           content:  
             text/plain:
-              schema: { $ref: "#/components/responses/Success" }
+              schema: { $ref: "#/components/schemas/Success" }
