@@ -153,7 +153,7 @@ components:
       description: List of posts
       type: object
       properties:
-        posts: { $ref: "#/components/schemas/PostList" }
+        postlist: { $ref: "#/components/schemas/PostList" }
     Followings:
       title: Following List
       description: List of followings
@@ -185,7 +185,7 @@ components:
       description: The authorization code is the user_id.
       type: object
       properties:
-        user_id: { $ref: "#/components/schemas/UserId" }
+        id: { $ref: "#/components/schemas/UserId" }
         auth: { $ref: "#/components/schemas/Authorization" }
     PublicationTime: 
       title: Pubblication Time 
@@ -525,7 +525,7 @@ paths:
               schema: { $ref: "#/components/schemas/Success" }            
     delete:
       tags: ["Post"]
-      operationId: unlikePost
+      operationId: unlikePhoto
       summary: Unlike a photo
       description: Unlike the post passed as parameter 
       security:
