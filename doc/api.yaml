@@ -77,6 +77,13 @@ components:
           pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
           minLength: 19
           maxLength: 19     
+    User: 
+      title: User
+      description: User
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/UserId" }
+        username: { $ref: "#/components/schemas/UserName" }    
     UsersList:
       title: Users List
       description: A list of users for many responses.
@@ -117,13 +124,12 @@ components:
       example: "12345"
       minLength: 5
       maxLength: 5
-    User: 
-      title: User
-      description: User
-      type: object
-      properties:
-        id: { $ref: "#/components/schemas/UserId" }
-        username: { $ref: "#/components/schemas/UserName" }
+    Count: 
+      title: Count 
+      description: The amount of items on array
+      type: integer
+      example: 24357
+      minimum: 0
     Bio:
           title: Bio
           description: Description of post or profile
@@ -154,24 +160,28 @@ components:
       type: object
       properties:
         postlist: { $ref: "#/components/schemas/PostList" }
+        count: { $ref: "#components/schemas/Count" }
     Followings:
       title: Following List
       description: List of followings
       type: object
       properties: 
         followings: {  $ref: "#/components/schemas/UsersList"  }
+        count: { $ref: "#components/schemas/Count" }
     Followers:
       title: Followers List
       description: List of followers
       type: object
       properties: 
         followers: {  $ref: "#/components/schemas/UsersList"  }
+        count: { $ref: "#components/schemas/Count" }
     Bans:
       title: Banned List
       description: List of blocked usersstring
       type: object
       properties: 
         bans: {  $ref: "#/components/schemas/UsersList"  }
+        count: { $ref: "#components/schemas/Count" }
     Authorization:
       title: Authorization
       description: The authorization code is the user_id.
@@ -201,12 +211,14 @@ components:
       type: object
       properties: 
         likes: {  $ref: "#/components/schemas/UsersList"  }
+        count: { $ref: "#components/schemas/Count" }
     Comments:
       title: Comments List
       description: The comments on your post
       type: object
       properties: 
         comments: {  $ref: "#/components/schemas/CommentList"  } 
+        count: { $ref: "#components/schemas/Count" }
     ImgUrl:
       title: Img Url
       description: Image URL specification.
