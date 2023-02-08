@@ -34,13 +34,66 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
+
+var ErrProfileDoesNotExist = errors.New("Profile does not exist")
+
+// Profile struct represent a profile.
+type Profile struct {
+	User           uint64
+	Bio            string
+	Posts          uint64
+	PostCount      uint64
+	FollowingCount uint64
+	FollowerCount  uint64
+}
+
+// Post struct represent a post.
+type Post struct {
+	User            uint64
+	PublicationTime time.Time
+	Bio             string
+	LikeCount       uint64
+	CommentCount    uint64
+	PhotoUrl        string
+}
+
+// Comment struct represent a comment
+type Comment struct {
+	User        uint64
+	Text        string
+	CommentId   uint64
+	TimeComment time.Time
+}
+
+// CommentList represent a list of profile
+type Comments struct {
+	UserList []Comment
+}
+
+// ProfileList represent a list of profile
+type Profiles struct {
+	UserList []Profile
+}
+
+// ProfileList represent a list of profile
+type Posts struct {
+	UserList []Post
+}
+
+// User represent the couple ID and UserName
+type User struct {
+	ID       uint64
+	UserName string
+}
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	GetName() (string, error)
 	SetName(name string) error
 
+	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
 }
 
