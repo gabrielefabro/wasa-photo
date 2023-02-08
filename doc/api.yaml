@@ -29,7 +29,7 @@ components:
           type: integer
           example: 5
           minimum: 0
-        following_ount:
+        following_count:
           description: The amount of person that you follow
           type: integer
           example: 200
