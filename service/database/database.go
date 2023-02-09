@@ -37,8 +37,6 @@ import (
 	"time"
 )
 
-var ErrProfileDoesNotExist = errors.New("Profile does not exist")
-
 // Profile struct represent a profile.
 type Profile struct {
 	User           uint64
@@ -69,17 +67,17 @@ type Comment struct {
 
 // CommentList represent a list of profile
 type Comments struct {
-	UserList []Comment
+	Comments []Comment
 }
 
 // ProfileList represent a list of profile
 type Profiles struct {
-	UserList []Profile
+	Profiles []Profile
 }
 
 // ProfileList represent a list of profile
 type Posts struct {
-	UserList []Post
+	Posts []Post
 }
 
 // User represent the couple ID and UserName
@@ -88,10 +86,70 @@ type User struct {
 	UserName string
 }
 
+// ProfileList represent a list of profile
+type Users struct {
+	users []User
+}
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	GetName() (string, error)
-	SetName(name string) error
+
+	// SetMyUserName set a new Username for an existing profile
+	SetMyUserName(User) error
+
+	// GetUserProfile returns the profile matched with the ID
+	GetUserProfile(id uint64) (Profile, error)
+
+	// GetMyStream returns the stream of the id passed as argoument
+	GetMyStream(id uint64) ([]Posts, error)
+
+	// GetMyFollowers returns the followers list
+	GetMyFollowers(id uint64) ([]Users, error)
+
+	// GetMyFollowings returns the followings list
+	GetMyFollowings(id uint64) ([]Users, error)
+
+	// GetMyBans returns the bans list
+	GetMyBans(id uint64) ([]Users, error)
+
+	// GetLikes returns the likes list
+	GetLikes(id uint64, postId uint64) ([]Users, error)
+
+	// GetComments returns the comments list
+	GetComments(id uint64, postId uint64) ([]Users, error)
+
+	// FollowUser adds one profile from the followers list
+	FollowUser(id uint64, secondId uint64) error
+
+	// FollowUser removes one profile from the followers list
+	UnfollowUser(id uint64, secondId uint64) error
+
+	// BanUser adds one profile from the bans list
+	BanUser(id uint64, secondId uint64) error
+
+	// UnbanUser remove one profile from the bans list
+	UnbanUser(id uint64, secondId uint64) error
+
+	// LikePost add a like to the likes list
+	LikePhoto(id uint64, postId uint64, secondId uint64) error
+
+	// UnlikePost removes a like to the Unlikes list
+	UnlikePhoto(id uint64, postId uint64, secondId uint64) error
+
+	// GetPost returns a post by his id
+	GetPost(id uint64, postId uint64) (Post, error)
+
+	// DeletePhoto deletes a post by his id
+	DeletePhoto(id uint64, postId uint64) error
+
+	// Uploadphoto add a post on your post list
+	Uploadphoto(id uint64, img string, caption string) error
+
+	// CommentPhoto adds a comment in the comments list
+	CommentPhoto(id uint64, postId uint64, comment string) error
+
+	// UncommentPhoto adds a comment in the comments list
+	UncommentPhoto(id uint64, postId uint64, commentId uint64) error
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
