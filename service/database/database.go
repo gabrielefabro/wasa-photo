@@ -37,6 +37,8 @@ import (
 	"time"
 )
 
+var ProfileDoesNotExist = errors.New("profile does not exist")
+
 // Profile struct represent a profile.
 type Profile struct {
 	User           uint64
