@@ -24,11 +24,6 @@ components:
         user: { $ref: "#/components/schemas/User"}
         bio: { $ref: "#/components/schemas/Bio"}
         posts: { $ref: "#/components/schemas/Posts"}
-        post_count:
-          description: Amount of posted photos on your profile
-          type: integer
-          example: 5
-          minimum: 0
         following_count:
           description: The amount of person that you follow
           type: integer
