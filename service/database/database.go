@@ -43,8 +43,7 @@ var ProfileDoesNotExist = errors.New("profile does not exist")
 type Profile struct {
 	User           uint64
 	Bio            string
-	Posts          uint64
-	PostCount      uint64
+	Posts          []Posts
 	FollowingCount uint64
 	FollowerCount  uint64
 }
