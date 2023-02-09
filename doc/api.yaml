@@ -678,7 +678,7 @@ paths:
           required: true
         - name: comment_id
           in: path
-          description: The ID of the comment you want to post/delete
+          description: The ID of the comment you want to delete
           schema: { $ref: "#/components/schemas/CommentId"}
           
           required: true
