@@ -297,12 +297,12 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Profile"}
-  /profiles/{profile_id}/username:
+  /profiles/{user_id}/username:
     parameters:
-      - name: profile_id
+      - name: user_id
         in: path
         description: The ID of the profile that want to change the userName
-        schema: { $ref: "#/components/schemas/UserId"}
+        schema: { $ref: "#/components/schemas/User"}
         required: true
     put:
       tags: ["Profile"]
@@ -590,7 +590,7 @@ paths:
     parameters:
       - name: profile_id
         in: path
-        description: The ID of the profile that you want to see
+        description: The ID of the profile that upload a photo
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
     post: 
