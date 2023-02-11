@@ -155,7 +155,7 @@ components:
       type: object
       properties:
         postlist: { $ref: "#/components/schemas/PostList" }
-        count: { $ref: "#components/schemas/Count" }
+        count: { $ref: "#/components/schemas/Count" }
     Followings:
       title: Following List
       description: List of followings
