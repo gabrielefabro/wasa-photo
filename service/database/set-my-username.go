@@ -2,7 +2,7 @@ package database
 
 func (db *appdbimpl) SetMyUserName(u User) error {
 
-	query = "UPDATE profile SET username = ?"
+	var query = "UPDATE profile SET username = ?"
 
 	res, err := db.c.Exec(query, u.UserName)
 
@@ -15,7 +15,7 @@ func (db *appdbimpl) SetMyUserName(u User) error {
 	if err != nil {
 		return err
 	} else if affected == 0 {
-		
+
 		// If we didn't delete any row, then the profile didn't exist
 		return ProfileDoesNotExist
 	}
