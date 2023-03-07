@@ -481,9 +481,9 @@ paths:
           content:
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /profiles/{profile_id}/posts/{post_id}/comments:
+  /profiles/{id}/posts/{post_id}/comments:
     parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: The ID of the profile that you want to see the comments
         schema: { $ref: "#/components/schemas/UserId"}
@@ -493,19 +493,6 @@ paths:
         description: The ID of the post that you want to see the comments
         schema: { $ref: "#/components/schemas/PostId"}
         required: true
-    get:
-      tags: ["Post"]
-      operationId: getComments
-      summary: return Comments
-      description: Return the comments from a post
-      security:
-        - bearerAuth: []      
-      responses:
-        "201":
-          description: Comments returned successfully
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Comments"}    
     post: 
       tags: ["Post"]
       operationId: commentPhoto
@@ -519,9 +506,9 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Success"}
-  /profiles/{profile_id}/posts/{post_id}/comments/{comment_id}:
+  /profiles/{id}/posts/{post_id}/comments/{comment_id}:
     parameters:
-        - name: profile_id
+        - name: id
           in: path
           description: The ID of the profile from you want to post/delete a comment
           schema: { $ref: "#/components/schemas/UserId"}
