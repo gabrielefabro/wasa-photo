@@ -24,16 +24,8 @@ components:
         user: { $ref: "#/components/schemas/User"}
         bio: { $ref: "#/components/schemas/Bio"}
         posts: { $ref: "#/components/schemas/Posts"}
-        following_count:
-          description: The amount of person that you follow
-          type: integer
-          example: 200
-          minimum: 0
-        follower_count: 
-          description: The amount of person that follow you
-          type: integer
-          example: 200
-          minimum: 0
+        followers: { $ref: " #/components/schemas/UsersList"}
+        followings: { $ref: " #/components/schemas/UsersList"}
     Post:
       title: Post
       description: An object that rapresent a post
@@ -52,7 +44,7 @@ components:
           type: integer
           example: 139495
           minimum: 0
-        photo_url: { $ref: "#/components/schemas/ImgUrl" }
+        photo_url: { $ref: "#/components/schemas/Photo" }
     Comment:
       title: Comment
       description: A comment under a post
@@ -64,14 +56,7 @@ components:
           type: string
           example: "SUPER PHOTO!!"
           pattern: '^.{1,100}$'
-        comment_id: {$ref: "#/components/schemas/CommentId"}
-        time_comment:
-          description: time of comment
-          type: string
-          format: date-time 
-          pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
-          minLength: 19
-          maxLength: 19     
+        comment_id: {$ref: "#/components/schemas/CommentId"}     
     User: 
       title: User
       description: User
@@ -119,28 +104,23 @@ components:
       example: "12345"
       minLength: 5
       maxLength: 5
-    Count: 
-      title: Count 
-      description: The amount of items on array
-      type: integer
-      example: 24357
-      minimum: 0
     Bio:
-        title: Bio
-        description: Description of post or profile
-        type: string
-        example: "Questo è il miglior profilo del mondo, SIUM!!"
-        pattern: '^[^\/\\]{1,64}$'
-        minLength: 1
-        maxLength: 64
+      title: Bio
+      description: Description of post or profile
+      type: string
+      example: "Questo è il miglior profilo del mondo, SIUM!!"
+      pattern: '^[^\/\\]{1,64}$'
+      minLength: 1
+      maxLength: 64
     CommentId:
       title: Comment ID 
-      type: string
-      description: Unic id of comment
-      pattern: '^[0-9]{10}$'
-      example: "0123456789"
-      minLength: 10
-      maxLength: 10
+      description: Any number between 0-9999
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9999
+      readOnly: true
+      example: 965
     PostId: 
       title: PostID 
       description: unic ID for a post
@@ -155,28 +135,24 @@ components:
       type: object
       properties:
         postlist: { $ref: "#/components/schemas/PostList" }
-        count: { $ref: "#/components/schemas/Count" }
     Followings:
       title: Following List
       description: List of followings
       type: object
       properties: 
         followings: {  $ref: "#/components/schemas/UsersList"  }
-        count: { $ref: "#/components/schemas/Count" }
     Followers:
       title: Followers List
       description: List of followers
       type: object
       properties: 
         followers: {  $ref: "#/components/schemas/UsersList"  }
-        count: { $ref: "#/components/schemas/Count" }
     Bans:
       title: Banned List
       description: List of blocked usersstring
       type: object
       properties: 
         bans: {  $ref: "#/components/schemas/UsersList"  }
-        count: { $ref: "#/components/schemas/Count" }
     Authorization:
       title: Authorization
       description: The authorization code is the user_id.
@@ -206,23 +182,19 @@ components:
       type: object
       properties: 
         likes: {  $ref: "#/components/schemas/UsersList"  }
-        count: { $ref: "#/components/schemas/Count" }
     Comments:
       title: Comments List
       description: The comments on your post
       type: object
       properties: 
         comments: {  $ref: "#/components/schemas/CommentList"  } 
-        count: { $ref: "#/components/schemas/Count" }
-    ImgUrl:
-      title: Img Url
-      description: Image URL specification.
+    Photo:
+      description: "Raw data of the photo"
       type: string
-      format: url
-      pattern: '^https:\/\/[a-zA-Z.-_\/]*\/users\/[0-9]{5}\/(propic|posts)\/[a-zA-Z]{3}\.jpg$'
-      minLength: 34
-      maxLength: 128
-      example: "https://www.example.com/users/00001/posts/aAk.jpg"  
+      minLength: 0
+      maxLength: 100
+      format: binary
+      example: "010110010"
     Success:
       title: Success
       description: The resource is returned successfully
@@ -264,17 +236,9 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
-              example: { "user_id" : "12345" , "Auth" : "12345" }
-        "200":
-          description: |-
-            Log-in succesfull.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/AuthorizationUser" }
-              example: { "user_id" : "12345" , "Auth" : "12345" }
-  /profiles/{profile_id}:
+  /profiles/{id}:
     parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: User that you want to search
         schema: { $ref: "#/components/schemas/UserId"}
@@ -292,13 +256,6 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Profile"}
-  /profiles/{user_id}/username:
-    parameters:
-      - name: user_id
-        in: path
-        description: The ID of the profile that want to change the userName
-        schema: { $ref: "#/components/schemas/User"}
-        required: true
     put:
       tags: ["Profile"]
       operationId: setMyUserName
@@ -319,9 +276,9 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /feeds/{profile_id}: 
+  /profiles/{id}/home: 
     parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: ID of profile that asks the stream
         schema: { $ref: "#/components/schemas/UserId"}
@@ -339,54 +296,14 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Posts"}
-  /profiles/{profile_id}/followers:
+  /profiles/{id}/followings/{following_id}:
     parameters:
-      - name: profile_id
-        in: path
-        description: The ID of the profile that is returning his followers
-        schema: { $ref: "#/components/schemas/UserId"}
-        required: true
-    get:
-      tags: ["Profile"]
-      operationId: getMyFollowers
-      summary: Return the followers
-      description: Return the followers of the profile passed as argoument
-      security:
-        - bearerAuth: []
-      responses:
-        "200": 
-          description: Followers returned successfully
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Followers"} 
-  /profiles/{profile_id}/followings: 
-    parameters:
-        - name: profile_id
-          in: path
-          description: The ID of the profile that is returning his followings
-          schema: { $ref: "#/components/schemas/UserId"}
-          required: true
-    get:
-      tags: ["Profile"]
-      operationId: getMyFollowings
-      summary: Return the following
-      description: Return the followings of the profile passed as argoument
-      security:
-        - bearerAuth: []
-      responses:
-        "200": 
-          description: Following returned successfully
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Followings"}
-  /profiles/{profile_id}/followings/{second_profile_id}:
-    parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: The ID of the profile that (un)followed someone
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: second_profile_id
+      - name: following_id
         in: path
         description: The ID of the profile that you want to (un)follow 
         schema: { $ref: "#/components/schemas/UserId"}
@@ -417,34 +334,14 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /profiles/{profile_id}/bans:
+  /profiles/{id}/bans/{banned_id}:
     parameters:
-      - name: profile_id
-        in: path
-        description: The ID of the profile that is returning his bans 
-        schema: { $ref: "#/components/schemas/UserId"}
-        required: true
-    get:
-      tags: ["Profile"]
-      operationId: getMyBans
-      summary: Return the people banned 
-      description: Return the banned people of the id profile passed as argoument
-      security:
-        - bearerAuth: []
-      responses:
-        "200": 
-          description: Bans returned successfully
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Bans"}  
-  /profiles/{profile_id}/bans/{second_profile_id}:
-    parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: The ID of the profile that is (un)blocking someone
         schema: { $ref: "#/components/schemas/UserId"}
         required: true
-      - name: second_profile_id
+      - name: banned_id
         in: path
         description: The ID of the profile that you want to (un)block  
         schema: { $ref: "#/components/schemas/UserId"}
@@ -475,34 +372,9 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }            
-  /profiles/{profile_id}/posts/{post_id}/likes:
+  /profiles/{id}/posts/{post_id}/likes/{like_id}:
     parameters:
-      - name: profile_id
-        in: path
-        description: The ID of the profile that you want to like a post
-        schema: { $ref: "#/components/schemas/UserId"}
-        required: true
-      - name: post_id
-        in: path
-        description: The post that you like
-        schema: { $ref: "#/components/schemas/Post"}
-        required: true
-    get:
-      tags: ["Profile"]
-      operationId: getLikes
-      summary: Return the likes of the post
-      description: Return the list of users who liked the post
-      security:
-        - bearerAuth: []  
-      responses:
-        "200":
-          description: Get the list of users who liked the post
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Likes" }
-  /profiles/{profile_id}/posts/{post_id}/likes/{second_profile_id}:
-    parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: The ID of the profile that you want to (un)like a post
         schema: { $ref: "#/components/schemas/UserId"}
@@ -512,7 +384,7 @@ paths:
         description: The post that you (un)like
         schema: { $ref: "#/components/schemas/Post"} 
         required: true
-      - name: second_profile_id 
+      - name: like_id 
         in: path
         description: The profile that need to be added at the list
         schema: { $ref: "#/components/schemas/User"} 
@@ -581,9 +453,9 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }  
-  /profiles/{profile_id}/posts:
+  /profiles/{id}/posts:
     parameters:
-      - name: profile_id
+      - name: id
         in: path
         description: The ID of the profile that upload a photo
         schema: { $ref: "#/components/schemas/UserId"}
@@ -597,24 +469,12 @@ paths:
         - bearerAuth: []
       requestBody:
         content:
-          multipart/form-data:
+          image/*:
             schema:
-              description: The photo that would be uploaded and the description of the post.
-              type: object
-              properties:
-                caption:
-                  description: The description of the post 
-                  type: string
-                  pattern: ^[^\\]{1,100}$
-                  example: "A simple nice photo"
-                  minLength: 1
-                  maxLength: 100
-                photo:
-                  description: The photo to upload
-                  type: string
-                  format: binary
-                  minLength: 1
-                  maxLength: 1000000     
+              $ref: "#/components/schemas/Photo"
+            example:
+              photo_data: "010110010"
+        required: true
       responses:
         "201":
           description: Photo added successfully
