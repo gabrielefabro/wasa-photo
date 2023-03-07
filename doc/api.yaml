@@ -71,7 +71,7 @@ components:
       items:
         $ref: "#/components/schemas/User"
       minItems: 0
-      maxItems: 100
+      maxItems: 10
     CommentList:
       title: Comment List
       description: A list of comments
@@ -79,7 +79,7 @@ components:
       items:
         $ref: "#/components/schemas/Comment"
       minItems: 0
-      maxItems: 500
+      maxItems: 10
     PostList:
       title: Post List
       description: A list of posts
@@ -87,7 +87,7 @@ components:
       items:
         $ref: "#/components/schemas/Post"
       minItems: 0
-      maxItems: 500
+      maxItems: 10
     UserName: 
       title: userName
       description: Profile's username, CAPS is not allowed
@@ -100,7 +100,7 @@ components:
       title: User Id
       description: ID of profile, each profile has an unic ID
       type: string
-      pattern: '^[0-9]{5}$'
+      pattern: '^[0-9]{8}$'
       example: "12345"
       minLength: 5
       maxLength: 5
@@ -125,7 +125,7 @@ components:
       title: PostID 
       description: unic ID for a post
       type: string
-      pattern: '^[0-9]{5}[a-zA-Z]{3}$'
+      pattern: '^[0-9]{8}'
       example: "00010aAz"
       minLength: 8
       maxLength: 8
