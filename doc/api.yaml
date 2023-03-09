@@ -34,16 +34,6 @@ components:
         user: { $ref: "#/components/schemas/User"}
         publication_time: { $ref: "#/components/schemas/PublicationTime"}
         bio: { $ref: "#/components/schemas/Bio"}
-        like_count:
-          description: Il numero di like della foto
-          type: integer
-          example: 139495
-          minimum: 0
-        comment_count:
-          description: The amount of comments on the post
-          type: integer
-          example: 139495
-          minimum: 0
         photo_url: { $ref: "#/components/schemas/Photo" }
     Comment:
       title: Comment
