@@ -38,6 +38,7 @@ import (
 )
 
 var ProfileDoesNotExist = errors.New("profile does not exist")
+var UserBanned = errors.New("user is banned")
 
 // Profile struct represent a profile.
 type Profile struct {
@@ -167,12 +168,18 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
 
+	// Activate foreign keys for db
+
+	_, errPramga := db.Exec(`PRAGMA foreign_keys= ON`)
+	if errPramga != nil {
+		return nil, fmt.Errorf("error setting pragmas: %w", errPramga)
+	}
+
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='example_table';`).Scan(&tableName)
+	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='users';`).Scan(&tableName)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE example_table (id INTEGER NOT NULL PRIMARY KEY, name TEXT);`
-		_, err = db.Exec(sqlStmt)
+		err = createDatabase(db)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
@@ -185,4 +192,60 @@ func New(db *sql.DB) (AppDatabase, error) {
 
 func (db *appdbimpl) Ping() error {
 	return db.c.Ping()
+}
+
+// Creates all the necessary sql tables for the WASAPhoto app.
+func createDatabase(db *sql.DB) error {
+	tables := [6]string{
+		`CREATE TABLE IF NOT EXISTS users (
+			id_user VARCHAR(5) NOT NULL PRIMARY KEY,
+			username VARCHAR(15) NOT NULL
+			);`,
+		`CREATE TABLE IF NOT EXISTS post (
+			id_photo INTEGER PRIMARY KEY AUTOINCREMENT,
+			id_user VARCHAR(16) NOT NULL,
+			date DATETIME NOT NULL,
+			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
+			);`,
+		`CREATE TABLE IF NOT EXISTS  likes (
+			id_photo INTEGER NOT NULL,
+			id_user VARCHAR(16) NOT NULL,
+			PRIMARY KEY (id_photo,id_user),
+			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE
+			);`,
+		`CREATE TABLE IF NOT EXISTS comments (
+			id_comment INTEGER PRIMARY KEY AUTOINCREMENT,
+			id_photo INTEGER NOT NULL,
+			id_user VARCHAR(16) NOT NULL,
+			comment VARCHAR(30) NOT NULL,
+			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE,
+			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
+			);`,
+		`CREATE TABLE IF NOT EXISTS banned_users (
+			banner VARCHAR(16) NOT NULL,
+			banned VARCHAR(16) NOT NULL,
+			PRIMARY KEY (banner,banned),
+			FOREIGN KEY(banner) REFERENCES users (id_user) ON DELETE CASCADE,
+			FOREIGN KEY(banned) REFERENCES users (id_user) ON DELETE CASCADE
+			);`,
+		`CREATE TABLE IF NOT EXISTS followers(
+			follower VARCHAR(16) NOT NULL,
+			followed VARCHAR(16) NOT NULL,
+			PRIMARY KEY (follower,followed),
+			FOREIGN KEY(follower) REFERENCES users (id_user) ON DELETE CASCADE,
+			FOREIGN KEY(followed) REFERENCES users (id_user) ON DELETE CASCADE
+			);`,
+	}
+
+	// Iteration to create all the needed sql schemas
+	for i := 0; i < len(tables); i++ {
+
+		sqlStmt := tables[i]
+		_, err := db.Exec(sqlStmt)
+
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
