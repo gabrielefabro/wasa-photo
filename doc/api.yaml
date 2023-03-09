@@ -55,7 +55,7 @@ components:
           description: text of comment
           type: string
           example: "SUPER PHOTO!!"
-          pattern: '^.{1,100}$'
+          pattern: '^.{1,50}$'
         comment_id: {$ref: "#/components/schemas/CommentId"}     
     User: 
       title: User
