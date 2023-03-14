@@ -24,8 +24,8 @@ components:
         user: { $ref: "#/components/schemas/User"}
         bio: { $ref: "#/components/schemas/Bio"}
         posts: { $ref: "#/components/schemas/Posts"}
-        followers: { $ref: " #/components/schemas/UsersList"}
-        followings: { $ref: " #/components/schemas/UsersList"}
+        followers: { $ref: "#/components/schemas/UsersList"}
+        followings: { $ref: "#/components/schemas/UsersList"}
     Post:
       title: Post
       description: An object that rapresent a post
