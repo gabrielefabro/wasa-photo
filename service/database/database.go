@@ -34,67 +34,16 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"time"
 )
 
 var ProfileDoesNotExist = errors.New("profile does not exist")
 var UserBanned = errors.New("user is banned")
 
-// Profile struct represent a profile.
-type Profile struct {
-	User           uint64
-	Bio            string
-	Posts          []Posts
-	FollowingCount uint64
-	FollowerCount  uint64
-}
-
-// Post struct represent a post.
-type Post struct {
-	User            uint64
-	PublicationTime time.Time
-	Bio             string
-	LikeCount       uint64
-	CommentCount    uint64
-	PhotoUrl        string
-}
-
-// Comment struct represent a comment
-type Comment struct {
-	User        uint64
-	Text        string
-	CommentId   uint64
-	TimeComment time.Time
-}
-
-// CommentList represent a list of profile
-type Comments struct {
-	Comments []Comment
-}
-
-// ProfileList represent a list of profile
-type Profiles struct {
-	Profiles []Profile
-}
-
-// ProfileList represent a list of profile
-type Posts struct {
-	Posts []Post
-}
-
-// User represent the couple ID and UserName
-type User struct {
-	ID       uint64
-	UserName string
-}
-
-// ProfileList represent a list of profile
-type Users struct {
-	users []User
-}
-
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
+
+	// CreateUser create a new user
+	CreateUser(User) error
 
 	// SetMyUserName set a new Username for an existing profile
 	SetMyUserName(User) error
@@ -103,22 +52,22 @@ type AppDatabase interface {
 	GetUserProfile(id uint64) (Profile, error)
 
 	// GetMyStream returns the stream of the id passed as argoument
-	GetMyStream(id uint64) ([]Posts, error)
+	GetMyStream(id uint64) ([]Post, error)
 
 	// GetMyFollowers returns the followers list
-	GetMyFollowers(id uint64) ([]Users, error)
+	GetMyFollowers(id uint64) ([]User, error)
 
 	// GetMyFollowings returns the followings list
-	GetMyFollowings(id uint64) ([]Users, error)
+	GetMyFollowings(id uint64) ([]User, error)
 
 	// GetMyBans returns the bans list
-	GetMyBans(id uint64) ([]Users, error)
+	GetMyBans(id uint64) ([]User, error)
 
 	// GetLikes returns the likes list
-	GetLikes(id uint64, postId uint64) ([]Users, error)
+	GetLikes(id uint64, postId uint64) ([]User, error)
 
 	// GetComments returns the comments list
-	GetComments(id uint64, postId uint64) ([]Users, error)
+	GetComments(id uint64, postId uint64) ([]User, error)
 
 	// FollowUser adds one profile from the followers list
 	FollowUser(id uint64, secondId uint64) error
@@ -138,6 +87,12 @@ type AppDatabase interface {
 	// UnlikePost removes a like to the Unlikes list
 	UnlikePhoto(id uint64, postId uint64, secondId uint64) error
 
+	// CommentPhoto adds a comment in the comments list
+	CommentPhoto(id uint64, postId uint64, comment string) error
+
+	// UncommentPhoto adds a comment in the comments list
+	UncommentPhoto(id uint64, postId uint64, commentId uint64) error
+
 	// GetPost returns a post by his id
 	GetPost(id uint64, postId uint64) (Post, error)
 
@@ -147,11 +102,8 @@ type AppDatabase interface {
 	// Uploadphoto add a post on your post list
 	Uploadphoto(id uint64, img string, caption string) error
 
-	// CommentPhoto adds a comment in the comments list
-	CommentPhoto(id uint64, postId uint64, comment string) error
-
-	// UncommentPhoto adds a comment in the comments list
-	UncommentPhoto(id uint64, postId uint64, commentId uint64) error
+	// BannedCheck control if an user is banned by anotherone
+	BanCheck(a User, b User) (bool, error)
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
@@ -196,44 +148,55 @@ func (db *appdbimpl) Ping() error {
 
 // Creates all the necessary sql tables for the WASAPhoto app.
 func createDatabase(db *sql.DB) error {
-	tables := [6]string{
+	tables := [7]string{
 		`CREATE TABLE IF NOT EXISTS users (
-			id_user VARCHAR(5) NOT NULL PRIMARY KEY,
-			username VARCHAR(15) NOT NULL
+			id INTEGER PRIMARY KEY,
+			username TEXT
+		);`,
+		`CREATE TABLE IF NOT EXISTS profiles (
+			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			username VARCHAR(16),
+			bio VARCHAR(64),
+			following_count INTEGER,
+			follower_count INTEGER,
+			FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 			);`,
-		`CREATE TABLE IF NOT EXISTS post (
-			id_photo INTEGER PRIMARY KEY AUTOINCREMENT,
-			id_user VARCHAR(16) NOT NULL,
-			date DATETIME NOT NULL,
-			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
+		`CREATE TABLE IF NOT EXISTS posts (
+			post_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id INTEGER,
+			publication_time DATETIME,
+			bio VARCHAAR(64),
+			like_count INTEGER,
+			comment_count INTEGER,
+			FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS  likes (
-			id_photo INTEGER NOT NULL,
-			id_user VARCHAR(16) NOT NULL,
+			post_id INTEGER NOT NULL,
+			user_id VARCHAR(16) NOT NULL,
 			PRIMARY KEY (id_photo,id_user),
-			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE
+			FOREIGN KEY(post_id) REFERENCES photos (post_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS comments (
-			id_comment INTEGER PRIMARY KEY AUTOINCREMENT,
-			id_photo INTEGER NOT NULL,
-			id_user VARCHAR(16) NOT NULL,
-			comment VARCHAR(30) NOT NULL,
-			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE,
-			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
+			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id INTEGER,
+			post_id INTEGER
+			text TEXT,
+			time_comment TIMESTAMP,
+			FOREIGN KEY (user) REFERENCES Users(user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS banned_users (
-			banner VARCHAR(16) NOT NULL,
-			banned VARCHAR(16) NOT NULL,
+			banner TEXT NOT NULL,
+			banned TEXT NOT NULL,
 			PRIMARY KEY (banner,banned),
-			FOREIGN KEY(banner) REFERENCES users (id_user) ON DELETE CASCADE,
-			FOREIGN KEY(banned) REFERENCES users (id_user) ON DELETE CASCADE
+			FOREIGN KEY(banner) REFERENCES users (user_id) ON DELETE CASCADE,
+			FOREIGN KEY(banned) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS followers(
-			follower VARCHAR(16) NOT NULL,
-			followed VARCHAR(16) NOT NULL,
+			follower TEXT NOT NULL,
+			followed TEXT NOT NULL,
 			PRIMARY KEY (follower,followed),
-			FOREIGN KEY(follower) REFERENCES users (id_user) ON DELETE CASCADE,
-			FOREIGN KEY(followed) REFERENCES users (id_user) ON DELETE CASCADE
+			FOREIGN KEY(follower) REFERENCES users (user_id) ON DELETE CASCADE,
+			FOREIGN KEY(followed) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 	}
 
