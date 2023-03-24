@@ -110,13 +110,14 @@ components:
       minimum: 0
       maximum: 9999
       readOnly: true
-      example: 965
+      example: "965"
+      pattern: '^[0-9]{4}'
     PostId: 
       title: PostID 
       description: unic ID for a post
       type: string
       pattern: '^[0-9]{8}'
-      example: "00010aAz"
+      example: "12345678"
       minLength: 8
       maxLength: 8
     Posts:
