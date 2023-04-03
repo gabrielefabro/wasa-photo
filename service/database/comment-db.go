@@ -38,3 +38,34 @@ func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post P
 
 	return comments, nil
 }
+
+// Database function that adds a comment of a user to a photo
+func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text string) (int64, error) {
+
+	res, err := db.c.Exec("INSERT INTO comments (post_id,user_id,text) VALUES (?, ?, ?)",
+		post_id, user.User_id, text)
+	if err != nil {
+		// Error executing query
+		return -1, err
+	}
+
+	commentId, err := res.LastInsertId()
+	if err != nil {
+		// Error getting id returned by last db operation (commentId)
+		return -1, err
+	}
+
+	return commentId, nil
+}
+
+// Database function that removes a comment of a user from a photo
+func (db *appdbimpl) UncommentPhoto(post_id PostId, user User, comment CommentId) error {
+
+	_, err := db.c.Exec("DELETE FROM comments WHERE (id_photo = ? AND id_user = ? AND id_comment = ?)",
+		post_id, user.User_id, comment.Comment_id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
