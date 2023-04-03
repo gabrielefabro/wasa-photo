@@ -5,7 +5,7 @@ func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post P
 
 	rows, err := db.c.Query("SELECT * FROM comments WHERE post_id = ? AND user_id NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) "+
 		"AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
-		Post.Post_id, requestingUser.User_id, requestedUser.User_id, requestingUser.User_id)
+		Post.Post_id, requestingUser.User_id, requestedUser.User_id)
 	if err != nil {
 		return nil, err
 	}
