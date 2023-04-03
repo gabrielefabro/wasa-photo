@@ -1,9 +1,9 @@
 package database
 
 // Database function that retrieves the list of comments of a photo (minus the comments from users that banned the requesting user)
-func (db *appdbimpl) GetCompleteCommentsList(requestingUser User, requestedUser User, Post Post) ([]Comment, error) {
+func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post Post) ([]Comment, error) {
 
-	rows, err := db.c.Query("SELECT * FROM comments WHERE poat_id = ? AND user_id NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) "+
+	rows, err := db.c.Query("SELECT * FROM comments WHERE post_id = ? AND user_id NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) "+
 		"AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
 		Post.Post_id, requestingUser.User_id, requestedUser.User_id, requestingUser.User_id)
 	if err != nil {
@@ -23,11 +23,11 @@ func (db *appdbimpl) GetCompleteCommentsList(requestingUser User, requestedUser 
 		}
 
 		// Get the nickname of the user that commented
-		nickname, err := db.GetNickname(User{User_id: comment.User.User_id})
+		username, err := db.GetUserName(comment.User)
 		if err != nil {
 			return nil, err
 		}
-		comment.Nickname = nickname
+		comment.User.UserName = username
 
 		comments = append(comments, comment)
 	}
