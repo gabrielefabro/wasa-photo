@@ -55,55 +55,55 @@ type AppDatabase interface {
 	ModifyUserName(User, Username) error
 
 	// GetUserProfile returns the profile matched with the ID
-	GetUserProfile(UserId) (Profile, error)
+	GetUserProfile(User) (Profile, error)
 
 	// GetMyStream returns the stream of the id passed as argoument
-	GetMyStream(UserId) ([]Post, error)
+	GetMyStream(User) ([]Post, error)
 
 	// GetMyFollowers returns the followers list
-	GetMyFollowers(UserId) ([]User, error)
+	GetMyFollowers(User) ([]User, error)
 
 	// GetMyFollowings returns the followings list
-	GetMyFollowings(UserId) ([]User, error)
+	GetMyFollowings(User) ([]User, error)
 
 	// GetMyBans returns the bans list
-	GetMyBans(UserId) ([]User, error)
+	GetMyBans(User) ([]User, error)
 
 	//GetPost return all the post from one profile
-	GetPosts(a UserId, b UserId) ([]Post, error)
+	GetPosts(a User, b User) ([]Post, error)
 
 	// GetLikes returns the likes list
-	GetLikes(a UserId, b UserId) ([]User, error)
+	GetLikes(a User, b User) ([]User, error)
 
 	// GetComments returns the comments list
-	GetComments(UserId, PostId) ([]User, error)
+	GetComments(User, PostId) ([]User, error)
 
 	// FollowUser adds one profile from the followers list
-	FollowUser(a UserId, b UserId) error
+	FollowUser(a User, b User) error
 
 	// FollowUser removes one profile from the followers list
-	UnfollowUser(a UserId, b UserId) error
+	UnfollowUser(a User, b User) error
 
 	// BanUser adds one profile from the bans list
-	BanUser(a UserId, b UserId) error
+	BanUser(a User, b User) error
 
 	// UnbanUser remove one profile from the bans list
-	UnbanUser(a UserId, b UserId) error
+	UnbanUser(a User, b User) error
 
 	// LikePost add a like to the likes list
-	LikePhoto(PostId, UserId) error
+	LikePhoto(PostId, User) error
 
 	// UnlikePost removes a like to the Unlikes list
-	UnlikePhoto(PostId, UserId) error
+	UnlikePhoto(PostId, User) error
 
 	// CommentPhoto adds a comment in the comments list
-	CommentPhoto(PostId, UserId, CommentId) error
+	CommentPhoto(PostId, User, CommentId) error
 
 	// UncommentPhoto adds a comment in the comments list
-	UncommentPhoto(PostId, UserId, CommentId) error
+	UncommentPhoto(PostId, User, CommentId) error
 
 	// DeletePhoto deletes a post by his id
-	DeletePhoto(UserId, PostId) error
+	DeletePhoto(User, PostId) error
 
 	// Uploadphoto add a post on your post list
 	Uploadphoto(Post) error
