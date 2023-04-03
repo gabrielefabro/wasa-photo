@@ -55,3 +55,7 @@ type UserId struct {
 type Username struct {
 	Username string `json:"username"`
 }
+
+type TextComment struct {
+	TextComment string `json:"text"`
+}
