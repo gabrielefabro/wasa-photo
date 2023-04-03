@@ -23,7 +23,7 @@ func (db *appdbimpl) UnbanUser(banner User, banned User) error {
 }
 
 // Database fuction that checks if the requesting user was banned by anotherone
-func (db *appdbimpl) BannedUserCheck(requestingUser User, targetUser User) (bool, error) {
+func (db *appdbimpl) BanCheck(requestingUser User, targetUser User) (bool, error) {
 
 	var cnt int
 	err := db.c.QueryRow("SELECT COUNT(*) FROM banned_users WHERE banned = ? AND banner = ?",
