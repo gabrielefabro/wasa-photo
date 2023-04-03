@@ -72,9 +72,6 @@ type AppDatabase interface {
 	//GetPost return all the post from one profile
 	GetPosts(a User, b User) ([]Post, error)
 
-	// GetLikes returns the likes list
-	GetLikes(a User, b User) ([]User, error)
-
 	// GetComments returns the comments list
 	GetComments(User, PostId) ([]User, error)
 
