@@ -42,65 +42,71 @@ var UserBanned = errors.New("user is banned")
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
+	//GetProfile return the profile from the id passed as argument
+	GetProfile(UserId) (Profile, error)
+
 	// CreateUser create a new user
 	CreateUser(User) error
 
+	// Gets the nickname of a user. Returns the nickname and an error
+	GetUserName(User) (string, error)
+
 	// SetMyUserName set a new Username for an existing profile
-	SetMyUserName(User) error
+	ModifyUserName(User, Username) error
 
 	// GetUserProfile returns the profile matched with the ID
-	GetUserProfile(id uint64) (Profile, error)
+	GetUserProfile(UserId) (Profile, error)
 
 	// GetMyStream returns the stream of the id passed as argoument
-	GetMyStream(id uint64) ([]Post, error)
+	GetMyStream(UserId) ([]Post, error)
 
 	// GetMyFollowers returns the followers list
-	GetMyFollowers(id uint64) ([]User, error)
+	GetMyFollowers(UserId) ([]User, error)
 
 	// GetMyFollowings returns the followings list
-	GetMyFollowings(id uint64) ([]User, error)
+	GetMyFollowings(UserId) ([]User, error)
 
 	// GetMyBans returns the bans list
-	GetMyBans(id uint64) ([]User, error)
+	GetMyBans(UserId) ([]User, error)
+
+	//GetPost return all the post from one profile
+	GetPosts(a UserId, b UserId) ([]Post, error)
 
 	// GetLikes returns the likes list
-	GetLikes(id uint64, postId uint64) ([]User, error)
+	GetLikes(a UserId, b UserId) ([]User, error)
 
 	// GetComments returns the comments list
-	GetComments(id uint64, postId uint64) ([]User, error)
+	GetComments(UserId, PostId) ([]User, error)
 
 	// FollowUser adds one profile from the followers list
-	FollowUser(id uint64, secondId uint64) error
+	FollowUser(a UserId, b UserId) error
 
 	// FollowUser removes one profile from the followers list
-	UnfollowUser(id uint64, secondId uint64) error
+	UnfollowUser(a UserId, b UserId) error
 
 	// BanUser adds one profile from the bans list
-	BanUser(id uint64, secondId uint64) error
+	BanUser(a UserId, b UserId) error
 
 	// UnbanUser remove one profile from the bans list
-	UnbanUser(id uint64, secondId uint64) error
+	UnbanUser(a UserId, b UserId) error
 
 	// LikePost add a like to the likes list
-	LikePhoto(id uint64, postId uint64, secondId uint64) error
+	LikePhoto(PostId, UserId) error
 
 	// UnlikePost removes a like to the Unlikes list
-	UnlikePhoto(id uint64, postId uint64, secondId uint64) error
+	UnlikePhoto(PostId, UserId) error
 
 	// CommentPhoto adds a comment in the comments list
-	CommentPhoto(id uint64, postId uint64, comment string) error
+	CommentPhoto(PostId, UserId, CommentId) error
 
 	// UncommentPhoto adds a comment in the comments list
-	UncommentPhoto(id uint64, postId uint64, commentId uint64) error
-
-	// GetPost returns a post by his id
-	GetPost(id uint64, postId uint64) (Post, error)
+	UncommentPhoto(PostId, UserId, CommentId) error
 
 	// DeletePhoto deletes a post by his id
-	DeletePhoto(id uint64, postId uint64) error
+	DeletePhoto(UserId, PostId) error
 
 	// Uploadphoto add a post on your post list
-	Uploadphoto(id uint64, img string, caption string) error
+	Uploadphoto(Post) error
 
 	// BannedCheck control if an user is banned by anotherone
 	BanCheck(a User, b User) (bool, error)
