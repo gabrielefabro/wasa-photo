@@ -190,7 +190,7 @@ components:
       title: Success
       description: The resource is returned successfully
       type: string
-      example: returned successfully
+      example: "returned successfully"
     Session:
       title: Success
       description: Security schema 
