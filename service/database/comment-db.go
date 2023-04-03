@@ -40,7 +40,7 @@ func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post P
 }
 
 // Database function that adds a comment of a user to a photo
-func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text string) (int64, error) {
+func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text TextComment) (int64, error) {
 
 	res, err := db.c.Exec("INSERT INTO comments (post_id,user_id,text) VALUES (?, ?, ?)",
 		post_id, user.User_id, text)
