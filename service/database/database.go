@@ -43,7 +43,7 @@ var UserBanned = errors.New("user is banned")
 type AppDatabase interface {
 
 	//GetProfile return the profile from the id passed as argument
-	GetProfile(UserId) (Profile, error)
+	GetProfile(a User, b User) (Profile, error)
 
 	// CreateUser create a new user
 	CreateUser(User) error
@@ -54,9 +54,6 @@ type AppDatabase interface {
 	// SetMyUserName set a new Username for an existing profile
 	ModifyUserName(User, Username) error
 
-	// GetUserProfile returns the profile matched with the ID
-	GetUserProfile(User) (Profile, error)
-
 	// GetMyStream returns the stream of the id passed as argoument
 	GetMyStream(User) ([]Post, error)
 
@@ -66,14 +63,8 @@ type AppDatabase interface {
 	// GetMyFollowings returns the followings list
 	GetMyFollowings(User) ([]User, error)
 
-	// GetMyBans returns the bans list
-	GetMyBans(User) ([]User, error)
-
 	//GetPost return all the post from one profile
 	GetPosts(a User, b User) ([]Post, error)
-
-	// GetComments returns the comments list
-	GetComments(User, PostId) ([]User, error)
 
 	// FollowUser adds one profile from the followers list
 	FollowUser(a User, b User) error
@@ -88,13 +79,13 @@ type AppDatabase interface {
 	UnbanUser(a User, b User) error
 
 	// LikePost add a like to the likes list
-	LikePhoto(PostId, User) error
+	LikePhoto(Post, User) error
 
 	// UnlikePost removes a like to the Unlikes list
-	UnlikePhoto(PostId, User) error
+	UnlikePhoto(Post, User) error
 
 	// CommentPhoto adds a comment in the comments list
-	CommentPhoto(PostId, User, CommentId) error
+	CommentPhoto(PostId, User, TextComment) (int64, error)
 
 	// UncommentPhoto adds a comment in the comments list
 	UncommentPhoto(PostId, User, CommentId) error
@@ -103,7 +94,7 @@ type AppDatabase interface {
 	DeletePhoto(User, PostId) error
 
 	// Uploadphoto add a post on your post list
-	Uploadphoto(Post) error
+	UploadPhoto(Post) (int64, error)
 
 	// BannedCheck control if an user is banned by anotherone
 	BanCheck(a User, b User) (bool, error)
