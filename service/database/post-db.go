@@ -57,7 +57,7 @@ func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PostId) (Post, err
 }
 
 // Database function that creates a photo on the database and returns the unique photo id
-func (db *appdbimpl) CreatePhoto(post Post) (int64, error) {
+func (db *appdbimpl) UploadPhoto(post Post) (int64, error) {
 
 	res, err := db.c.Exec("INSERT INTO posts (user_id,publication_time) VALUES (?,?)",
 		post.User, post.Publication_time)
@@ -82,10 +82,10 @@ by that user
 */
 
 // Database function that removes a photo from the database
-func (db *appdbimpl) RemovePhoto(user User, post Post) error {
+func (db *appdbimpl) DeletePhoto(user User, post_id PostId) error {
 
 	_, err := db.c.Exec("DELETE FROM photos WHERE id_user = ? AND id_photo = ? ",
-		user.User_id, post.Post_id)
+		user.User_id, post_id)
 	if err != nil {
 		// Error during the execution of the query
 		return err

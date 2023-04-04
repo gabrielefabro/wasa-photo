@@ -29,7 +29,7 @@ func (db *appdbimpl) GetMyFollowers(requestinUser User) ([]User, error) {
 }
 
 // Database function that retrieves the list of users followed by the user
-func (db *appdbimpl) GetMyFollowing(requestinUser User) ([]User, error) {
+func (db *appdbimpl) GetMyFollowings(requestinUser User) ([]User, error) {
 
 	rows, err := db.c.Query("SELECT followed FROM followers WHERE follower = ?", requestinUser.User_id)
 	if err != nil {
