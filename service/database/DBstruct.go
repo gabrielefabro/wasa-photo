@@ -4,11 +4,11 @@ import "time"
 
 // Profile struct represent a profile.
 type Profile struct {
-	User            User   `json:"users"`
-	Bio             string `json:"bio"`
-	Posts           []Post `json:"posts"`
-	Following_count uint64 `json:"following_count"`
-	Follower_count  uint64 `json:"follower_count"`
+	User      User   `json:"users"`
+	Bio       string `json:"bio"`
+	Posts     []Post `json:"posts"`
+	Following []User `json:"following"`
+	Follower  []User `json:"follower"`
 }
 
 // Post struct represent a post.

@@ -11,34 +11,34 @@ func (db *appdbimpl) GetPosts(requestingUser User, targetUser User) ([]Post, err
 	defer func() { _ = rows.Close() }()
 
 	// Read all the photos in the resulset
-	var photos []Post
+	var posts []Post
 	for rows.Next() {
-		var photo Post
-		err = rows.Scan(&photo.Post_id, &photo.User, &photo.Publication_time)
+		var post Post
+		err = rows.Scan(&post.Post_id, &post.User, &post.Publication_time, &post.Photo_url)
 		if err != nil {
 			return nil, err
 		}
 
-		comments, err := db.GetComments(requestingUser, targetUser, photo)
+		comments, err := db.GetComments(requestingUser, targetUser, post)
 		if err != nil {
 			return nil, err
 		}
-		photo.Comment = comments
+		post.Comment = comments
 
-		likes, err := db.GetLikes(requestingUser, targetUser, photo)
+		likes, err := db.GetLikes(requestingUser, targetUser, post)
 		if err != nil {
 			return nil, err
 		}
-		photo.Like = likes
+		post.Like = likes
 
-		photos = append(photos, photo)
+		posts = append(posts, post)
 	}
 
 	if rows.Err() != nil {
 		return nil, err
 	}
 
-	return photos, nil
+	return posts, nil
 }
 
 // Database function that retrieves a specific photo (only if the requesting user is not banned by that owner of that photo).
@@ -59,8 +59,8 @@ func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PostId) (Post, err
 // Database function that creates a photo on the database and returns the unique photo id
 func (db *appdbimpl) UploadPhoto(post Post) (int64, error) {
 
-	res, err := db.c.Exec("INSERT INTO posts (user_id,publication_time) VALUES (?,?)",
-		post.User, post.Publication_time)
+	res, err := db.c.Exec("INSERT INTO posts (user_id,publication_time,bio) VALUES (?,?,?)",
+		post.User, post.Publication_time, post.Bio)
 
 	if err != nil {
 		// Error executing query
@@ -84,7 +84,7 @@ by that user
 // Database function that removes a photo from the database
 func (db *appdbimpl) DeletePhoto(user User, post_id PostId) error {
 
-	_, err := db.c.Exec("DELETE FROM photos WHERE id_user = ? AND id_photo = ? ",
+	_, err := db.c.Exec("DELETE FROM photos WHERE user_id = ? AND post_id = ? ",
 		user.User_id, post_id)
 	if err != nil {
 		// Error during the execution of the query

@@ -12,7 +12,7 @@ func (db *appdbimpl) GetProfile(searcher User, userToSearch User) (Profile, erro
 	defer func() { _ = rows.Close() }()
 
 	var profile Profile
-	err = rows.Scan(&profile.User, &profile.Posts, &profile.Bio, &profile.Following_count, &profile.Follower_count)
+	err = rows.Scan(&profile.User, &profile.Posts, &profile.Bio, &profile.Following, &profile.Follower)
 	if err != nil {
 		return Profile{}, err
 	}

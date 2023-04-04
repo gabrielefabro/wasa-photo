@@ -42,8 +42,8 @@ func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post P
 // Database function that adds a comment of a user to a photo
 func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text TextComment) (int64, error) {
 
-	res, err := db.c.Exec("INSERT INTO comments (post_id,user_id,text) VALUES (?, ?, ?)",
-		post_id, user.User_id, text)
+	res, err := db.c.Exec("INSERT INTO comments (post_id,username,user_id,text) VALUES (?, ?, ?)",
+		post_id, user.UserName, user.User_id, text)
 	if err != nil {
 		// Error executing query
 		return -1, err
@@ -61,7 +61,7 @@ func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text TextComment) (
 // Database function that removes a comment of a user from a photo
 func (db *appdbimpl) UncommentPhoto(post_id PostId, user User, comment CommentId) error {
 
-	_, err := db.c.Exec("DELETE FROM comments WHERE (id_photo = ? AND id_user = ? AND id_comment = ?)",
+	_, err := db.c.Exec("DELETE FROM comments WHERE (post_id = ? AND user_id = ? AND comment_id = ?)",
 		post_id, user.User_id, comment.Comment_id)
 	if err != nil {
 		return err
