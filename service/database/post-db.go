@@ -49,7 +49,7 @@ func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PostId) (Post, err
 		targetPhoto.Post_id, requestinUser.User_id).Scan(&post)
 
 	if err != nil {
-		return Post{}, UserBanned
+		return Post{}, ErrUserBanned
 	}
 
 	return post, nil

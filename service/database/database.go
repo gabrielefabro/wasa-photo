@@ -36,8 +36,8 @@ import (
 	"fmt"
 )
 
-var ProfileDoesNotExist = errors.New("profile does not exist")
-var UserBanned = errors.New("user is banned")
+var ErrProfileDoesNotExist = errors.New("profile does not exist")
+var ErrUserBanned = errors.New("user is banned")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
