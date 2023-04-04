@@ -7,8 +7,8 @@ type Profile struct {
 	User            User   `json:"users"`
 	Bio             string `json:"bio"`
 	Posts           []Post `json:"posts"`
-	following_count uint64 `json:"following_count"`
-	follower_count  uint64 `json:"follower_count"`
+	Following_count uint64 `json:"following_count"`
+	Follower_count  uint64 `json:"follower_count"`
 }
 
 // Post struct represent a post.
