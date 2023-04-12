@@ -2,7 +2,8 @@ package api
 
 import (
 	"time"
-	"wasa-photo/service/database"
+
+	"git.gabrielefabro.it/service/database"
 )
 
 // Profile struct represent a profile.
@@ -36,7 +37,7 @@ type Comment struct {
 
 // User represent the couple ID and UserName
 type User struct {
-	User_id  uint64 `json:"user_id"`
+	User_id  string `json:"user_id"`
 	UserName string `json:"username"`
 }
 
@@ -52,7 +53,7 @@ type CommentId struct {
 
 // PostId represent the id of profile
 type UserId struct {
-	User_id int64 `json:"user_id"`
+	User_id string `json:"user_id"`
 }
 
 type Username struct {

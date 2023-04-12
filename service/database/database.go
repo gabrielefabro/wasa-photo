@@ -144,7 +144,7 @@ func (db *appdbimpl) Ping() error {
 func createDatabase(db *sql.DB) error {
 	tables := [7]string{
 		`CREATE TABLE IF NOT EXISTS users (
-			id INTEGER PRIMARY KEY,
+			id VARCHAR(5) PRIMARY KEY,
 			username TEXT
 		);`,
 		`CREATE TABLE IF NOT EXISTS profiles (
