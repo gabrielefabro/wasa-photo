@@ -102,6 +102,9 @@ type AppDatabase interface {
 	// CheckUser control if an user exist
 	CheckUser(User) (bool, error)
 
+	// GetBio return the bio of a profile
+	GetBio(User) (string, error)
+
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
 }
