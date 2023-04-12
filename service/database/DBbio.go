@@ -8,3 +8,13 @@ func (db *appdbimpl) SetBio(userID int, bio string) error {
 	}
 	return nil
 }
+
+func (db *appdbimpl) GetBio(user User) (string, error) {
+	var bio string
+	err := db.c.QueryRow("SELECT bio FROM profiles WHERE user_id = ?", user.User_id).Scan(bio)
+	if err != nil {
+		return bio, ErrUserBanned
+	}
+
+	return bio, nil
+}
