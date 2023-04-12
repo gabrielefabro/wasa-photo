@@ -99,6 +99,9 @@ type AppDatabase interface {
 	// BannedCheck control if an user is banned by anotherone
 	BanCheck(a User, b User) (bool, error)
 
+	// CheckUser control if an user exist
+	CheckUser(User) (bool, error)
+
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
 }
