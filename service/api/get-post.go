@@ -3,7 +3,8 @@ package api
 import (
 	"net/http"
 	"path/filepath"
-	"wasa-photo/service/api/reqcontext"
+
+	"git.gabrielefabro.it/service/api/reqcontext"
 
 	"github.com/julienschmidt/httprouter"
 )
