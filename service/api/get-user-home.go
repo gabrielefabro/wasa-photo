@@ -3,8 +3,9 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"wasa-photo/service/api/reqcontext"
-	"wasa-photo/service/database"
+
+	"git.gabrielefabro.it/service/api/reqcontext"
+	"git.gabrielefabro.it/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -22,7 +23,7 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	followers, err := rt.db.GetMyFollowings(User{User_id: identifier}.ToDatabase())
+	followers, err := rt.db.GetMyFollowings(User.ToDatabase(User{User_id: identifier}))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -32,8 +33,8 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 	for _, follower := range followers {
 
 		followerPost, err := rt.db.GetPosts(
-			User{User_id: identifier}.ToDatabase(),
-			User{User_id: follower.User_id}.ToDatabase())
+			User.ToDatabase(User{}),
+			follower)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
