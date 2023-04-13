@@ -45,7 +45,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// Get the folder of the file that has to be eliminated
-	pathPhoto, err := getUserPhotoFolder(bearerAuth)
+	pathPhoto, err := getUserPostFolder(bearerAuth)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-delete/getUserPhotoFolder: error with directories")
 		w.WriteHeader(http.StatusInternalServerError)
