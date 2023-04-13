@@ -105,6 +105,9 @@ type AppDatabase interface {
 	// GetBio return the bio of a profile
 	GetBio(User) (string, error)
 
+	// Searches all the users that match the given name (both identifier and nickname). Returns the list of matching users and an error
+	SearchUser(searcher User, userToSearch User) ([]User, error)
+
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
 }
