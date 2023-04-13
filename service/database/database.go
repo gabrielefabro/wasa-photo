@@ -43,7 +43,7 @@ var ErrUserBanned = errors.New("user is banned")
 type AppDatabase interface {
 
 	//GetProfile return the profile from the id passed as argument
-	GetProfile(a User, b User) (Profile, error)
+	GetProfile(a User, b User) (Profile, int64, error)
 
 	// CreateUser create a new user
 	CreateUser(User) error
@@ -79,10 +79,10 @@ type AppDatabase interface {
 	UnbanUser(a User, b User) error
 
 	// LikePost add a like to the likes list
-	LikePhoto(Post, User) error
+	LikePhoto(PostId, User) error
 
 	// UnlikePost removes a like to the Unlikes list
-	UnlikePhoto(Post, User) error
+	UnlikePhoto(PostId, User) error
 
 	// CommentPhoto adds a comment in the comments list
 	CommentPhoto(PostId, User, TextComment) (int64, error)

@@ -110,7 +110,7 @@ components:
       minimum: 0
       maximum: 9999
       readOnly: true
-      example: "965"
+      example: "9657"
       pattern: '^[0-9]{4}'
     PostId: 
       title: PostID 
