@@ -14,7 +14,7 @@ func (db *appdbimpl) GetPosts(requestingUser User, targetUser User) ([]Post, err
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err = rows.Scan(&post.Post_id, &post.User, &post.Publication_time, &post.Photo_url)
+		err = rows.Scan(&post.Post_id, &post.User_id, &post.Publication_time, &post.Photo_url)
 		if err != nil {
 			return nil, err
 		}
@@ -60,20 +60,20 @@ func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PostId) (Post, err
 func (db *appdbimpl) UploadPhoto(post Post) (int64, error) {
 
 	res, err := db.c.Exec("INSERT INTO posts (user_id,publication_time,bio) VALUES (?,?,?)",
-		post.User, post.Publication_time, post.Bio)
+		post.User_id, post.Publication_time, post.Bio)
 
 	if err != nil {
 		// Error executing query
 		return -1, err
 	}
 
-	photoId, err := res.LastInsertId()
+	postId, err := res.LastInsertId()
 	if err != nil {
 		// Error getting id returned by last db operation (photoId)
 		return -1, err
 	}
 
-	return photoId, nil
+	return postId, nil
 }
 
 /*

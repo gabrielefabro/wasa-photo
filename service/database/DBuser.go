@@ -15,7 +15,7 @@ func (db *appdbimpl) GetMyStream(user User) ([]Post, error) {
 	var res []Post
 	for rows.Next() {
 		var post Post
-		err = rows.Scan(&post.Post_id, &post.User, &post.Publication_time) //  &photo.Comments, &photo.Likes,
+		err = rows.Scan(&post.Post_id, &post.User_id, &post.Publication_time) //  &photo.Comments, &photo.Likes,
 		if err != nil {
 			return nil, err
 		}

@@ -13,7 +13,7 @@ type Profile struct {
 
 // Post struct represent a post.
 type Post struct {
-	User             User      `json:"users"`
+	User_id          uint64    `json:"users"`
 	Post_id          uint64    `json:"post_id"`
 	Publication_time time.Time `json:"pubblication_time"`
 	Bio              string    `json:"bio"`
