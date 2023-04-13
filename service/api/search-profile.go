@@ -26,10 +26,8 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	// Extract the query parameter from the URL
 	identificator := r.URL.Query().Get("id")
 
-	var profile Profile
-
 	// Search the user in the database (with the query parameter as a filter)
-	profile, res, err := rt.db.GetProfile(User{User_id: identifier}.ToDatabase(), User{User_id: identificator}.ToDatabase())
+	res, err := rt.db.SearchUser(User{User_id: identifier}.ToDatabase(), User{User_id: identificator}.ToDatabase())
 	if err != nil {
 		// In this case, there's an error coming from the database. Return an empty json
 		w.WriteHeader(http.StatusInternalServerError)
