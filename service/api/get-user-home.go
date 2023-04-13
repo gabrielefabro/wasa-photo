@@ -40,10 +40,7 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 			return
 		}
 
-		for i, post := range followerPost {
-			if i >= database.PhotosPerUserHome {
-				break
-			}
+		for _, post := range followerPost {
 			posts = append(posts, post)
 		}
 
@@ -51,6 +48,6 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	w.WriteHeader(http.StatusOK)
 
-	// Send the output to the user. Instead of giving null for no matches return and empty slice of photos. ( ontrollaerrore)
+	// Send the output to the user. Instead of giving null for no matches return and empty slice of photos.
 	_ = json.NewEncoder(w).Encode(posts)
 }
