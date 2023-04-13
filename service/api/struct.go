@@ -6,6 +6,19 @@ import (
 	"git.gabrielefabro.it/service/database"
 )
 
+// Error messages
+const INTERNAL_ERROR_MSG = "internal server error"
+const PNG_ERROR_MSG = "file is not a png format"
+const JPG_ERROR_MSG = "file is not a jpg format"
+const IMG_FORMAT_ERROR_MSG = "images must be jpeg or png"
+const INVALID_JSON_ERROR_MSG = "invalid json format"
+const INVALID_IDENTIFIER_ERROR_MSG = "identifier must be a string between 3 and 16 characters"
+
+// JSON Error Structure
+type JSONErrorMsg struct {
+	Message string `json:"message"` // Error messages
+}
+
 // Profile struct represent a profile.
 type Profile struct {
 	User      User            `json:"users"`
@@ -17,7 +30,7 @@ type Profile struct {
 
 // Post struct represent a post.
 type Post struct {
-	User             database.User      `json:"users"`
+	User_id          uint64             `json:"users"`
 	Post_id          uint64             `json:"post_id"`
 	Publication_time time.Time          `json:"pubblication_time"`
 	Bio              string             `json:"bio"`
@@ -96,7 +109,7 @@ func (user User) ToDatabase() database.User {
 // Converts a Post from the api package to a Post of the database package
 func (post Post) ToDatabase() database.Post {
 	return database.Post{
-		User:             post.User,
+		User_id:          post.User_id,
 		Publication_time: post.Publication_time,
 		Bio:              post.Bio,
 		Like:             post.Like,
