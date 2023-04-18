@@ -14,7 +14,7 @@ export default {
 				// Home get: "/users/:id/home"
 				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
 				if (response.data != null){
-					this.photos = response.data
+					this.posts = response.data
 				}
 				
 			} catch (e) {
@@ -34,13 +34,13 @@ export default {
 
 		<div class="row">
 			<Photo
-				v-for="(photo,index) in photos"
+				v-for="(post,index) in posts"
 				:key="index"
-				:owner="photo.owner"
-				:photo_id="photo.photo_id"
-				:comments="photo.comments != nil ? photo.comments : []"
-				:likes="photo.likes != nil ? photo.likes : []"
-				:upload_date="photo.date"
+				:owner="post.owner"
+				:photo_id="post.photo_id"
+				:comments="post.comments != nil ? post.comments : []"
+				:likes="post.likes != nil ? post.likes : []"
+				:upload_date="post.date"
 			/>
 		</div>
 
