@@ -172,7 +172,7 @@ func createDatabase(db *sql.DB) error {
 		`CREATE TABLE IF NOT EXISTS  likes (
 			post_id INTEGER NOT NULL,
 			user_id INTEGER NOT NULL,
-			username VARCHAR(16)
+			username VARCHAR(16),
 			PRIMARY KEY (id_photo,id_user),
 			FOREIGN KEY(post_id) REFERENCES photos (post_id) ON DELETE CASCADE
 			);`,
