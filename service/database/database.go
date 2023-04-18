@@ -178,9 +178,9 @@ func createDatabase(db *sql.DB) error {
 			);`,
 		`CREATE TABLE IF NOT EXISTS comments (
 			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			username VARCHAR(16)
+			username VARCHAR(16),
 			user_id INTEGER,
-			post_id INTEGER
+			post_id INTEGER,
 			text TEXT,
 			time_comment TIMESTAMP,
 			FOREIGN KEY (user) REFERENCES Users(user_id) ON DELETE CASCADE
