@@ -90,7 +90,7 @@ components:
       title: User Id
       description: ID of profile, each profile has an unic ID
       type: string
-      pattern: '^[0-9]{8}$'
+      pattern: '^[0-9]{5}$'
       example: "12345"
       minLength: 5
       maxLength: 5
@@ -110,8 +110,7 @@ components:
       minimum: 0
       maximum: 9999
       readOnly: true
-      example: "9657"
-      pattern: '^[0-9]{4}'
+      example: 96579
     PostId: 
       title: PostID 
       description: unic ID for a post
@@ -149,7 +148,7 @@ components:
       description: The authorization code is the user_id.
       type: string
       pattern: "^[0-9]{5}$"
-      example: "00010"
+      example: "12345"
       minLength: 5
       maxLength: 5
     AuthorizationUser:
@@ -167,18 +166,6 @@ components:
       pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$'
       minLength: 19
       maxLength: 19
-    Likes:
-      title: Like List
-      description: The list of profiles that like your photo
-      type: object
-      properties: 
-        likes: {  $ref: "#/components/schemas/UsersList"  }
-    Comments:
-      title: Comments List
-      description: The comments on your post
-      type: object
-      properties: 
-        comments: {  $ref: "#/components/schemas/CommentList"  } 
     Photo:
       description: "Raw data of the photo"
       type: string
