@@ -42,7 +42,7 @@ var ErrUserBanned = errors.New("user is banned")
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
-	//GetProfile return the profile from the id passed as argument
+	// GetProfile return the profile from the id passed as argument
 	GetProfile(a User, b User) (Profile, int64, error)
 
 	// CreateUser create a new user
