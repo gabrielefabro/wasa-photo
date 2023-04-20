@@ -46,7 +46,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Photo media folder
+// Post media folder
 var postFolder = filepath.Join("/tmp", "media")
 
 // Config is used to provide dependencies and configuration to the New function.

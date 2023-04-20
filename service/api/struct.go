@@ -69,10 +69,12 @@ type UserId struct {
 	User_id string `json:"user_id"`
 }
 
+// Username represent the username of profile
 type Username struct {
 	Username string `json:"username"`
 }
 
+// TextComment represent the text of comment
 type TextComment struct {
 	TextComment string `json:"text"`
 }
@@ -124,6 +126,7 @@ func (post Post) ToDatabase() database.Post {
 	}
 }
 
+// Converts a Comment from the api package to a Comment of the database package
 func (comment Comment) ToDatabase() database.Comment {
 	return database.Comment{
 		Comment_id:   comment.Comment_id,

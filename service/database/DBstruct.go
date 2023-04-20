@@ -52,10 +52,12 @@ type UserId struct {
 	User_id string `json:"user_id"`
 }
 
+// Username represent the username of profile
 type Username struct {
 	Username string `json:"username"`
 }
 
+// TextComment represent the text of comment
 type TextComment struct {
 	TextComment string `json:"text"`
 }
