@@ -1,11 +1,11 @@
 package database
 
 // Database function that retrieves the list of comments of a photo (minus the comments from users that banned the requesting user)
-func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post Post) ([]Comment, error) {
+func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, post Post) ([]Comment, error) {
 
 	rows, err := db.c.Query("SELECT * FROM comments WHERE post_id = ? AND user_id NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) "+
 		"AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
-		Post.Post_id, requestingUser.User_id, requestedUser.User_id, requestingUser.User_id)
+		post.Post_id, requestingUser.User_id, requestedUser.User_id, requestingUser.User_id)
 	if err != nil {
 		return nil, err
 	}
@@ -40,10 +40,10 @@ func (db *appdbimpl) GetComments(requestingUser User, requestedUser User, Post P
 }
 
 // Database function that adds a comment of a user to a photo
-func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text TextComment) (int64, error) {
+func (db *appdbimpl) CommentPhoto(postId PostId, user User, text TextComment) (int64, error) {
 
 	res, err := db.c.Exec("INSERT INTO comments (post_id,username,user_id,text) VALUES (?, ?, ?, ?)",
-		post_id, user.UserName, user.User_id, text)
+		postId, user.UserName, user.User_id, text)
 	if err != nil {
 		// Error executing query
 		return -1, err
@@ -59,10 +59,10 @@ func (db *appdbimpl) CommentPhoto(post_id PostId, user User, text TextComment) (
 }
 
 // Database function that removes a comment of a user from a photo
-func (db *appdbimpl) UncommentPhoto(post_id PostId, user User, comment CommentId) error {
+func (db *appdbimpl) UncommentPhoto(postId PostId, user User, comment CommentId) error {
 
 	_, err := db.c.Exec("DELETE FROM comments WHERE (post_id = ? AND user_id = ? AND comment_id = ?)",
-		post_id, user.User_id, comment.Comment_id)
+		postId, user.User_id, comment.Comment_id)
 	if err != nil {
 		return err
 	}

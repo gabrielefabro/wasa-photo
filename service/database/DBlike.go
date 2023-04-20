@@ -39,9 +39,9 @@ func (db *appdbimpl) GetLikes(requestingUser User, requestedUser User, post Post
 }
 
 // Database function that adds a like of a user to a photo
-func (db *appdbimpl) LikePhoto(post_id PostId, user User) error {
+func (db *appdbimpl) LikePhoto(postId PostId, user User) error {
 
-	_, err := db.c.Exec("INSERT INTO likes (post_id,user_id,username) VALUES (?, ?, ?)", post_id, user.User_id, user.UserName)
+	_, err := db.c.Exec("INSERT INTO likes (post_id,user_id,username) VALUES (?, ?, ?)", postId, user.User_id, user.UserName)
 	if err != nil {
 		return err
 	}
@@ -50,9 +50,9 @@ func (db *appdbimpl) LikePhoto(post_id PostId, user User) error {
 }
 
 // Database function that removes a like of a user from a photo
-func (db *appdbimpl) UnlikePhoto(post_id PostId, user User) error {
+func (db *appdbimpl) UnlikePhoto(postId PostId, user User) error {
 
-	_, err := db.c.Exec("DELETE FROM likes WHERE(post_id = ? AND user_id = ?)", post_id, user.User_id)
+	_, err := db.c.Exec("DELETE FROM likes WHERE(post_id = ? AND user_id = ?)", postId, user.User_id)
 	if err != nil {
 		return err
 	}
