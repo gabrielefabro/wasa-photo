@@ -160,14 +160,14 @@ func createDatabase(db *sql.DB) error {
 			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			username VARCHAR(16),
 			bio VARCHAR(64),
-			FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS posts (
 			post_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			user_id INTEGER,
 			publication_time DATETIME,
 			bio VARCHAAR(64),
-			FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS  likes (
 			post_id INTEGER NOT NULL,
@@ -183,7 +183,7 @@ func createDatabase(db *sql.DB) error {
 			post_id INTEGER,
 			text TEXT,
 			time_comment TIMESTAMP,
-			FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS banned_users (
 			banner TEXT NOT NULL,
