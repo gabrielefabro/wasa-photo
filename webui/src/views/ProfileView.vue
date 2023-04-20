@@ -3,19 +3,26 @@ export default {
 	data: function() {
 		return {
 			errormsg: null,
+
 			userExists: false,
 			banStatus: false,
+
             nickname: "",
+
+
 			followStatus: false,
 			currentIsBanned: false,
+
 			followerCnt: 0,
 			followingCnt:0,
 			postCnt:0,
-			post: [],
+
+			photos: [],
             following: [],
             followers: [],
 		}
 	},
+
     watch:{
         currentPath(newid,oldid){
             if (newid !== oldid){
@@ -23,32 +30,51 @@ export default {
             }
         },
     },
+
 	computed:{
+
         currentPath(){
             return this.$route.params.id
         },
         
+
 		sameUser(){
 			return this.$route.params.id === localStorage.getItem('token')
 		},
 	},
+
 	methods: {
+
         async uploadFile(){
             let fileInput = document.getElementById('fileUploader')
+
             const file = fileInput.files[0];
             const reader = new FileReader();
+
             reader.readAsArrayBuffer(file);
+
             reader.onload = async () => {
-                // Post photo: /users/:id/posts
-                let response = await this.$axios.post("/users/"+this.$route.params.id+"/posts", reader.result, {
+                // Post photo: /users/:id/photos
+                let response = await this.$axios.post("/users/"+this.$route.params.id+"/photos", reader.result, {
                     headers: {
                     'Content-Type': file.type
                     },
                 })
-                this.posts.unshift(response.data)
+                //console.log(response)
+                /*
+                this.photos.unshift({
+                    owner: response.data.owner,
+                    date: response.data.date,
+                    photo_id: response.data.photo_id,
+                    likes: response.data.likes,
+                    comments: response.data.comments,
+                })
+                */
+                this.photos.unshift(response.data)
                 this.postCnt += 1
             };
         },
+
 		async followClick(){
             try{
                 if (this.followStatus){ 
@@ -66,6 +92,7 @@ export default {
             }
             
 		},
+
 		async banClick(){
             try{
                 if (this.banStatus){
@@ -82,46 +109,56 @@ export default {
                 this.errormsg = e.toString();
             }
 		},
+
 		async loadInfo(){
             if (this.$route.params.id === undefined){
                 return
             }
+
 			try{
                 // Get user profile: /users/:id
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
+
                 this.banStatus = false
                 this.userExists = true
                 this.currentIsBanned = false
+
                 if (response.status === 206){
                     this.banStatus = true
                     return
                 }
+
 				if (response.status === 204){
 					this.userExists = false
 				}
 				
-                this.nickname = response.data.user_id
+                this.nickname = response.data.nickname
 				this.followerCnt = response.data.followers != null ? response.data.followers.length : 0
 				this.followingCnt = response.data.following != null? response.data.following.length : 0
 				this.postCnt = response.data.posts != null ? response.data.posts.length : 0
 				this.followStatus = response.data.followers != null ? response.data.followers.find(obj => obj.user_id === localStorage.getItem('token')) : false
-                this.post = response.data.posts != null ? response.data.posts : []
+                this.photos = response.data.posts != null ? response.data.posts : []
                 this.followers = response.data.followers != null ? response.data.followers : []
                 this.following = response.data.following != null ? response.data.following : []
+
 			}catch(e){
 				this.currentIsBanned = true
 			}
 		},
+
         goToSettings(){
             this.$router.push(this.$route.params.id+'/settings')
         },
-        removePhotoFromList(post_id){
-			this.post = this.posts.filter(item => item.post_id !== post_id)
+
+        removePhotoFromList(photo_id){
+			this.photos = this.photos.filter(item => item.photo_id !== photo_id)
 		},
 	},
+
 	async mounted(){
 		await this.loadInfo()
 	},
+
 }
 </script>
 
@@ -136,7 +173,7 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="card-body d-flex justify-content-between align-items-center">
-                                <h5 class="card-title p-0 me-auto mt-auto">{{user_id}} @{{this.$route.params.id}}</h5>
+                                <h5 class="card-title p-0 me-auto mt-auto">{{nickname}} @{{this.$route.params.id}}</h5>
 
                                 <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-success ms-2">
                                     {{followStatus ? "Unfollow" : "Follow"}}
@@ -198,13 +235,13 @@ export default {
             <div class="col">
 
                 <div v-if="!banStatus && postCnt>0">
-                    <Photo v-for="(post,index) in posts" 
+                    <Photo v-for="(photo,index) in photos" 
                     :key="index" 
                     :owner="this.$route.params.id" 
-                    :photo_id="post.photo_id" 
-                    :comments="post.comments" 
-                    :likes="post.likes" 
-                    :upload_date="post.date" 
+                    :photo_id="photo.photo_id" 
+                    :comments="photo.comments" 
+                    :likes="photo.likes" 
+                    :upload_date="photo.date" 
                     :isOwner="sameUser" 
                     
                     @removePhoto="removePhotoFromList"
@@ -233,12 +270,14 @@ export default {
 .profile-file-upload{
     display: none;
 }
+
 .my-nav-icon-gear{
     color: grey;
 }
 .my-nav-icon-gear:hover{
     transform: scale(1.3);
 }
+
 .my-btn-add-photo{
     background-color: green;
     border-color: grey;
@@ -248,4 +287,5 @@ export default {
     background-color: green;
     border-color: grey;
 }
+
 </style>

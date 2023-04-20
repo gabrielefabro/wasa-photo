@@ -7,6 +7,10 @@ export default {
     }
   },
   methods:{
+    logout(){
+      localStorage.removeItem('token')
+      this.$emit('logoutNavbar',false)
+    },
     goBackHome(){
       this.$emit('requestUpdateView',"/home")
     },
@@ -59,24 +63,29 @@ export default {
 </template>
 
 <style>
+
 .my-nav {
   background: transparent;
 }
 .my-nav:hover{
   cursor: pointer;
 }
+
 .navbar-btn {
     background-color: rgba(235, 79, 79, 0.795);
     color: grey;
     border-color: white;
 }
+
 .navbar-elements {
     color: rgb(231, 152, 47);
+
 }
 .brand-img{
   height: 30px;
   width: 30px;
 }
+
 .my-nav-icon-profile{
   color: black;
 }

@@ -5,12 +5,13 @@ export default {
 			commentValue:"",
 		}
 	},
-	props:['modal_id','comments_list','user_id','post_id'],
+	props:['modal_id','comments_list','photo_owner','photo_id'],
+
 	methods: {
 		async addComment(){
 			try{
 				// Comment post: /users/:id/photos/:photo_id/comments
-				let response = await this.$axios.post("/users/"+ this.user_id +"/posts/"+this.post_id+"/comments",{
+				let response = await this.$axios.post("/users/"+ this.photo_owner +"/photos/"+this.photo_id+"/comments",{
 					user_id: localStorage.getItem('token'),
 					comment: this.commentValue
 				},{
@@ -18,9 +19,10 @@ export default {
 						'Content-Type': 'application/json'
 					}
 				})
+
 				this.$emit('addComment',{
 					comment_id: response.data.comment_id, 
-					post_id: this.post_id, 
+					photo_id: this.photo_id, 
 					user_id: localStorage.getItem('token'), 
 					comment: this.commentValue}
 				)
@@ -30,9 +32,11 @@ export default {
 				console.log(e.toString())
 			}
 		},
+
 		eliminateCommentToParent(value){
 			this.$emit('eliminateComment',value)
 		},
+
 		addCommentToParent(newCommentJSON){
 			this.$emit('addComment',newCommentJSON)
 		},
@@ -54,10 +58,11 @@ export default {
                     <PhotoComment v-for="(comm,index) in comments_list" 
 					:key="index" 
 					:author="comm.user_id" 
-					:username="comm.username"
+					:nickname="comm.nickname"
 					:comment_id="comm.comment_id"
-					:post_id="comm.post_id"
+					:photo_id="comm.photo_id"
 					:content="comm.comment"
+					:photo_owner="photo_owner"
 					
 
 					@eliminateComment="eliminateCommentToParent"

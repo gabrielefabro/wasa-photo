@@ -1,6 +1,8 @@
 <script>
 export default {	
+
 	props:['modal_id','likes'],
+
 }
 </script>
 
@@ -16,7 +18,7 @@ export default {
 			<UserMiniCard v-for="(user,index) in likes" 
 			:key="index" 
 			:identifier="user.user_id"
-			:username="user.username"
+			:nickname="user.nickname"
 			/>
 		</div>
 		</div>
@@ -28,4 +30,5 @@ export default {
 .my-modal-disp-none{
 	display: none;
 }
+
 </style>

@@ -8,52 +8,65 @@ export default {
 			allLikes: [],
 		}
 	},
-	props: ['user_id','likes','comments',"upload_date","post_id","isOwner"], 
+
+	props: ['owner','likes','comments',"upload_date","photo_id","isOwner"], 
+
 	methods:{
 		loadPhoto(){
-			// Get post : "/users/:id/posts/:post_id"
-			this.photoURL = __API_URL__+ "/users/"+this.user_id+"/posts/"+this.post_id 
+			// Get photo : "/users/:id/photos/:photo_id"
+			this.photoURL = __API_URL__+ "/users/"+this.owner+"/photos/"+this.photo_id 
 		},
+
 		async deletePhoto(){
 			try{
-				// Delete post: /users/:id/posts/:post_id
-				await this.$axios.delete("/users/"+this.user_id+"/posts/"+this.post_id)
+				// Delete photo: /users/:id/photos/:photo_id
+				await this.$axios.delete("/users/"+this.owner+"/photos/"+this.photo_id)
 				// location.reload()
-				this.$emit("removePhoto",this.post_id)
+				this.$emit("removePhoto",this.photo_id)
 			}catch(e){
 				//
 			}
 		},
+
 		photoOwnerClick: function(){
-			this.$router.replace("/users/"+this.user_id)
+			this.$router.replace("/users/"+this.owner)
 		},
+
 		async toggleLike() {
+
 			if(this.isOwner){ 
 				return
 			}
+
 			const bearer = localStorage.getItem('token')
+
 			try{
 				if (!this.liked){
-					// Put like: /users/:id/posts/:post_id/likes/:like_id"
-					await this.$axios.put("/users/"+ this.user_id +"/posts/"+this.post_id+"/likes/"+ bearer)
+
+					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
+					await this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.allLikes.push({
 						user_id: bearer,
-						username: bearer
+						nickname: bearer
 					})
+
 				}else{
-					// Delete like: /users/:id/posts/:post_id/likes/:like_id"
-					await this.$axios.delete("/users/"+ this.user_id  +"/posts/"+this.post_id+"/likes/"+ bearer)
+					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
+					await this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.allLikes.pop()
 				}
+
 				this.liked = !this.liked;
 			}catch(e){
 				//
 			}
       		
     	},
+
 		removeCommentFromList(value){
 			this.allComments = this.allComments.filter(item=> item.comment_id !== value)
 		},
+
 		addCommentToList(comment){
 			this.allComments.push(comment)
 		},
@@ -61,9 +74,11 @@ export default {
 	
 	async mounted(){
 		await this.loadPhoto()
+
 		if (this.likes != null){
 			this.allLikes = this.likes
 		}
+
 		if (this.likes != null){
 			this.liked = this.allLikes.some(obj => obj.user_id === localStorage.getItem('token'))
 		}
@@ -73,19 +88,20 @@ export default {
 		
 		
 	},
+
 }
 </script>
 
 <template>
 	<div class="container-fluid mt-3 mb-5 ">
 
-        <LikeModal :modal_id="'like_modal'+post_id" 
+        <LikeModal :modal_id="'like_modal'+photo_id" 
 		:likes="allLikes" />
 
-        <CommentModal :modal_id="'comment_modal'+post_id" 
+        <CommentModal :modal_id="'comment_modal'+photo_id" 
 		:comments_list="allComments" 
-		:user_id="user_id" 
-		:photo_id="post_id"
+		:photo_owner="owner" 
+		:photo_id="photo_id"
 
 		@eliminateComment="removeCommentFromList"
 		@addComment="addCommentToList"
@@ -113,18 +129,18 @@ export default {
                         <div class="d-flex flex-row justify-content-end align-items-center mb-2">
 
 							<button class="my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
-                            	<i> From {{user_id}}</i>
+                            	<i> From {{owner}}</i>
 							</button>
 
                             <button class="my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
                                 <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(liked ? 'fa-heart' : 'fa-heart-o') "></i>
-                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+post_id" class="my-comment-color ">
+                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+photo_id" class="my-comment-color ">
                                     {{allLikes.length}}
                                 </i>
                             </button>
 
                             <button class="my-trnsp-btn m-0 p-1  d-flex justify-content-center align-items-center" 
-							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+post_id">
+							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+photo_id">
 
                                 <i class="my-comment-color fa-regular fa-comment me-1" @click="commentClick"></i>
                                 <i class="my-comment-color-2"> {{allComments != null ? allComments.length : 0}}</i>
@@ -146,26 +162,31 @@ export default {
 .photo-background-color{
 	background-color: grey;
 }
+
 .my-card{
 	width: 27rem;
 	border-color: black;
 	border-width: thin;
 }
+
 .my-heart-color{
 	color: grey;
 }
 .my-heart-color:hover{
 	color: red;
 }
+
 .my-comment-color {
 	color: grey;
 }
 .my-comment-color:hover{
 	color: black;
 }
+
 .my-comment-color-2{
 	color:grey
 }
+
 .my-dlt-btn{
 	font-size: 19px;
 }

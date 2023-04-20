@@ -1,30 +1,34 @@
 <script>
 export default {
-	data: function() {
+	data: function () {
 		return {
 			errormsg: null,
-			posts: [],
+			photos: [],
 		}
 	},
+
 	methods: {
+		
 		async loadStream() {
-			this.errormsg = null;
 			try {
 				this.errormsg = null
 				// Home get: "/users/:id/home"
 				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
+
 				if (response.data != null){
-					this.posts = response.data
+					this.photos = response.data
 				}
 				
 			} catch (e) {
 				this.errormsg = e.toString()
+			}
 		}
 	},
-	mounted() {
-		this.loadStream()
+
+	async mounted() {
+		await this.loadStream()
 	}
-}
+
 }
 </script>
 
@@ -34,13 +38,13 @@ export default {
 
 		<div class="row">
 			<Photo
-				v-for="(post,index) in posts"
+				v-for="(photo,index) in photos"
 				:key="index"
-				:owner="post.owner"
-				:photo_id="post.photo_id"
-				:comments="post.comments != nil ? post.comments : []"
-				:likes="post.likes != nil ? post.likes : []"
-				:upload_date="post.date"
+				:owner="photo.owner"
+				:photo_id="photo.photo_id"
+				:comments="photo.comments != nil ? photo.comments : []"
+				:likes="photo.likes != nil ? photo.likes : []"
+				:upload_date="photo.date"
 			/>
 		</div>
 

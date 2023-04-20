@@ -6,12 +6,15 @@ export default {
 			errormsg: null,
 		}
 	},
+
 	props:['searchValue'],
+
 	watch:{
 		searchValue: function(){
 			this.loadSearchedUsers()
 		},
 	},
+
 	methods:{
 		async loadSearchedUsers(){
 			this.errormsg = null;
@@ -31,14 +34,17 @@ export default {
 					},
 				});
 				this.users = response.data
+
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
 		},
+
 		goToProfile(profileId){
 			this.$router.replace("/users/"+profileId)
 		}
 	},
+
 	async mounted(){
 		// Check if the user is logged
 		if (!localStorage.getItem('token')){
@@ -65,6 +71,7 @@ export default {
 </template>
 
 <style>
+
 .no-result-text{
 	color: white;
 	font-style: italic;

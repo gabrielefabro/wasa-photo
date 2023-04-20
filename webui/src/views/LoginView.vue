@@ -16,6 +16,7 @@ export default {
 				let response = await this.$axios.post("/session",{
 					user_id: this.identifier.trim()
 				});
+
 				localStorage.setItem('token',response.data.user_id);
 				this.$router.replace("/home")
 				this.$emit('updatedLoggedChild',true)
@@ -80,9 +81,10 @@ export default {
 
 <style>
 .login {
-    background-image: url("../assets/images/cielo.avif");
+    background-image: url("../assets/images/people.png");
     height: 100vh;
 }
+
 .login-title {
     color: black;
 }
