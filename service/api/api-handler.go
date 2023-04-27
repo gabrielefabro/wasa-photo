@@ -7,39 +7,51 @@ import (
 // Handler returns an instance of httprouter.Router that handle APIs registered here
 func (rt *_router) Handler() http.Handler {
 
-	// Login enpoint
+	// Login
 	rt.router.POST("/session", rt.wrap(rt.sessionHandler))
 
-	// Search endpoint
-	rt.router.GET("/users", rt.wrap(rt.getUsersQuery))
+	// Change UserName
+	rt.router.PUT("/users/:id", rt.wrap(rt.setMyUserName))
 
-	// User Endpoint
-	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
+	// Return Profile
 	rt.router.GET("/users/:id", rt.wrap(rt.getUserProfile))
 
-	// Ban endpoint
+	// Stream
+	rt.router.GET("/users/:id/home", rt.wrap(rt.getMyStream))
+
+	// Follow User
+	rt.router.PUT("/users/:id/followings/:following_id", rt.wrap(rt.putFollow))
+
+	// Unfollow User
+	rt.router.DELETE("/users/:id/followings/:following_id", rt.wrap(rt.deleteFollow))
+
+	// Ban User
 	rt.router.PUT("/users/:id/banned_users/:banned_id", rt.wrap(rt.putBan))
+
+	// Unban User
 	rt.router.DELETE("/users/:id/banned_users/:banned_id", rt.wrap(rt.deleteBan))
 
-	// Followers endpoint
-	rt.router.PUT("/users/:id/followers/:follower_id", rt.wrap(rt.putFollow))
-	rt.router.DELETE("/users/:id/followers/:follower_id", rt.wrap(rt.deleteFollow))
+	// Like Post
+	rt.router.PUT("/users/:id/posts/:post_id/likes/:like_id", rt.wrap(rt.putLike))
 
-	// Stream endpoint
-	rt.router.GET("/users/:id/home", rt.wrap(rt.getHome))
+	// Unlike Post
+	rt.router.DELETE("/users/:id/posts/:post_id/likes/:like_id", rt.wrap(rt.deleteLike))
 
-	// Photo Endpoint
-	rt.router.POST("/users/:id/photos", rt.wrap(rt.postPhoto))
-	rt.router.DELETE("/users/:id/photos/:photo_id", rt.wrap(rt.deletePhoto))
-	rt.router.GET("/users/:id/photos/:photo_id", rt.wrap(rt.getPhoto))
+	// Return Post
+	rt.router.GET("/users/:id/posts/:post_id", rt.wrap(rt.getPhoto))
 
-	// Comments endpoint
-	rt.router.POST("/users/:id/photos/:photo_id/comments", rt.wrap(rt.postComment))
-	rt.router.DELETE("/users/:id/photos/:photo_id/comments/:comment_id", rt.wrap(rt.deleteComment))
+	// Delete Post
+	rt.router.DELETE("/users/:id/posts/:post_id", rt.wrap(rt.deletePhoto))
 
-	// Likes endpoint
-	rt.router.PUT("/users/:id/photos/:photo_id/likes/:like_id", rt.wrap(rt.putLike))
-	rt.router.DELETE("/users/:id/photos/:photo_id/likes/:like_id", rt.wrap(rt.deleteLike))
+	// Post
+	rt.router.POST("/users/:id/posts", rt.wrap(rt.postPhoto))
+
+	// Comment Post
+	rt.router.POST("/users/:id/posts/:post_id/comments", rt.wrap(rt.postComment))
+
+	// Uncomment Post
+	rt.router.DELETE("/users/:id/posts/:post_id/comments/:comment_id", rt.wrap(rt.deleteComment))
+
 	// Special routes
 	rt.router.GET("/liveness", rt.liveness)
 

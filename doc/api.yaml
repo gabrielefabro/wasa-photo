@@ -214,7 +214,7 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AuthorizationUser" }
-  /profiles/{id}:
+  /users/{id}:
     parameters:
       - name: id
         in: path
@@ -254,7 +254,7 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /profiles/{id}/home: 
+  /users/{id}/home: 
     parameters:
       - name: id
         in: path
@@ -274,7 +274,7 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Posts"}
-  /profiles/{id}/followings/{following_id}:
+  /users/{id}/followings/{following_id}:
     parameters:
       - name: id
         in: path
@@ -312,7 +312,7 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /profiles/{id}/bans/{banned_id}:
+  /users/{id}/banned_users/{banned_id}:
     parameters:
       - name: id
         in: path
@@ -350,7 +350,7 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }            
-  /profiles/{id}/posts/{post_id}/likes/{like_id}:
+  /users/{id}/posts/{post_id}/likes/{like_id}:
     parameters:
       - name: id
         in: path
@@ -393,7 +393,7 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /profiles/{profile_id}/posts/{post_id}:
+  /users/{profile_id}/posts/{post_id}:
     parameters:
       - name: profile_id
         in: path
@@ -431,7 +431,7 @@ paths:
           content:  
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }  
-  /profiles/{id}/posts:
+  /users/{id}/posts:
     parameters:
       - name: id
         in: path
@@ -459,7 +459,7 @@ paths:
           content:
             text/plain:
               schema: { $ref: "#/components/schemas/Success" }
-  /profiles/{id}/posts/{post_id}/comments:
+  /users/{id}/posts/{post_id}/comments:
     parameters:
       - name: id
         in: path
@@ -484,7 +484,7 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Comment"}
-  /profiles/{id}/posts/{post_id}/comments/{comment_id}:
+  /users/{id}/posts/{post_id}/comments/{comment_id}:
     parameters:
         - name: id
           in: path

@@ -11,7 +11,7 @@ import (
 )
 
 // This function retrieves all the photos of the people that the user is following
-func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	w.Header().Set("Content-Type", "application/json")
 	identifier := extractBearer(r.Header.Get("Authorization"))

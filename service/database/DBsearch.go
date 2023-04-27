@@ -1,7 +1,7 @@
 package database
 
 // Database function that return a profile that matches with the username passed as argoument
-func (db *appdbimpl) GetProfile(searcher User, userToSearch User) (Profile, int64, error) {
+func (db *appdbimpl) GetUserProfile(searcher User, userToSearch User) (Profile, int64, error) {
 
 	rows, err := db.c.Query("SELECT profile FROM profiles WHERE user_id = ? AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
 		userToSearch.User_id, userToSearch.User_id, searcher.User_id)

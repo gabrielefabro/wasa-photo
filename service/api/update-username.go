@@ -10,7 +10,7 @@ import (
 )
 
 // Function that updates a user's nickname
-func (rt *_router) putNickname(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	pathId := ps.ByName("id")
 
