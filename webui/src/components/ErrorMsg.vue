@@ -5,16 +5,10 @@ export default {
 </script>
 
 <template>
-	<div class="d-flex justify-content-center alert alert-danger mt-3 error" role="alert">
+	<div class="alert alert-danger" role="alert">
 		{{ msg }}
 	</div>
 </template>
 
 <style>
-.error {
-    position: absolute;
-    width: 50%;
-    left: 25%;
-    bottom: 0%;
-}
 </style>
