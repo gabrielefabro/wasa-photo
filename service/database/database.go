@@ -63,7 +63,7 @@ type AppDatabase interface {
 	// GetMyFollowings returns the followings list
 	GetMyFollowings(User) ([]User, error)
 
-	//GetPost return all the post from one profile
+	// GetPost return all the post from one profile
 	GetPosts(a User, b User) ([]Post, error)
 
 	// FollowUser adds one profile from the followers list
