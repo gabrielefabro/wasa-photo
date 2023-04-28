@@ -13,10 +13,11 @@ func applyCORSHandler(h http.Handler) http.Handler {
 	return handlers.CORS(
 		handlers.AllowedHeaders([]string{
 			"x-example-header",
-			"Content-Type",
-			"Authorization",
 		}),
+		handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS", "DELETE", "PUT"}),
 		handlers.AllowedOrigins([]string{"*"}),
+		handlers.ExposedHeaders([]string{"Autorization"}),
+		handlers.AllowCredentials(),
 	)(h)
 }
