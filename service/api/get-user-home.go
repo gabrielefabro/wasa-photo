@@ -40,9 +40,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 			return
 		}
 
-		for _, post := range followerPost {
-			posts = append(posts, post)
-		}
+		posts = append(posts, followerPost...)
 
 	}
 
