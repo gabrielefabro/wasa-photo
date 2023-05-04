@@ -4,20 +4,17 @@ export default {
 		return {
 			errormsg: "",
 			posts: [],
-            search: "",
 		}
 	},
 
     methods: {
-        getID(post) {
-			return `${post.user.userId}` + `${post.postId}`;
-		},
         async getMyStream() {
             try {
 				this.errormsg = null
 				
-				let response = await this.$axios.get("/users/" + localStorage.userId + "/home")
-				if (response.data != null){
+				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
+				
+                if (response.data != null){
 					this.posts = response.data
 				}
 			
@@ -25,15 +22,6 @@ export default {
 				this.errormsg = error.toString()
 			}
         },
-
-        addLike(data) {
-			this.posts.forEach(post => {
-				if (post.postId == data.postId) {
-					post.liked = data.liked;
-					post.likesCount++;
-				}
-			});
-		},
 
     async mounted() {
         await this.getMyStream()
@@ -44,6 +32,21 @@ export default {
 </script>
 
 <template>
+	<div class="container-fluid">
+		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 
-<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+		<div class="row">
+			<post
+				v-for="(post,index) in posts"
+				:key="index"
+				:username="post.username"
+				:post_id="post.post_id"
+				:comments="post.comments != nil ? post.comments : []"
+				:likes="post.likes != nil ? post.likes : []"
+				:upload_date="post.pubblicationTime"
+			/>
+		</div>
+    <span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet </span>
+	<span v-if="posts.length == 0" class="no-posts-text fw-500 fs-6"> Start to follow someone!</span>
+	</div>
 </template>
