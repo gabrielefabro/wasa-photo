@@ -19,7 +19,7 @@ export default{
 					username: this.username,
 				});
 				this.$router.replace("/home")
-				localStorage.userID = response.data.user.userID;
+				localStorage.userId = response.data.user.userId;
                 localStorage.username = response.data.user.username;
 			} catch (error) {
 				this.errorMsg = error.toString();
@@ -36,8 +36,7 @@ export default{
 </script>
 
 <template>
-	<ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
-	<div class="login-container">
+	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>	<div class="login-container">
         <div class="title-login-container">
             <span class="login-title"> Login </span>
         </div>
