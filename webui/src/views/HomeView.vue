@@ -1,4 +1,6 @@
 <script>
+import FloatingNavbar from '@/components/FloattingNavbar.vue'
+import UploadPhoto from '@/components/UploadPhoto.vue';
 export default {
 	data: function () {
 		return {
@@ -22,6 +24,25 @@ export default {
 				this.errormsg = error.toString()
 			}
         },
+
+		updateLike(data) {
+			this.posts.forEach(post => {
+				if (post.postID == data.postID) {
+					post.liked = data.liked;
+					post.likesCount++;
+				}
+			});
+		},
+
+		async deletePost(postID) {
+			const index = this.posts.findIndex(post => post.postID == postID && post.user.userID == localStorage.userID);
+			try {
+				await this.$axios.delete(`users/${localStorage.userID}/posts/${postID}`)
+				this.posts.splice(index, 1);
+			} catch (e) {
+				this.errorMsg = $utils.errorToString();
+			}
+		},
 
     async mounted() {
         await this.getMyStream()
