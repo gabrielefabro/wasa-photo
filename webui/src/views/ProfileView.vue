@@ -123,7 +123,7 @@ export default {
             this.typeList = "simple";
             this.dataGetter = async (profilesArray, dataAvaible) => {
                 try {
-                    let response = await this.$axios.get(`/profiles/${this.userID}/followings`);
+                    let response = await this.$axios.get(`/users/${this.userID}/followings`);
                     if (response.data == null) {
                         dataAvaible = false;
                         return;
@@ -142,7 +142,7 @@ export default {
         async follow() {
             if (this.isFollowed) {
                 try {
-                    let _ = await this.$axios.delete(`profiles/${localStorage.userID}/followings/${this.userID}`);
+                    let _ = await this.$axios.delete(`users/${localStorage.userID}/followings/${this.userID}`);
                     this.isFollowed = false;
                     this.followTextButton = "Follow";
                     this.followersCount--;
@@ -150,7 +150,7 @@ export default {
                     this.errormsg = e.toString();                }
             } else {
                 try {
-                    let _ = await this.$axios.put(`profiles/${localStorage.userID}/followings/${this.userID}`, {});
+                    let _ = await this.$axios.put(`users/${localStorage.userID}/followings/${this.userID}`, {});
                     this.isFollowed = true;
                     this.followTextButton = "Unfollow";
                     this.followersCount++;
