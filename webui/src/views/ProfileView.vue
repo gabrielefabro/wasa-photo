@@ -1,5 +1,4 @@
 <script>
-import UploadPhoto from '../components/UploadPhoto.vue';
 export default {
     components: {
         UploadPhoto,
@@ -250,16 +249,11 @@ export default {
             document.querySelectorAll(".top-profile-picture")[0].style.cursor = "pointer";
         }
 
-        document.addEventListener('scroll', e => {
-            if (document.documentElement.scrollTop + window.innerHeight >= document.documentElement.scrollHeight*0.8) {
-                this.loadMoreContents();
-            }
-        });
+        document.addEventListener('scroll');
     },
 
     beforeRouteUpdate(to, from) {
         this.posts = [];
-        this.postOffset = 0;
         this.dataAvaible = true;
 
         this.userID = parseInt(to.params.userID);
