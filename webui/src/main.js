@@ -8,8 +8,8 @@ import ErrorMsg from './components/ErrorMsg.vue'
 import Post from './components/Post.vue'
 
 import './assets/main.css'
-import './assets/home.css'
 import './assets/login_style.css'
+import './assets/dashboard.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
