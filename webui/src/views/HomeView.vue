@@ -1,6 +1,5 @@
 <script>
 import FloatingNavbar from '@/components/FloattingNavbar.vue'
-import UploadPhoto from '@/components/UploadPhoto.vue';
 export default {
 	data: function () {
 		return {
