@@ -6,7 +6,6 @@ import LoadingSpinner from './components/LoadingSpinner.vue'
 
 import ErrorMsg from './components/ErrorMsg.vue'
 import Post from './components/Post.vue'
-import ProfilesList from './components/ProfilesList.vue'
 
 import './assets/main.css'
 import './assets/home.css'
@@ -26,7 +25,6 @@ app.config.globalProperties.$utils = utils;
 //--- COMPONENT ---//
 app.component("ErrorMsg", ErrorMsg);
 app.component("Post", Post);
-app.component("ProfilesList", ProfilesList);
 app.component("LoadingSpinner", LoadingSpinner);
 //---------------//
 
