@@ -22,10 +22,8 @@ app.component("LoadingSpinner", LoadingSpinner);
 //---------------//
 
 
-library.add(fas);
-library.add(far);
 
-app.component('font-awesome-icon', FontAwesomeIcon)
+
 
 app.use(router)
 app.mount('#app')
