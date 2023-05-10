@@ -1,8 +1,6 @@
 <script>
 export default {
-    components: {
-        UploadPhoto,
-    },
+
     data() {
         return {
             errorMsg: "",
