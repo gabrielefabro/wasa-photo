@@ -5,7 +5,7 @@ export default {
         return {
             errorMsg: "",
             // Profile data
-            userID: parseInt(this.$route.params.userID),
+            userId: parseInt(this.$route.params.userId),
             username: "",
             followersCount: 0,
             followingsCount: 0,
@@ -45,15 +45,15 @@ export default {
         async getProfile() {
             this.isLoading = true;
             try {
-                let response = await this.$axios.get(`users/${this.userID}`)
-                this.userID = response.data.user.userID;
+                let response = await this.$axios.get(`users/${this.userId}`)
+                this.userId = response.data.user.userId;
                 this.username = response.data.user.username;
                 this.followersCount = response.data.followersCount;
                 this.followingsCount = response.data.followingsCount;
                 this.postsCount = response.data.postsCount;
                 this.isFollowed = response.data.isFollowed;
                 this.followTextButton = this.isFollowed ? "Unfollow" : "Follow";
-                this.isOwner = localStorage.userID == this.userID;
+                this.isOwner = localStorage.userId == this.userID;
             } catch (e) {
                 this.errormsg = e.toString();
             }
@@ -62,7 +62,7 @@ export default {
         async getPosts() {
             this.isLoading = true;
             try {
-                let response = await this.$axios.get(`/users/${this.userID}/posts`);
+                let response = await this.$axios.get(`/users/${this.userId}/posts`);
                 if (response.data == null) {
                     this.dataAvaible = false;
                     this.isLoading = false;
@@ -76,7 +76,7 @@ export default {
         editingUsername() {
             if (this.isOwner) {
                 document.querySelectorAll(".top-body-profile-username")[0].style.outline = "auto";
-                document.querySelectorAll(".top-body-profile-username")[0].style.outlineColor = "#03C988";
+                document.querySelectorAll(".top-body-profile-username")[0].style.outlineColor = "#03c917";
             }
         },
         async saveChangeUsername() {
@@ -88,7 +88,7 @@ export default {
                 }
                 this.isLoading = true;
                 try {
-                    let _ = await this.$axios.put(`/users/${this.userID}/username`, { username: this.username });
+                    let _ = await this.$axios.put(`/users/${this.userId}/username`, { username: this.username });
                     localStorage.username = this.username;
                 } catch (e) {
                     this.errormsg = e.toString();
@@ -103,7 +103,7 @@ export default {
             this.typeList = "simple";
             this.dataGetter = async (profilesArray, dataAvaible) => {
                 try {
-                    let response = await this.$axios.get(`/users/${this.userID}/followers`);
+                    let response = await this.$axios.get(`/users/${this.userId}/followers`);
                     if (response.data == null) {
                         dataAvaible = false;
                         return;
@@ -120,7 +120,7 @@ export default {
             this.typeList = "simple";
             this.dataGetter = async (profilesArray, dataAvaible) => {
                 try {
-                    let response = await this.$axios.get(`/users/${this.userID}/followings`);
+                    let response = await this.$axios.get(`/users/${this.userId}/followings`);
                     if (response.data == null) {
                         dataAvaible = false;
                         return;
@@ -139,7 +139,7 @@ export default {
         async follow() {
             if (this.isFollowed) {
                 try {
-                    let _ = await this.$axios.delete(`users/${localStorage.userID}/followings/${this.userID}`);
+                    let _ = await this.$axios.delete(`users/${localStorage.userId}/followings/${this.userId}`);
                     this.isFollowed = false;
                     this.followTextButton = "Follow";
                     this.followersCount--;
@@ -147,7 +147,7 @@ export default {
                     this.errormsg = e.toString();                }
             } else {
                 try {
-                    let _ = await this.$axios.put(`users/${localStorage.userID}/followings/${this.userID}`, {});
+                    let _ = await this.$axios.put(`users/${localStorage.userId}/followings/${this.userId}`, {});
                     this.isFollowed = true;
                     this.followTextButton = "Unfollow";
                     this.followersCount++;
@@ -181,14 +181,14 @@ export default {
             this.typeList = "ban";
             this.dataGetter = async (profilesArray, dataAvaible) => {
                 try {
-                    let response = await this.$axios.get(`/users/${this.userID}/bans`);
+                    let response = await this.$axios.get(`/users/${this.userId}/bans`);
                     if (response.data == null) {
                         dataAvaible = false;
                         return;
                     }
                     profilesArray.push(...response.data);
                 } catch (e) {
-                    this.errorMsg = this.$utils.errorToString(e);;
+                    this.errorMsg = error.toString(e);;
                 }
             }
         },
@@ -199,8 +199,8 @@ export default {
         },
         async banUser() {
             try {
-                let _ = await this.$axios.put(`/users/${localStorage.userID}/bans/${this.userID}`, {});
-                this.$router.push(`/users/${localStorage.userID}`);
+                let _ = await this.$axios.put(`/users/${localStorage.userId}/bans/${this.userId}`);
+                this.$router.push(`/users/${localStorage.userId}`);
             } catch (e) {
                 this.errormsg = e.toString();            }
             this.showOptions = false;
@@ -208,22 +208,12 @@ export default {
         async deletePost(postID) {
             this.isLoading = true;
             try {
-                let _ = await this.$axios.delete(`users/${localStorage.userID}/posts/${postID}`);
-                this.posts = this.posts.filter(post => post.postID != postID);
+                let _ = await this.$axios.delete(`users/${localStorage.userId}/posts/${postId}`);
+                this.posts = this.posts.filter(post => post.postId != postId);
                 this.postsCount--;
                 this.exitPost();
             } catch (e) {
                 this.errormsg = e.toString();            }
-            this.isLoading = false;
-        },
-        async deleteProfile() {
-            this.isLoading = true;
-            try {
-                let _ = await this.$axios.delete(`users/${localStorage.userID}`);
-                this.doLogout();
-            } catch (e) {
-                this.errorMsg = this.$utils.errorToString(e);;
-            }
             this.isLoading = false;
         },
     },
@@ -241,10 +231,7 @@ export default {
         this.getPosts();
 
         if (this.isOwner) {
-            document.querySelectorAll(".top-body-profile-bio-text")[0].style.cursor = "text";
             document.querySelectorAll(".top-body-profile-username")[0].style.cursor = "text";
-
-            document.querySelectorAll(".top-profile-picture")[0].style.cursor = "pointer";
         }
 
         document.addEventListener('scroll');
@@ -254,7 +241,7 @@ export default {
         this.posts = [];
         this.dataAvaible = true;
 
-        this.userID = parseInt(to.params.userID);
+        this.userId = to.params.userId;
         this.getProfile();
         this.getPosts();
     },
@@ -265,8 +252,7 @@ export default {
 
 <template>
 	<LoadingSpinner :loading=isLoading />
-    <ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
-    <UploadPhoto v-if="isEditingPropic" :photoType="'proPic'" @exit-upload-form="isEditingPropic = false"
+	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
         @refresh-data="updateProfile" @error-occurred="(value) => { errorMsg = value }" />
     <div class="top-profile-container">
         <div class="top-body-profile-container">
@@ -295,12 +281,6 @@ export default {
             </div>
             <input :readonly="!isOwner" v-model="username" class="top-body-profile-username" @focusin="editingUsername"
                 @focusout="saveChangeUsername" @input="checkUsername" maxlength="15" spellcheck="false">
-            <div class="top-body-profile-bio-container">
-                <span class="top-body-profile-bio-text-counter">{{ textCounter }}/100</span>
-                <span class="top-body-profile-bio-label">Bio</span>
-                <textarea :readonly="!isOwner" @focusin="editingBio" @focusout="saveChangeBio" @input="countChar"
-                    v-model="bio" class="top-body-profile-bio-text" spellcheck="false" maxlength="100" rows="2"></textarea>
-            </div>
             <div class="top-body-profile-stats-container">
                 <div class="profile-stats" @click="goToPost">
                     <span class="profile-stats-text">posts</span>

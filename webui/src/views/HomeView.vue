@@ -24,9 +24,9 @@ export default {
 			}
         },
 
-		updateLike(data) {
+		addLike(data) {
 			this.posts.forEach(post => {
-				if (post.postID == data.postID) {
+				if (post.postId == data.postId) {
 					post.liked = data.liked;
 					post.likesCount++;
 				}
@@ -34,12 +34,12 @@ export default {
 		},
 
 		async deletePost(postID) {
-			const index = this.posts.findIndex(post => post.postID == postID && post.user.userID == localStorage.userID);
+			const index = this.posts.findIndex(post => post.postId == postId && post.user.userId == localStorage.userId);
 			try {
-				await this.$axios.delete(`users/${localStorage.userID}/posts/${postID}`)
+				await this.$axios.delete(`users/${localStorage.userId}/posts/${postId}`)
 				this.posts.splice(index, 1);
 			} catch (e) {
-				this.errorMsg = $utils.errorToString();
+				this.errorMsg = error.toString();
 			}
 		},
 
@@ -60,7 +60,7 @@ export default {
 				v-for="(post,index) in posts"
 				:key="index"
 				:username="post.username"
-				:post_id="post.post_id"
+				:postId="post.postId"
 				:comments="post.comments != nil ? post.comments : []"
 				:likes="post.likes != nil ? post.likes : []"
 				:upload_date="post.pubblicationTime"

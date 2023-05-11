@@ -36,7 +36,8 @@ export default{
 </script>
 
 <template>
-	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>	<div class="login-container">
+	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+	<div class="login-container">
         <div class="title-login-container">
             <span class="login-title"> Login </span>
         </div>
