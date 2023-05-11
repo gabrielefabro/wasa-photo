@@ -8,15 +8,13 @@ const router = createRouter({
 	routes: [
 		{path: '/home', component: HomeView},
 		{path: '/login', component: LoginView},
+		{path: '/', redirect: '/login'},
 		{path: '/users/:userID', component: ProfileView},
 		{path: '/some/:id/link', component: HomeView},
 	]
 })
 
-router.beforeEach((to, from, next) => {
-	if (to.path !== '/login' && !localStorage.token) next({ path: '/login' })
-	else next()
-  })
+
 
 
 export default router
