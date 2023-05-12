@@ -7,17 +7,17 @@ export default {
 			userExists: false,
 			banStatus: false,
 
-            nickname: "",
+            username: "",
 
 
 			followStatus: false,
 			currentIsBanned: false,
 
-			followerCnt: 0,
-			followingCnt:0,
-			postCnt:0,
+			followerCount: 0,
+			followingCount:0,
+			postCount:0,
 
-			photos: [],
+			posts: [],
             following: [],
             followers: [],
 		}
@@ -45,7 +45,7 @@ export default {
 
 	methods: {
 
-        async uploadFile(){
+        async loadPhoto(){
             let fileInput = document.getElementById('fileUploader')
 
             const file = fileInput.files[0];
@@ -54,25 +54,24 @@ export default {
             reader.readAsArrayBuffer(file);
 
             reader.onload = async () => {
-                // Post photo: /users/:id/photos
-                let response = await this.$axios.post("/users/"+this.$route.params.id+"/photos", reader.result, {
+                let response = await this.$axios.post("/users/"+this.$route.params.id+"/posts", reader.result, {
                     headers: {
                     'Content-Type': file.type
                     },
                 })
-                this.photos.unshift(response.data)
-                this.postCnt += 1
+                this.posts.unshift(response.data)
+                this.postCount += 1
             };
         },
 
-		async followClick(){
+		async follow(){
             try{
                 if (this.followStatus){ 
                     await this.$axios.delete("/users/"+this.$route.params.id+"/followers/"+ localStorage.getItem('token'));
-                    this.followerCnt -=1
+                    this.followerCount -=1
                 }else{
                     await this.$axios.put("/users/"+this.$route.params.id+"/followers/"+ localStorage.getItem('token'));
-                    this.followerCnt +=1
+                    this.followerCount +=1
                 }
                 this.followStatus = !this.followStatus
             }catch (e){
@@ -81,14 +80,12 @@ export default {
             
 		},
 
-		async banClick(){
+		async ban(){
             try{
                 if (this.banStatus){
-                    // Delete ban: /users/:id/banned_users/:banned_id
                     await this.$axios.delete("/users/"+localStorage.getItem('token')+"/banned_users/"+ this.$route.params.id);
                     this.loadInfo()
                 }else{
-                    // Put ban: /users/:id/banned_users/:banned_id
                     await this.$axios.put("/users/"+localStorage.getItem('token')+"/banned_users/"+ this.$route.params.id);
                     this.followStatus = false
                 }
@@ -104,7 +101,6 @@ export default {
             }
 
 			try{
-                // Get user profile: /users/:id
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
 
                 this.banStatus = false
@@ -120,12 +116,12 @@ export default {
 					this.userExists = false
 				}
 				
-                this.nickname = response.data.nickname
-				this.followerCnt = response.data.followers != null ? response.data.followers.length : 0
-				this.followingCnt = response.data.following != null? response.data.following.length : 0
-				this.postCnt = response.data.posts != null ? response.data.posts.length : 0
+                this.username = response.data.username
+				this.followerCount = response.data.followers != null ? response.data.followers.length : 0
+				this.followingCount = response.data.following != null? response.data.following.length : 0
+				this.postCount = response.data.posts != null ? response.data.posts.length : 0
 				this.followStatus = response.data.followers != null ? response.data.followers.find(obj => obj.user_id === localStorage.getItem('token')) : false
-                this.photos = response.data.posts != null ? response.data.posts : []
+                this.posts = response.data.posts != null ? response.data.posts : []
                 this.followers = response.data.followers != null ? response.data.followers : []
                 this.following = response.data.following != null ? response.data.following : []
 
@@ -138,8 +134,8 @@ export default {
             this.$router.push(this.$route.params.id+'/settings')
         },
 
-        removePhotoFromList(photo_id){
-			this.photos = this.photos.filter(item => item.photo_id !== photo_id)
+        removePhotoFromList(postId){
+			this.posts = this.posts.filter(item => item.postId !== postId)
 		},
 	},
 
@@ -163,11 +159,11 @@ export default {
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <h5 class="card-title p-0 me-auto mt-auto">{{nickname}} @{{this.$route.params.id}}</h5>
 
-                                <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-success ms-2">
+                                <button v-if="!sameUser && !banStatus" @click="follow" class="btn btn-success ms-2">
                                     {{followStatus ? "Unfollow" : "Follow"}}
                                 </button>
 
-                                <button v-if="!sameUser" @click="banClick" class="btn btn-danger ms-2">
+                                <button v-if="!sameUser" @click="ban" class="btn btn-danger ms-2">
                                     {{banStatus ? "Unban" : "Ban"}}
                                 </button>
 
@@ -181,15 +177,15 @@ export default {
 
                     <div v-if="!banStatus" class="row mt-1 mb-1">
                         <div class="col-4 d-flex justify-content-start">
-                            <h6 class="ms-3 p-0 ">Posts: {{postCnt}}</h6>
+                            <h6 class="ms-3 p-0 ">Posts: {{postCount}}</h6>
                         </div>
                     
                         <div class="col-4 d-flex justify-content-center">
-                            <h6 class=" p-0 ">Followers: {{followerCnt}}</h6>
+                            <h6 class=" p-0 ">Followers: {{followerCount}}</h6>
                         </div>
                     
                         <div class="col-4 d-flex justify-content-end">
-                            <h6 class=" p-0 me-3">Following: {{followingCnt}}</h6>
+                            <h6 class=" p-0 me-3">Following: {{followingCount}}</h6>
                         </div>
                     </div>
                 </div>
@@ -222,14 +218,14 @@ export default {
         <div class="row">
             <div class="col">
 
-                <div v-if="!banStatus && postCnt>0">
-                    <Photo v-for="(photo,index) in photos" 
+                <div v-if="!banStatus && postCount>0">
+                    <Post v-for="(post,index) in posts" 
                     :key="index" 
                     :owner="this.$route.params.id" 
-                    :photo_id="photo.photo_id" 
-                    :comments="photo.comments" 
-                    :likes="photo.likes" 
-                    :upload_date="photo.date" 
+                    :postId="post.postId" 
+                    :comments="post.comments" 
+                    :likes="post.likes" 
+                    :upload_date="post.date" 
                     :isOwner="sameUser" 
                     
                     @removePhoto="removePhotoFromList"
