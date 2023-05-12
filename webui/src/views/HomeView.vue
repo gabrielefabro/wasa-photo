@@ -1,5 +1,4 @@
 <script>
-import FloatingNavbar from '@/components/FloattingNavbar.vue'
 export default {
 	data: function () {
 		return {
