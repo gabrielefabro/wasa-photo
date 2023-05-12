@@ -3,35 +3,47 @@ import { RouterView } from 'vue-router'
 </script>
 <script>
 export default {
-	components: {
-		RouterView,
-	},
-	data() {
-		return {
+	data(){
+		return{
+			logged: false,
 		}
 	},
-	methods: {
-		goHome() {
-			if (this.$route.path == '/home') {
-				this.$router.go(0);
-				return;
-			}
-			this.$router.push('/home');
+	methods:{
+		logout(newValue){
+			this.logged = newValue
+			this.$router.replace("/login")
 		},
-	},
-	mounted() {
-	},
 
+		updateView(newRoute){
+			this.$router.replace(newRoute)
+		},
+	},	
+
+	mounted(){
+
+		if (!localStorage.getItem('token')){
+			this.$router.replace("/login")
+		}else{
+			this.logged = true
+		}
+	},
 }
 </script>
 
 <template>
-	<main>
-		<div class="navbar-header">
-			<span @click="goHome">Wasa Photo</span>
-		</div>
-		<RouterView />
-	</main>
-</template>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col p-0">
+				<main >
+					<Navbar v-if="logged" 
+					@logoutNavbar="logout" 
+					@requestUpdateView="updateView"/>
 
-<style></style>
+					<RouterView 
+					@updatedLoggedChild="updateLogged" 
+					@requestUpdateView="updateView"/>
+				</main>
+			</div>
+		</div>
+	</div>
+</template>
