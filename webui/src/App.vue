@@ -13,7 +13,9 @@ export default {
 			this.logged = newValue
 			this.$router.replace("/login")
 		},
-
+		updateLogged(newLogged){
+			this.logged = newLogged
+		},
 		updateView(newRoute){
 			this.$router.replace(newRoute)
 		},
