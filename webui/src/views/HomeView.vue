@@ -24,24 +24,6 @@ export default {
 			}
         },
 
-		addLike(data) {
-			this.posts.forEach(post => {
-				if (post.postId == data.postId) {
-					post.liked = data.liked;
-					post.likesCount++;
-				}
-			});
-		},
-
-		async deletePost(postID) {
-			const index = this.posts.findIndex(post => post.postId == postId && post.user.userId == localStorage.userId);
-			try {
-				await this.$axios.delete(`users/${localStorage.userId}/posts/${postId}`)
-				this.posts.splice(index, 1);
-			} catch (e) {
-				this.errorMsg = error.toString();
-			}
-		},
 
     async mounted() {
         await this.getMyStream()
