@@ -10,9 +10,7 @@ export default {
 	methods:{
 		async modifyusername(){
 			try{
-				let resp = await this.$axios.put("/users/"+this.$route.params.id,{
-					username: this.username,
-				})
+				let resp = await this.$axios.put("/users/"+this.$route.params.id,{username: this.username,})
 
 				this.username=""
 			}catch (e){
