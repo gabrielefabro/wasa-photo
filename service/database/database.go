@@ -102,9 +102,6 @@ type AppDatabase interface {
 	// CheckUser control if an user exist
 	CheckUser(User) (bool, error)
 
-	// GetBio return the bio of a profile
-	GetBio(User) (string, error)
-
 	// Searches all the users that match the given name (both identifier and nickname). Returns the list of matching users and an error
 	SearchUser(searcher User, userToSearch User) ([]User, error)
 
@@ -159,7 +156,6 @@ func createDatabase(db *sql.DB) error {
 		`CREATE TABLE IF NOT EXISTS profiles (
 			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			username VARCHAR(16),
-			bio VARCHAR(64),
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS posts (

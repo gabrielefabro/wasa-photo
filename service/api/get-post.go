@@ -13,6 +13,6 @@ import (
 func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	http.ServeFile(w, r,
-		filepath.Join(postFolder, ps.ByName("id"), "posts", ps.ByName("posts_id")))
+		filepath.Join(postFolder, ps.ByName("id"), "posts", ps.ByName("post_id")))
 
 }

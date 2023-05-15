@@ -5,7 +5,6 @@ import "time"
 // Profile struct represent a profile.
 type Profile struct {
 	User      User   `json:"users"`
-	Bio       string `json:"bio"`
 	Posts     []Post `json:"posts"`
 	Following []User `json:"following"`
 	Follower  []User `json:"follower"`

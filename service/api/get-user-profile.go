@@ -73,7 +73,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 	posts, err = rt.db.GetPosts(User{User_id: requestingUserId}.ToDatabase(), User{User_id: requestedUser}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("getUserProfile/db.GetPhotosList: error executing query")
+		ctx.Logger.WithError(err).Error("getUserProfile/db.GetPosts: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -85,17 +85,9 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	bio, err := rt.db.GetBio(User{User_id: requestingUserId}.ToDatabase())
-	if err != nil {
-		ctx.Logger.WithError(err).Error("getUserProfile/db.GetBio: error executing query")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(Profile{
 		User:      User{User_id: requestedUser, UserName: username},
-		Bio:       bio,
 		Follower:  followers,
 		Following: following,
 		Posts:     posts,

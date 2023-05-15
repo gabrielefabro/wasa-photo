@@ -46,7 +46,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	// Check if the comment has a valid lenght (<=30)
+	// Check if the comment has a valid lenght (<=50)
 	if len(comment.Text) > 50 {
 		w.WriteHeader(http.StatusBadRequest)
 		ctx.Logger.WithError(err).Error("post-comment: comment longer than 50 characters")

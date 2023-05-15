@@ -22,7 +22,6 @@ type JSONErrorMsg struct {
 // Profile struct represent a profile.
 type Profile struct {
 	User      User            `json:"users"`
-	Bio       string          `json:"bio"`
 	Posts     []database.Post `json:"posts"`
 	Following []database.User `json:"following"`
 	Follower  []database.User `json:"follower"`
@@ -120,7 +119,6 @@ func (post Post) ToDatabase() database.Post {
 	return database.Post{
 		User_id:          post.User_id,
 		Publication_time: post.Publication_time,
-		Bio:              post.Bio,
 		Like:             post.Like,
 		Comment:          post.Comment,
 	}
