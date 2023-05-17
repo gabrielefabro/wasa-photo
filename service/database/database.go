@@ -150,32 +150,31 @@ func (db *appdbimpl) Ping() error {
 func createDatabase(db *sql.DB) error {
 	tables := [7]string{
 		`CREATE TABLE IF NOT EXISTS users (
-			id VARCHAR(5) PRIMARY KEY,
-			username TEXT
+			id VARCHAR(15) PRIMARY KEY,
+			username VARCHAR(15)
 		);`,
 		`CREATE TABLE IF NOT EXISTS profiles (
 			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			username VARCHAR(16),
+			username VARCHAR(15),
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS posts (
 			post_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			user_id INTEGER,
+			user_id VARCHAR(15),
 			publication_time DATETIME,
-			bio VARCHAAR(64),
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS  likes (
 			post_id INTEGER NOT NULL,
-			user_id INTEGER NOT NULL,
-			username VARCHAR(16),
+			user_id VARCHAR(15) NOT NULL,
+			username VARCHAR(15),
 			PRIMARY KEY (post_id,user_id),
 			FOREIGN KEY(post_id) REFERENCES posts (post_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS comments (
 			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			username VARCHAR(16),
-			user_id INTEGER,
+			username VARCHAR(15),
+			user_id VARCHAR(15),
 			post_id INTEGER,
 			text TEXT,
 			time_comment TIMESTAMP,

@@ -60,7 +60,7 @@ func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PostId) (Post, err
 func (db *appdbimpl) UploadPhoto(post Post) (int64, error) {
 
 	res, err := db.c.Exec("INSERT INTO posts (user_id,publication_time,bio) VALUES (?,?,?)",
-		post.User_id, post.Publication_time, post.Bio)
+		post.User_id, post.Publication_time)
 
 	if err != nil {
 		// Error executing query

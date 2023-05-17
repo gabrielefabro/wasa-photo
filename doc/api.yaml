@@ -22,7 +22,6 @@ components:
       type: object
       properties: 
         user: { $ref: "#/components/schemas/User"}
-        bio: { $ref: "#/components/schemas/Bio"}
         posts: { $ref: "#/components/schemas/Posts"}
         followers: { $ref: "#/components/schemas/UsersList"}
         followings: { $ref: "#/components/schemas/UsersList"}
@@ -33,7 +32,6 @@ components:
       properties:
         user: { $ref: "#/components/schemas/User"}
         publication_time: { $ref: "#/components/schemas/PublicationTime"}
-        bio: { $ref: "#/components/schemas/Bio"}
         photo_url: { $ref: "#/components/schemas/Photo" }
     Comment:
       title: Comment
@@ -52,7 +50,7 @@ components:
       description: User
       type: object
       properties:
-        id: { $ref: "#/components/schemas/UserId" }
+        id: { $ref: "#/components/schemas/UserName" }
         username: { $ref: "#/components/schemas/UserName" }    
     UsersList:
       title: Users List
@@ -86,22 +84,6 @@ components:
       example: "gabrielefabro"
       minLength: 1
       maxLength: 15
-    UserId:
-      title: User Id
-      description: ID of profile, each profile has an unic ID
-      type: string
-      pattern: '^[0-9]{5}$'
-      example: "12345"
-      minLength: 5
-      maxLength: 5
-    Bio:
-      title: Bio
-      description: Description of post or profile
-      type: string
-      example: "Questo è il miglior profilo del mondo, SIUM!!"
-      pattern: '^[^\/\\]{1,64}$'
-      minLength: 1
-      maxLength: 64
     CommentId:
       title: Comment ID 
       description: Any number between 0-9999
@@ -114,11 +96,12 @@ components:
     PostId: 
       title: PostID 
       description: unic ID for a post
-      type: string
-      pattern: '^[0-9]{8}'
-      example: "12345678"
-      minLength: 8
-      maxLength: 8
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 99999
+      example: 12345
+      readOnly: true
     Posts:
       title: Posts List
       description: List of posts
@@ -156,7 +139,7 @@ components:
       description: The authorization code is the user_id.
       type: object
       properties:
-        id: { $ref: "#/components/schemas/UserId" }
+        id: { $ref: "#/components/schemas/UserName" }
         auth: { $ref: "#/components/schemas/Authorization" }
     PublicationTime: 
       title: Pubblication Time 

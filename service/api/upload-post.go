@@ -30,18 +30,10 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		w.WriteHeader(valid)
 		return
 	}
-	// Convert auth to uint64 from string
-	authInt, err := strconv.ParseInt(auth, 10, 64)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("The auth should be correct")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	authUInt := uint64(authInt)
 
 	// Initialize photo struct
 	post := Post{
-		User_id:          authUInt,
+		User_id:          auth,
 		Publication_time: time.Now().UTC(),
 	}
 
