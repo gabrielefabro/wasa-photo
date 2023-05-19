@@ -21,6 +21,14 @@ export default {
 		},
 	},	
 
+	created(){
+		if (!localStorage.getItem('notFirstStart')){
+			localStorage.clear()
+			localStorage.setItem('notFirstStart',true)
+		}
+		
+	},
+
 	mounted(){
 
 		if (!localStorage.getItem('token')){
