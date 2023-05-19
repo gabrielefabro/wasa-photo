@@ -2,7 +2,7 @@
 export default {
 	data: function() {
 		return {
-			errormsg: null,
+			errorMsg: null,
 
 			userExists: false,
 			banStatus: false,
@@ -75,7 +75,7 @@ export default {
                 }
                 this.followStatus = !this.followStatus
             }catch (e){
-                this.errormsg = e.toString();
+                this.errorMsg = this.$utils.errorToString(e);;
             }
             
 		},
@@ -91,7 +91,7 @@ export default {
                 }
                 this.banStatus = !this.banStatus
             }catch(e){
-                this.errormsg = e.toString();
+                this.errorMsg = this.$utils.errorToString(e);;
             }
 		},
 
@@ -241,7 +241,7 @@ export default {
         </div>
 
     
-    <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+        <ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
     </div>
     <div v-else class="h-25 ">
         <PageNotFound />

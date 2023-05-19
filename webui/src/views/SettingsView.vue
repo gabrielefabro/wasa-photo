@@ -2,7 +2,7 @@
 export default {
 	data: function () {
 		return {
-			errormsg: null,
+			errorMsg: null,
 			nickname: "",
 		}
 	},
@@ -14,7 +14,7 @@ export default {
 
 				this.username=""
 			}catch (e){
-				this.errormsg = e.toString();
+				this.errorMsg = this.$utils.errorToString(e);;
 			}
 		},
 	},
@@ -59,7 +59,7 @@ export default {
 		</div>
 
 		<div class="row">
-			<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+			<ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
 		</div>
 	</div>
 	

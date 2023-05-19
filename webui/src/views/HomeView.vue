@@ -2,7 +2,7 @@
 export default {
 	data: function () {
 		return {
-			errormsg: "",
+			errorMsg: "",
 			posts: [],
 		}
 	},
@@ -19,7 +19,7 @@ export default {
 				}
 			
 			} catch (error) {
-				this.errormsg = error.toString()
+				this.errorMsg = this.$utils.errorToString(e);;
 			}
         },
 
@@ -34,8 +34,7 @@ export default {
 
 <template>
 	<div class="container-fluid">
-		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-
+		<ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
 		<div class="row">
 			<post
 				v-for="(post,index) in posts"

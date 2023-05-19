@@ -2,7 +2,7 @@
 export default {
 	data: function() {
 		return {
-			errormsg: null,
+			errorMsg: null,
 			identifier: "",
 			disabled: true,
 		}
@@ -20,7 +20,7 @@ export default {
 				this.$emit('updatedLoggedChild',true)
 				
 			} catch (e) {
-				this.errormsg = e.toString();
+				this.errorMsg = this.$utils.errorToString(e);;
 			}
 		},
 	},
@@ -38,7 +38,7 @@ export default {
 
 		<div class="row ">
 			<div class="col">
-				<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+				<ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
 			</div>
 		</div>
 
