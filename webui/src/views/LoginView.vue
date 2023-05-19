@@ -12,7 +12,7 @@ export default {
 			this.errormsg = null;
 			try {
 				let response = await this.$axios.post("/session",{
-					userId: this.identifier.trim()
+					user_id: this.identifier.trim()
 				});
 
 				localStorage.setItem('token',response.data.userId);
