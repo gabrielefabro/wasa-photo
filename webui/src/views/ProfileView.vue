@@ -34,7 +34,7 @@ export default {
 	computed:{
 
         currentPath(){
-            return this.$route.params.id
+            return this.$route.params.user_id
         },
         
 
@@ -54,7 +54,7 @@ export default {
             reader.readAsArrayBuffer(file);
 
             reader.onload = async () => {
-                let response = await this.$axios.post("/users/"+this.$route.params.id+"/posts", reader.result, {
+                let response = await this.$axios.post("/users/"+this.$route.params.user_id+"/posts", reader.result, {
                     headers: {
                     'Content-Type': file.type
                     },
@@ -67,10 +67,10 @@ export default {
 		async follow(){
             try{
                 if (this.followStatus){ 
-                    await this.$axios.delete("/users/"+this.$route.params.id+"/followers/"+ localStorage.getItem('token'));
+                    await this.$axios.delete("/users/"+this.$route.params.user_id+"/followers/"+ localStorage.getItem('token'));
                     this.followerCount -=1
                 }else{
-                    await this.$axios.put("/users/"+this.$route.params.id+"/followers/"+ localStorage.getItem('token'));
+                    await this.$axios.put("/users/"+this.$route.params.user_id+"/followers/"+ localStorage.getItem('token'));
                     this.followerCount +=1
                 }
                 this.followStatus = !this.followStatus
@@ -83,10 +83,10 @@ export default {
 		async ban(){
             try{
                 if (this.banStatus){
-                    await this.$axios.delete("/users/"+localStorage.getItem('token')+"/banned_users/"+ this.$route.params.id);
+                    await this.$axios.delete("/users/"+localStorage.getItem('token')+"/banned_users/"+ this.$route.params.user_id);
                     this.loadInfo()
                 }else{
-                    await this.$axios.put("/users/"+localStorage.getItem('token')+"/banned_users/"+ this.$route.params.id);
+                    await this.$axios.put("/users/"+localStorage.getItem('token')+"/banned_users/"+ this.$route.params.user_id);
                     this.followStatus = false
                 }
                 this.banStatus = !this.banStatus
@@ -96,12 +96,12 @@ export default {
 		},
 
 		async loadInfo(){
-            if (this.$route.params.id === undefined){
+            if (this.$route.params.user_id === undefined){
                 return
             }
 
 			try{
-				let response = await this.$axios.get("/users/"+this.$route.params.id);
+				let response = await this.$axios.get("/users/"+this.$route.params.user_id);
 
                 this.banStatus = false
                 this.userExists = true
@@ -131,7 +131,7 @@ export default {
 		},
 
         goToSettings(){
-            this.$router.push(this.$route.params.id+'/settings')
+            this.$router.push(this.$route.params.user_id+'/settings')
         },
 
         removePhotoFromList(postId){
@@ -157,7 +157,7 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="card-body d-flex justify-content-between align-items-center">
-                                <h5 class="card-title p-0 me-auto mt-auto">{{nickname}} @{{this.$route.params.id}}</h5>
+                                <h5 class="card-title p-0 me-auto mt-auto">{{username}} @{{this.$route.params.user_id}}</h5>
 
                                 <button v-if="!sameUser && !banStatus" @click="follow" class="btn btn-success ms-2">
                                     {{followStatus ? "Unfollow" : "Follow"}}
@@ -221,11 +221,11 @@ export default {
                 <div v-if="!banStatus && postCount>0">
                     <Post v-for="(post,index) in posts" 
                     :key="index" 
-                    :owner="this.$route.params.id" 
+                    :owner="this.$route.params.user_id" 
                     :postId="post.postId" 
                     :comments="post.comments" 
                     :likes="post.likes" 
-                    :upload_date="post.date" 
+                    :upload_date="post.upload_date" 
                     :isOwner="sameUser" 
                     
                     @removePhoto="removePhotoFromList"
