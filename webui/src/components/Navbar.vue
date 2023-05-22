@@ -17,12 +17,6 @@ export default {
     myProfile(){
       this.$emit('requestUpdateView',"/users/"+localStorage.getItem('token'))
     },
-    profileIconInactive(){
-      this.iconProfile = "fa-regular"
-    },
-    profileIconActive(){
-      this.iconProfile = "fa-solid"
-    },
   },
 }
 </script>
@@ -46,7 +40,7 @@ export default {
       <div class="col-4 d-flex justify-content-end">
           <button @click="myProfile" class="my-trnsp-btn me-2" type="button">
               <!--Profile-->
-              <i :class="'my-nav-icon-profile me-1 w-100 h-100 '+iconProfile+ ' fa-user'" @mouseover="profileIconActive" @mouseout="profileIconInactive"></i>
+              <i :class="'my-nav-icon-profile me-1 w-100 h-100 '+iconProfile+ ' fa-user'"></i>
           </button>
 
           <button @click="logout" class="my-trnsp-btn me-2" type="button">

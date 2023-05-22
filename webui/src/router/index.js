@@ -10,9 +10,8 @@ const router = createRouter({
 		{path: '/home', component: HomeView},
 		{path: '/login', component: LoginView},
 		{path: '/', redirect: '/login'},
-		{path: '/users/:userId', component: ProfileView},
-		{path: '/some/:id/link', component: HomeView},
-		{path: '/settings', component: SettingsView,}
+		{path: '/users/:id', component: ProfileView},
+		{path: '/users/:id/settings', component: SettingsView,}
 	]
 })
 

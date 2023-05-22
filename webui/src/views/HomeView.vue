@@ -27,7 +27,7 @@ export default {
 		},
 
 		goToSettingsPage() {
-			this.$router.push('/settings');
+			this.$router.push("/users/" + localStorage.getItem('token') + "/settings");
 		}
 	}
 }
@@ -44,11 +44,11 @@ export default {
 				:postId="post.postId"
 				:comments="post.comments != nil ? post.comments : []"
 				:likes="post.likes != nil ? post.likes : []"
-				:upload_date="post.upload_date"
+				:pubblication_time="post.pubblication_time"
 			/>
 		</div>
-		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet </span>
-		<span v-if="posts.length == 0" class="no-posts-text fw-500 fs-6"> Start to follow someone!</span>
+		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet, </span>
+		<span v-if="posts.length == 0" class="no-posts-text fw-500 fs-6"> start to follow someone!</span>
 
 		<!-- Aggiunta del pulsante delle impostazioni -->
 		<button class="settings-button" @click="goToSettingsPage">

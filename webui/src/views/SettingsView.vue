@@ -10,7 +10,7 @@ export default {
 	methods:{
 		async modifyusername(){
 			try{
-				let resp = await this.$axios.put("/users/"+this.$route.params.id,{username: this.username,})
+				let resp = await this.$axios.put("/users/"+this.$route.params.user_id,{username: this.username,})
 
 				this.username=""
 			}catch (e){
@@ -26,7 +26,7 @@ export default {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col d-flex justify-content-center mb-2">
-				<h1>{{ this.$route.params.id }}'s Settings</h1>
+				<h1>{{ this.$route.params.user_id }}'s Settings</h1>
 			</div>
 		</div>
 
