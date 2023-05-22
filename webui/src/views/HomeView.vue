@@ -27,7 +27,6 @@ export default {
 		},
 
 		goToSettingsPage() {
-			// Effettua il reindirizzamento alla pagina delle impostazioni utilizzando Vue Router
 			this.$router.push('/settings');
 		}
 	}
@@ -45,7 +44,7 @@ export default {
 				:postId="post.postId"
 				:comments="post.comments != nil ? post.comments : []"
 				:likes="post.likes != nil ? post.likes : []"
-				:upload_date="post.pubblicationTime"
+				:upload_date="post.upload_date"
 			/>
 		</div>
 		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet </span>
