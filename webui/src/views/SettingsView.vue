@@ -3,7 +3,7 @@ export default {
 	data: function () {
 		return {
 			errorMsg: null,
-			nickname: "",
+			username: "",
 		}
 	},
 
@@ -45,7 +45,7 @@ export default {
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary" 
 						@click="modifyusername"
-						:disabled="username === null || nickname.length >= 15 || nickname.length < 1 || nickname.trim().length===0">
+						:disabled="username === null || username.length >= 15 || username.length < 1 || username.trim().length===0">
 						Modify</button>
 					</div>
 				</div>
@@ -54,7 +54,7 @@ export default {
 
 		<div class="row" >
 			<div v-if="username.trim().length>0" class="col d-flex justify-content-center">
-				Preview: {{nickname}} @{{ this.$route.params.id }}
+				Preview: {{username}} @{{ this.$route.params.user_id }}
 			</div>
 		</div>
 
