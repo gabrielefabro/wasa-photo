@@ -48,7 +48,6 @@ export default {
       reader.readAsArrayBuffer(file);
 
       reader.onload = async () => {
-        // Post photo: /users/:id/photos
         let response = await this.$axios.post(
           "/users/" + this.$route.params.user_id + "/posts",
           reader.result,
@@ -172,8 +171,8 @@ export default {
     },
   },
 
-  async mounted() {
-    await this.loadInfo();
+  mounted() {
+    this.loadInfo();
   },
 };
 </script>
