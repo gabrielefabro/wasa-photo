@@ -79,14 +79,27 @@ export default {
 
 .my-nav-icon-profile {
   color: #3498db; /* Colore azzurro */
+  font-size: 24px; /* Grandezza dell'icona */
 }
 
 .my-nav-icon-quit {
   color: #e74c3c; /* Colore rosso */
+  font-size: 24px; /* Grandezza dell'icona */
 }
 
 .my-nav-icon-quit:hover {
   color: var(--color-red-danger);
   transform: scale(1.2);
+}
+
+/* Aggiunta delle classi personalizzate per i pulsanti */
+.my-trnsp-btn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.my-trnsp-btn:focus {
+  outline: none;
 }
 </style>

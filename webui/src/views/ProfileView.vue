@@ -1,4 +1,7 @@
 <script>
+import CommentModal from '../components/CommentModal.vue';
+import LikeModal from '../components/LikeModal.vue';
+import UserMiniCard from '../components/UserMiniCard.vue';
 export default {
   data: function () {
     return {
