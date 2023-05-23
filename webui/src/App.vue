@@ -1,11 +1,12 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 <script>
 export default {
 	data(){
 		return{
 			logged: false,
+			searchValue: "",
 		}
 	},
 	methods:{
@@ -19,8 +20,10 @@ export default {
 		updateView(newRoute){
 			this.$router.replace(newRoute)
 		},
-	},	
 
+	},
+
+	
 	created(){
 		if (!localStorage.getItem('notFirstStart')){
 			localStorage.clear()
@@ -28,6 +31,7 @@ export default {
 		}
 		
 	},
+	
 
 	mounted(){
 
@@ -47,13 +51,18 @@ export default {
 				<main >
 					<Navbar v-if="logged" 
 					@logoutNavbar="logout" 
-					@requestUpdateView="updateView"/>
+					@requestUpdateView="updateView"
+					@searchNavbar="search"/>
 
 					<RouterView 
 					@updatedLoggedChild="updateLogged" 
-					@requestUpdateView="updateView"/>
+					@requestUpdateView="updateView"
+					:searchValue="searchValue"/>
 				</main>
 			</div>
 		</div>
 	</div>
 </template>
+
+<style>
+</style>
