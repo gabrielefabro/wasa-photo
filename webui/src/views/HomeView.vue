@@ -1,4 +1,6 @@
 <script>
+import router from '../router';
+
 export default {
 	data: function () {
 		return {
@@ -21,8 +23,11 @@ export default {
 				this.errorMsg = this.$utils.errorToString(e);
 			}
 		},
-
 		async mounted() {
+			if (!localStorage.token) {
+				this.$router.push('/login');
+				return
+			}
 			await this.getMyStream();
 		},
 
