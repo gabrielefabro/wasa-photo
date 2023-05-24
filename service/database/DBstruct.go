@@ -4,15 +4,17 @@ import "time"
 
 // Profile struct represent a profile.
 type Profile struct {
-	User      User   `json:"users"`
-	Posts     []Post `json:"posts"`
+	User_id   string `json:"user_id"`
+	Username  string `json:"username"`
+	Posts     []Post `json:"post"`
 	Following []User `json:"following"`
 	Follower  []User `json:"follower"`
 }
 
 // Post struct represent a post.
 type Post struct {
-	User_id          string    `json:"users"`
+	User_id          string    `json:"user_id"`
+	Username         string    `json:"username"`
 	Post_id          uint64    `json:"post_id"`
 	Publication_time time.Time `json:"pubblication_time"`
 	Photo_url        string    `json:"photo_url"`
@@ -22,7 +24,8 @@ type Post struct {
 
 // Comment struct represent a comment
 type Comment struct {
-	User         User      `json:"users"`
+	User_id      string    `json:"user_id"`
+	Username     string    `json:"username"`
 	Post_id      uint64    `json:"post_id"`
 	Text         string    `json:"text"`
 	Comment_id   uint64    `json:"comment_id"`
@@ -32,7 +35,7 @@ type Comment struct {
 // User represent the couple ID and UserName
 type User struct {
 	User_id  string `json:"user_id"`
-	UserName string `json:"username"`
+	Username string `json:"username"`
 }
 
 // PostId represent the id of profile
