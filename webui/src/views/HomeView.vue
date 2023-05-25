@@ -25,6 +25,10 @@ export default {
 	},
 
 	mounted() {
+		if (!localStorage.token) {
+			this.$router.push('/login');
+			return
+		}
 		this.getMyStream();
 	}
 

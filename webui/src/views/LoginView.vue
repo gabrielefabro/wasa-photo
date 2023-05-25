@@ -57,7 +57,7 @@ export default {
 							v-model="identifier" 
 							maxlength="16"
 							minlength="1"
-							placeholder="Your identifier" 
+							placeholder="Your user id" 
 						/>
 					</div>
 				</div>
