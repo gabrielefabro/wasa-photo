@@ -24,8 +24,8 @@ type AppDatabase interface {
 	// ModifyUserName set a new Username for an existing profile
 	ModifyUserName(User, Username) error
 
-	// GetStream returns the stream of the id passed as argoument
-	GetStream(User) ([]Post, error)
+	// GetMyStream returns the stream of the id passed as argoument
+	GetMyStream(User) ([]Post, error)
 
 	// GetFollowers returns the followers list
 	GetFollowers(User) ([]User, error)
