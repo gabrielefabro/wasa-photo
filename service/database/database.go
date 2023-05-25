@@ -36,6 +36,9 @@ type AppDatabase interface {
 	// GetPosts return all the post from one profile
 	GetPosts(a User, b User) ([]Post, error)
 
+	// GetPhoto return a single post from a profile
+	GetPhoto(User, PostId) (Post, error)
+
 	// FollowUser adds one profile from the followers list
 	FollowUser(a User, b User) error
 

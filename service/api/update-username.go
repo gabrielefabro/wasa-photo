@@ -12,7 +12,7 @@ import (
 // Function that updates a user's nickname
 func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	pathId := ps.ByName("id")
+	pathId := ps.ByName("user_id")
 
 	// Check the user's identity for the operation
 	valid := validateRequestingUser(pathId, extractBearer(r.Header.Get("Authorization")))
@@ -21,7 +21,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	// Get the new nickname from the request body
+	// Get the new username from the request body
 	var username Username
 	err := json.NewDecoder(r.Body).Decode(&username)
 	if err != nil {
@@ -40,6 +40,5 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

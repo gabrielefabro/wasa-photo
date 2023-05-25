@@ -11,7 +11,7 @@ import (
 // Function that adds a user to banned list of another
 func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	pathId := ps.ByName("id")
+	pathId := ps.ByName("user_id")
 	pathBannedId := ps.ByName("banned_id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 

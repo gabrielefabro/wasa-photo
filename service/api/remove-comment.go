@@ -24,19 +24,17 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 	// Check if the requesting user wasn't banned by the photo owner
 	banned, err := rt.db.BanCheck(
 		User{User_id: requestingUserId}.ToDatabase(),
-		User{User_id: ps.ByName("id")}.ToDatabase())
+		User{User_id: ps.ByName("user_id")}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-comment/db.BanCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	if banned {
-		// User was banned by owner, can't post the comment
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
-	// Convert the photo identifier from string to uint64
 	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
 	post_id_u64 := uint64(post_id_64)
 	if err != nil {
@@ -55,7 +53,7 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 	}
 
 	// Function call to db for comment removal (only authors can remove their comments)
-	err = rt.db.UncommentPhoto(
+	err = rt.db.UncommentPost(
 		PostId{Post_id: post_id_u64}.ToDatabase(),
 		User{User_id: requestingUserId}.ToDatabase(),
 		CommentId{Comment_id: comment_id_u64}.ToDatabase())

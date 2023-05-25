@@ -14,7 +14,7 @@ import (
 func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	w.Header().Set("Content-Type", "application/json")
-	postUserId := ps.ByName("id")
+	postUserId := ps.ByName("user_id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
 	if isNotLogged(requestingUserId) {
@@ -22,7 +22,6 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	// Check if the requesting user wasn't banned by the photo owner
 	banned, err := rt.db.BanCheck(
 		User{User_id: requestingUserId}.ToDatabase(),
 		User{User_id: postUserId}.ToDatabase())
@@ -32,12 +31,10 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 	if banned {
-		// User was banned by owner, can't post the comment
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
-	// Copy body content (comment sent by user) into comment (struct)
 	var comment Comment
 	err = json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
@@ -53,7 +50,6 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	// Convert the photo identifier from string to int64
 	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -65,7 +61,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	post_id_u64 := uint64(post_id_64)
 
 	// Function call to db for comment creation
-	commentId, err := rt.db.CommentPhoto(
+	commentId, err := rt.db.CommentPost(
 		PostId{Post_id: post_id_u64}.ToDatabase(),
 		User{User_id: requestingUserId}.ToDatabase(),
 		TextComment{TextComment: comment.Text}.ToDatabase())

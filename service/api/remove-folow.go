@@ -14,7 +14,7 @@ func (rt *_router) deleteFollow(w http.ResponseWriter, r *http.Request, ps httpr
 
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 	oldFollower := ps.ByName("follower_id")
-	userPostId := ps.ByName("id")
+	userPostId := ps.ByName("user_id")
 
 	// Check if the id of the follower in the path is the same of bearer (no impersonation)
 	valid := validateRequestingUser(oldFollower, requestingUserId)
@@ -23,13 +23,11 @@ func (rt *_router) deleteFollow(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	// Users can't follow themselfes so the unfollow won't do anything
 	if userPostId == requestingUserId {
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 
-	// Check if the requesting user wasn't banned by the photo owner
 	banned, err := rt.db.BanCheck(
 		database.User{User_id: requestingUserId},
 		database.User{User_id: userPostId})
@@ -39,7 +37,6 @@ func (rt *_router) deleteFollow(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 	if banned {
-		// User was banned, can't perform the follow action
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
@@ -54,6 +51,5 @@ func (rt *_router) deleteFollow(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

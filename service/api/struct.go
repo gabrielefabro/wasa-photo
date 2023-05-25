@@ -21,15 +21,17 @@ type JSONErrorMsg struct {
 
 // Profile struct represent a profile.
 type Profile struct {
-	User      User            `json:"users"`
-	Posts     []database.Post `json:"posts"`
+	User_id   string          `json:"user_id"`
+	Username  string          `json:"username"`
+	Posts     []database.Post `json:"post"`
 	Following []database.User `json:"following"`
 	Follower  []database.User `json:"follower"`
 }
 
 // Post struct represent a post.
 type Post struct {
-	User_id          string             `json:"users"`
+	User_id          string             `json:"user_id"`
+	Username         string             `json:"username"`
 	Post_id          uint64             `json:"post_id"`
 	Publication_time time.Time          `json:"pubblication_time"`
 	Photo_url        string             `json:"photo_url"`
@@ -39,17 +41,18 @@ type Post struct {
 
 // Comment struct represent a comment
 type Comment struct {
-	User         database.User `json:"users"`
-	Post_id      uint64        `json:"post_id"`
-	Text         string        `json:"text"`
-	Comment_id   uint64        `json:"comment_id"`
-	Time_comment time.Time     `json:"time_comment"`
+	User_id      string    `json:"user_id"`
+	Username     string    `json:"username"`
+	Post_id      uint64    `json:"post_id"`
+	Text         string    `json:"text"`
+	Comment_id   uint64    `json:"comment_id"`
+	Time_comment time.Time `json:"time_comment"`
 }
 
 // User represent the couple ID and UserName
 type User struct {
 	User_id  string `json:"user_id"`
-	UserName string `json:"username"`
+	Username string `json:"username"`
 }
 
 // PostId represent the id of profile
@@ -102,7 +105,7 @@ func (comment CommentId) ToDatabase() database.CommentId {
 func (user User) ToDatabase() database.User {
 	return database.User{
 		User_id:  user.User_id,
-		UserName: user.UserName,
+		Username: user.Username,
 	}
 }
 
@@ -117,7 +120,10 @@ func (text TextComment) ToDatabase() database.TextComment {
 func (post Post) ToDatabase() database.Post {
 	return database.Post{
 		User_id:          post.User_id,
+		Username:         post.Username,
+		Post_id:          post.Post_id,
 		Publication_time: post.Publication_time,
+		Photo_url:        post.Photo_url,
 		Like:             post.Like,
 		Comment:          post.Comment,
 	}
@@ -128,7 +134,8 @@ func (comment Comment) ToDatabase() database.Comment {
 	return database.Comment{
 		Comment_id:   comment.Comment_id,
 		Post_id:      comment.Post_id,
-		User:         comment.User,
+		Username:     comment.Username,
+		User_id:      comment.User_id,
 		Text:         comment.Text,
 		Time_comment: comment.Time_comment,
 	}

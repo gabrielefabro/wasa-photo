@@ -14,13 +14,12 @@ import (
 func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
-	requestedUser := ps.ByName("id")
+	requestedUser := ps.ByName("user_id")
 
 	var followers []database.User
 	var following []database.User
 	var posts []database.Post
 
-	// Check if the requesting user is banned by the requested profile owner
 	userBanned, err := rt.db.BanCheck(User{User_id: requestingUserId}.ToDatabase(),
 		User{User_id: requestedUser}.ToDatabase())
 	if err != nil {
@@ -33,7 +32,6 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	// Check if the requested profile was banned by the requesting user. If it's true respond with partial content
 	requestedProfileBanned, err := rt.db.BanCheck(User{User_id: requestedUser}.ToDatabase(),
 		User{User_id: requestingUserId}.ToDatabase())
 	if err != nil {
@@ -57,14 +55,14 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	followers, err = rt.db.GetMyFollowers(User{User_id: requestedUser}.ToDatabase())
+	followers, err = rt.db.GetFollowers(User{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetMyFollowers: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	following, err = rt.db.GetMyFollowings(User{User_id: requestedUser}.ToDatabase())
+	following, err = rt.db.GetFollowings(User{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetMyFollowings: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -78,7 +76,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	username, err := rt.db.GetUserName(User{User_id: requestedUser}.ToDatabase())
+	username, err := rt.db.GetUserName(requestedUser)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetuserName: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -87,7 +85,8 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(Profile{
-		User:      User{User_id: requestedUser, UserName: username},
+		User_id:   requestedUser,
+		Username:  username,
 		Follower:  followers,
 		Following: following,
 		Posts:     posts,

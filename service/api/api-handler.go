@@ -11,46 +11,46 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.POST("/session", rt.wrap(rt.sessionHandler))
 
 	// Change UserName
-	rt.router.PUT("/users/:id", rt.wrap(rt.setMyUserName))
+	rt.router.PUT("/users/:user_id", rt.wrap(rt.setMyUserName))
 
 	// Return Profile
-	rt.router.GET("/users/:id", rt.wrap(rt.getUserProfile))
+	rt.router.GET("/users/:user_id", rt.wrap(rt.getUserProfile))
 
 	// Stream
-	rt.router.GET("/users/:id/home", rt.wrap(rt.getMyStream))
+	rt.router.GET("/users/:user_id/home", rt.wrap(rt.getMyStream))
 
 	// Follow User
-	rt.router.PUT("/users/:id/followings/:following_id", rt.wrap(rt.putFollow))
+	rt.router.PUT("/users/:user_id/followings/:following_id", rt.wrap(rt.putFollow))
 
 	// Unfollow User
-	rt.router.DELETE("/users/:id/followings/:following_id", rt.wrap(rt.deleteFollow))
+	rt.router.DELETE("/users/:user_id/followings/:following_id", rt.wrap(rt.deleteFollow))
 
 	// Ban User
-	rt.router.PUT("/users/:id/banned_users/:banned_id", rt.wrap(rt.putBan))
+	rt.router.PUT("/users/:user_id/banned_users/:banned_id", rt.wrap(rt.putBan))
 
 	// Unban User
-	rt.router.DELETE("/users/:id/banned_users/:banned_id", rt.wrap(rt.deleteBan))
+	rt.router.DELETE("/users/:user_id/banned_users/:banned_id", rt.wrap(rt.deleteBan))
 
 	// Like Post
-	rt.router.PUT("/users/:id/posts/:post_id/likes/:like_id", rt.wrap(rt.putLike))
+	rt.router.PUT("/users/:user_id/posts/:post_id/likes/:like_id", rt.wrap(rt.putLike))
 
 	// Unlike Post
-	rt.router.DELETE("/users/:id/posts/:post_id/likes/:like_id", rt.wrap(rt.deleteLike))
+	rt.router.DELETE("/users/:user_id/posts/:post_id/likes/:like_id", rt.wrap(rt.deleteLike))
 
 	// Return Post
-	rt.router.GET("/users/:id/posts/:post_id", rt.wrap(rt.getPhoto))
+	rt.router.GET("/users/:user_id/posts/:post_id", rt.wrap(rt.getPhoto))
 
 	// Delete Post
-	rt.router.DELETE("/users/:id/posts/:post_id", rt.wrap(rt.deletePhoto))
+	rt.router.DELETE("/users/:user_id/posts/:post_id", rt.wrap(rt.deletePhoto))
 
 	// Post
-	rt.router.POST("/users/:id/posts", rt.wrap(rt.postPhoto))
+	rt.router.POST("/users/:user_id/posts", rt.wrap(rt.postPhoto))
 
 	// Comment Post
-	rt.router.POST("/users/:id/posts/:post_id/comments", rt.wrap(rt.postComment))
+	rt.router.POST("/users/:user_id/posts/:post_id/comments", rt.wrap(rt.postComment))
 
 	// Uncomment Post
-	rt.router.DELETE("/users/:id/posts/:post_id/comments/:comment_id", rt.wrap(rt.deleteComment))
+	rt.router.DELETE("/users/:user_id/posts/:post_id/comments/:comment_id", rt.wrap(rt.deleteComment))
 
 	// Special routes
 	rt.router.GET("/liveness", rt.liveness)

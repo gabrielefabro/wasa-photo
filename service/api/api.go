@@ -39,15 +39,11 @@ package api
 import (
 	"errors"
 	"net/http"
-	"path/filepath"
 
 	"git.gabrielefabro.it/service/database"
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
 )
-
-// Post media folder
-var postFolder = filepath.Join("/tmp", "media")
 
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {

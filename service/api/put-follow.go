@@ -12,7 +12,7 @@ import (
 // Function that adds a user to the followers list of another
 func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	userToFollowId := ps.ByName("id")
+	userToFollowId := ps.ByName("user_id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
 	// users can't follow themselves
@@ -52,6 +52,5 @@ func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

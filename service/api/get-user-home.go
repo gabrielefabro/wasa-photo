@@ -16,14 +16,13 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	w.Header().Set("Content-Type", "application/json")
 	identifier := extractBearer(r.Header.Get("Authorization"))
 
-	// A user can only see his/her home
-	valid := validateRequestingUser(ps.ByName("id"), identifier)
+	valid := validateRequestingUser(ps.ByName("user_id"), identifier)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
 	}
 
-	followers, err := rt.db.GetMyFollowings(User.ToDatabase(User{User_id: identifier}))
+	followers, err := rt.db.GetFollowings(User.ToDatabase(User{User_id: identifier}))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -45,7 +44,5 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	w.WriteHeader(http.StatusOK)
-
-	// Send the output to the user. Instead of giving null for no matches return and empty slice of photos.
 	_ = json.NewEncoder(w).Encode(posts)
 }

@@ -12,23 +12,14 @@ import (
 // Function that removes a like from a photo
 func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	postAuthor := ps.ByName("id")
+	postAuthor := ps.ByName("user_id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
-	// Check if the user is logged
 	if isNotLogged(requestingUserId) {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
-	// User trying to unlike his/her photo. Since it's not possibile to like it in the first
-	// place it's useless. Return to avoid doing useless operations
-	if postAuthor == requestingUserId {
-		w.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	// Check if the requesting user wasn't banned by the photo owner
 	banned, err := rt.db.BanCheck(
 		User{User_id: requestingUserId}.ToDatabase(),
 		User{User_id: postAuthor}.ToDatabase())
@@ -38,7 +29,6 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 	if banned {
-		// User was banned by owner, can't post the comment
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
@@ -52,7 +42,7 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	// Insert the like in the db via db function
-	err = rt.db.UnlikePhoto(
+	err = rt.db.UnlikePost(
 		PostId{Post_id: post_id_u64}.ToDatabase(),
 		User{User_id: requestingUserId}.ToDatabase())
 	if err != nil {
@@ -61,6 +51,5 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }
