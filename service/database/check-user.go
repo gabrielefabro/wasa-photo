@@ -4,7 +4,7 @@ package database
 func (db *appdbimpl) CheckUser(targetUser User) (bool, error) {
 
 	var count int
-	var query = "SELECT COUNT(*) FROM users WHERE id_user = ?"
+	var query = "SELECT COUNT(*) FROM users WHERE user_id = ?"
 
 	err := db.c.QueryRow(query, targetUser.User_id).Scan(&count)
 

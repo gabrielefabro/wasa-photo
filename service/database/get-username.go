@@ -4,7 +4,7 @@ package database
 func (db *appdbimpl) GetUserName(user_id string) (string, error) {
 
 	var username string
-	var query = "SELECT username FROM users WHERE id = ?"
+	var query = "SELECT username FROM users WHERE user_id = ?"
 
 	err := db.c.QueryRow(query, user_id).Scan(&username)
 	if err != nil {
