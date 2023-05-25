@@ -3,7 +3,7 @@ package database
 // Function that return a profile that matches with the username passed as argoument
 func (db *appdbimpl) GetUserProfile(searcher User, userToSearch User) (Profile, int64, error) {
 
-	var query = "SELECT profile FROM profiles WHERE user_id = ? AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)"
+	var query = "SELECT * FROM profiles WHERE ((user_id LIKE ?) OR (username LIKE ?)) AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)"
 
 	rows, err := db.c.Query(query, userToSearch.User_id, userToSearch.User_id, searcher.User_id)
 	if err != nil {
