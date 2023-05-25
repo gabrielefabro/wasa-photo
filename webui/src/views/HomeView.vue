@@ -9,7 +9,7 @@ export default {
 
 	methods: {
 		
-		async getMyStream() {
+		async getMyStream() {  
 			try {
 				this.errormsg = null
 				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
