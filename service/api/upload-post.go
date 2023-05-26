@@ -58,7 +58,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	postIdInt, err := rt.db.UploadPost(post.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-upload: error executing db function call")
+		ctx.Logger.WithError(err).Error("function call")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
