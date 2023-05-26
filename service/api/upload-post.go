@@ -1,15 +1,23 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
+	"image/jpeg"
+	"image/png"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strconv"
 	"time"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
 
 	"github.com/julienschmidt/httprouter"
 )
+
 // Function that manages the upload of a post
 func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
@@ -24,12 +32,11 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	// Initialize photo struct
-	photo := Photo{
-		user_id: auth,
-		pubblication_time:  time.Now().UTC(),
+	post := Post{
+		User_id:          auth,
+		Publication_time: time.Now().UTC(),
 	}
 
-	// Create a copy of the body
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-upload: error reading body content")
@@ -37,26 +44,21 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// After reading the body we won't be able to read it again. We'll reassign a "fresh" io.ReadCloser to the body
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
 
-	// Check if the body content is either a png or a jpeg image
 	err = checkFormatPhoto(r.Body, io.NopCloser(bytes.NewBuffer(data)), ctx)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		ctx.Logger.WithError(err).Error("post-upload: body contains file that is neither jpg or png")
-		// controllaerrore
 		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: IMG_FORMAT_ERROR_MSG})
 		return
 	}
 
-	// Body has been read in the previous function so it's necessary to reassign a io.ReadCloser to it
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
 
-	// Generate a unique id for the photo
 	postIdInt, err := rt.db.UploadPost(post.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload: error executing db function call")
+		ctx.Logger.WithError(err).Error("post-upload: error executing db function call")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -66,7 +68,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	// Create the user's folder locally to save his/her images
 	PhotoPath, err := getUserPhotoFolder(auth)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload: error getting user's photo folder")
+		ctx.Logger.WithError(err).Error("post-upload: error getting user's post folder")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -75,7 +77,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	out, err := os.Create(filepath.Join(PhotoPath, post_id))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("photo-upload: error creating local photo file")
+		ctx.Logger.WithError(err).Error("post-upload: error creating local post file")
 		//  = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
 		return
 	}
@@ -84,7 +86,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	_, err = io.Copy(out, r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("photo-upload: error copying body content into file photo")
+		ctx.Logger.WithError(err).Error("post-upload: error copying body content into file photo")
 		// controllaerrore
 		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
 		return
@@ -93,21 +95,21 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	// Close the created file
 	out.Close()
 
-	username, err := db.GetUserName(post.User_id)
-		if err != nil {
-			return nil, err
-		}
-		comment.Username = username
+	username, err := rt.db.GetUserName(post.User_id)
+	if err != nil {
+		return
+	}
+	post.Username = username
 
 	w.WriteHeader(http.StatusCreated)
 	// controllaerrore
 	// _ = json.NewEncoder(w).Encode(PhotoId{IdPhoto: photoIdInt})
-	_ = json.NewEncoder(w).Encode(Photo{
-		Comments: nil,
-		Likes:    nil,
-		user_id:  post.user_id,
-		Date:     post.pubblication_time,
-		post_id:  post_id,
+	_ = json.NewEncoder(w).Encode(Post{
+		Comment:          nil,
+		Like:             nil,
+		User_id:          post.User_id,
+		Publication_time: post.Publication_time,
+		Post_id:          post.Post_id,
 	})
 
 }

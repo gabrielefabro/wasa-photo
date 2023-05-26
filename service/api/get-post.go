@@ -1,12 +1,10 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
-	"strconv"
+	"path/filepath"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
-	"git.gabrielefabro.it/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
