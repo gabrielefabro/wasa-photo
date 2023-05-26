@@ -2,32 +2,30 @@
 export default {
 	data(){
 		return{
-			postURL: "",
+			photo_url: "",
 			liked: false,
 			allComments: [],
 			allLikes: [],
 		}
 	},
 
-	props: ['owner','likes','comments',"uploadDate","postId","isOwner"], 
+	props: ['user_id','likes','comments',"pubblication_time","post_id","isOwner"], 
 
 	methods:{
 		loadPhoto(){
-			this.postURL = __API_URL__+ "/users/"+this.owner+"/posts/"+this.postId 
+			this.photo_url = __API_URL__+ "/users/"+this.user_id+"/posts/"+this.post_id 
 		},
 
 		async deletePhoto(){
 			try{
-				await this.$axios.delete("/users/"+this.owner+"/posts/"+this.postId)
-				// location.reload()
+				await this.$axios.delete("/users/"+this.user_id+"/posts/"+this.post_id)
 				this.$emit("removePhoto",this.postId)
 			}catch(e){
-				//
 			}
 		},
 
 		photoOwnerClick: function(){
-			this.$router.replace("/users/"+this.owner)
+			this.$router.replace("/users/"+this.user_id)
 		},
 
 		async toggleLike() {
@@ -40,14 +38,14 @@ export default {
 
 			try{
 				if (!this.liked){
-					await this.$axios.put("/users/"+ this.owner +"/posts/"+this.postId+"/likes/"+ bearer)
+					await this.$axios.put("/users/"+ this.user_id +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.push({
 						user_id: bearer,
-						nickname: bearer
+						username: bearer
 					})
 
 				}else{
-					await this.$axios.delete("/users/"+ this.owner  +"/posts/"+this.postId+"/likes/"+ bearer)
+					await this.$axios.delete("/users/"+ this.user_id  +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.pop()
 				}
 
@@ -67,8 +65,8 @@ export default {
 		},
 	},
 	
-	async mounted(){
-		await this.loadPhoto()
+	mounted(){
+		this.loadPhoto()
 
 		if (this.likes != null){
 			this.allLikes = this.likes
@@ -93,10 +91,10 @@ export default {
         <LikeModal :modal_id="'like_modal'+postId" 
 		:likes="allLikes" />
 
-        <CommentModal :modal_id="'comment_modal'+postId" 
+        <CommentModal :modal_id="'comment_modal'+post_id" 
 		:comments_list="allComments" 
-		:postOwner="owner" 
-		:postId="postId"
+		:user_id="user_id" 
+		:post_id="post_id"
 
 		@eliminateComment="removeCommentFromList"
 		@addComment="addCommentToList"
@@ -114,7 +112,7 @@ export default {
 
                 </div>
                 <div class="d-flex justify-content-center photo-background-color">
-                    <img :src="photoURL" class="card-img-top img-fluid">
+                    <img :src="photo_url" class="card-img-top img-fluid">
                 </div>
 
                 <div class="card-body">
@@ -124,18 +122,18 @@ export default {
                         <div class="d-flex flex-row justify-content-end align-items-center mb-2">
 
 							<button class="my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
-                            	<i> From {{owner}}</i>
+                            	<i> From {{user_id}}</i>
 							</button>
 
                             <button class="my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
                                 <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(liked ? 'fa-heart' : 'fa-heart-o') "></i>
-                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+postId" class="my-comment-color ">
+                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+post_id" class="my-comment-color ">
                                     {{allLikes.length}}
                                 </i>
                             </button>
 
                             <button class="my-trnsp-btn m-0 p-1  d-flex justify-content-center align-items-center" 
-							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+postId">
+							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+post_id">
 
                                 <i class="my-comment-color fa-regular fa-comment me-1" @click="commentClick"></i>
                                 <i class="my-comment-color-2"> {{allComments != null ? allComments.length : 0}}</i>
@@ -144,7 +142,7 @@ export default {
                         </div>
 
                         <div class="d-flex flex-row justify-content-start align-items-center ">
-                            <p> Uploaded on {{uploadDate}}</p>
+                            <p> Uploaded on {{pubblication_time}}</p>
                         </div>
                     </div>
                 </div>

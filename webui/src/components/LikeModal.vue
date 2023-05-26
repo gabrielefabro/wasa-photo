@@ -17,7 +17,7 @@ export default {
 		<div class="modal-body">
 			<UserMiniCard v-for="(user,index) in likes" 
 			:key="index" 
-			:identifier="user.userid"
+			:identifier="user.user_id"
 			:username="user.username"
 			/>
 		</div>
