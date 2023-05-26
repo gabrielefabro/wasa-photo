@@ -129,6 +129,7 @@ func createDatabase(db *sql.DB) error {
 		`CREATE TABLE IF NOT EXISTS posts (
 			post_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			user_id VARCHAR(15),
+			username VARCHAR(15),
 			publication_time DATETIME,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
