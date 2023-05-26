@@ -31,9 +31,15 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
+	username, err := rt.db.GetUserName(auth)
+	if err != nil {
+		return
+	}
+
 	// Initialize photo struct
 	post := Post{
 		User_id:          auth,
+		Username:         username,
 		Publication_time: time.Now().UTC(),
 	}
 
@@ -94,12 +100,6 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Close the created file
 	out.Close()
-
-	username, err := rt.db.GetUserName(post.User_id)
-	if err != nil {
-		return
-	}
-	post.Username = username
 
 	w.WriteHeader(http.StatusCreated)
 	// controllaerrore
