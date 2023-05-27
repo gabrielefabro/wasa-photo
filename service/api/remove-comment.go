@@ -48,7 +48,7 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 	comment_id_u64 := uint64(comment_id_64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
+		ctx.Logger.WithError(err).Error("post-comment: failed convert comment_id to int64")
 		return
 	}
 
@@ -59,7 +59,7 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 		CommentId{Comment_id: comment_id_u64}.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("post-comment: failed to execute query for insertion")
+		ctx.Logger.WithError(err).Error("delete-comment: failed to execute query for insertion")
 		return
 	}
 
