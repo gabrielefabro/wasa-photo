@@ -57,14 +57,6 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	// Send the output to the user
-	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(user)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("session: can't create response json")
-		return
-	}
 }
 
 // Function that creates a new subdir for the specified user
