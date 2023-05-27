@@ -63,19 +63,13 @@ export default {
     created() {
 
         // teoricamente da rimuovere ma voglio sapere se l'errore sussiste
-        if (this.editorType === 'post') {
+       
             this.cropperProps.stencilSize = {
                 width: 720,
                 height: 720,
             };
             this.cropperProps.stencilComponent = markRaw(RectangleStencil);
-        } else if (this.editorType === 'proPic') {
-            this.cropperProps.stencilSize = {
-                width: 250,
-                height: 250,
-            };
-            this.cropperProps.stencilComponent = markRaw(CircleStencil);
-        }
+        
     },
     mounted() {
     },

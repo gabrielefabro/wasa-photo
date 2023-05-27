@@ -46,9 +46,7 @@ export default {
         },
 
         saveData(data) {
-            if (this.photoType == 'post') {
-                this.createPost(data);
-            }
+            this.createPost(data);
         },
 
         async createPost(postData) {
