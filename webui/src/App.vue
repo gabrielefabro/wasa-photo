@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import router from './router';
 </script>
 <script>
 export default {
@@ -20,6 +21,10 @@ export default {
 		updateView(newRoute){
 			this.$router.replace(newRoute)
 		},
+		search(queryParam) {
+			this.searchValue= queryParam
+			this.$router.replace('/search')
+		}
 
 	},
 
