@@ -1,8 +1,9 @@
-ackage api
+package api
 
 import (
 	"encoding/json"
 	"net/http"
+
 	"git.gabrielefabro.it/service/api/reqcontext"
 
 	"github.com/julienschmidt/httprouter"
@@ -26,7 +27,7 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	identificator := r.URL.Query().Get("user_id")
 
 	// Search the user in the database (with the query parameter as a filter)
-	res, err := rt.db.SearchUser(User{user_id: identifier}.ToDatabase(), User{IdUser: identificator}.ToDatabase())
+	res, err := rt.db.SearchUser(User{User_id: identifier}.ToDatabase(), User{User_id: identificator}.ToDatabase())
 	if err != nil {
 		// In this case, there's an error coming from the database. Return an empty json
 		w.WriteHeader(http.StatusInternalServerError)
