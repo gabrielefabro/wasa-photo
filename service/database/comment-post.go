@@ -5,7 +5,7 @@ func (db *appdbimpl) CommentPost(postId PostId, user User, text TextComment) (in
 
 	var query = "INSERT INTO comments (post_id,username,user_id,text) VALUES (?, ?, ?, ?)"
 
-	res, err := db.c.Exec(query, postId.Post_id, user.Username, user.User_id, text)
+	res, err := db.c.Exec(query, postId.Post_id, user.Username, user.User_id, text.TextComment)
 	if err != nil {
 		// Error executing query
 		return -1, err
