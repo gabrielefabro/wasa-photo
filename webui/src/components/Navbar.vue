@@ -43,6 +43,7 @@ export default {
 
       <div class="col-4 d-flex justify-content-end">
           <button @click="myProfile" class="my-trnsp-btn me-2" type="button">
+            <i :class="'my-nav-icon-profile me-1 w-100 h-100 '+iconProfile+ ' fa-user'"></i>
           </button>
 
           <button @click="logout" class="my-trnsp-btn me-2" type="button">
