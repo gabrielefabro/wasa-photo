@@ -5,7 +5,7 @@ export default {
             user: "",
         }
     },
-	props: ['text','author','user_id','comment_id','post_id','username'],
+	props: ['content','author','user_id','comment_id','post_id','username'],
 
     methods:{
         async deleteComment(){

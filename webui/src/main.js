@@ -8,11 +8,11 @@ import axios from './services/axios.js';
 import ErrorMsg from './components/ErrorMsg.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
 import Navbar from './components/Navbar.vue'
-import Post from './components/Post.vue'
+import Photo from './components/Post.vue'
 import UserMiniCard from './components/UserMiniCard.vue'
 import LikeModal from './components/LikeModal.vue'
 import CommentModal from './components/CommentModal.vue'
-import PostComment from './components/PostComment.vue'
+import PhotoComment from './components/PostComment.vue'
 
 import './assets/dashboard.css'
 import './assets/main.css'
@@ -25,6 +25,7 @@ app.component("LoadingSpinner", LoadingSpinner);
 app.component("Navbar", Navbar);
 app.component("Post", Post);
 app.component("UserMiniCard", UserMiniCard);
+app.component("PageNotFound", PageNotFound);
 app.component("LikeModal", LikeModal);
 app.component("CommentModal", CommentModal);
 app.component("PostComment", PostComment);

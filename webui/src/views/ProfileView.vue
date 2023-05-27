@@ -1,8 +1,4 @@
 <script>
-import CommentModal from '../components/CommentModal.vue';
-import LikeModal from '../components/LikeModal.vue';
-import UserMiniCard from '../components/UserMiniCard.vue';
-import UploadPost from '../components/UploadPost.vue';
 export default {
   data: function () {
     return {
@@ -21,7 +17,25 @@ export default {
     };
   },
 
+  watch:{
+        currentPath(newid,oldid){
+            if (newid !== oldid){
+                this.loadInfo()
+            }
+        },
+    },
 
+	computed:{
+
+        currentPath(){
+            return this.$route.params.id
+        },
+        
+
+		sameUser(){
+			return this.$route.params.id === localStorage.getItem('token')
+		},
+	},
   methods: {
     async uploadFile() {
       let fileInput = document.getElementById("fileUploader");
@@ -146,6 +160,10 @@ export default {
       }
     },
 
+    goToSettings() {
+      this.$router.push(this.$route.params.user_id+'settings')
+    },
+
     removePhotoFromList(post_id) {
       this.posts = this.posts.filter((item) => item.post_id !== post_id);
     },
@@ -165,7 +183,7 @@ export default {
             <div class="col">
               <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="profile-info">
-                  <h5 class="profile-username">{{ userName }}</h5>
+                  <h5 class="profile-username">{{ username }}</h5>
                   <h6 class="profile-userid">@{{ this.$route.params.user_id }}</h6>
                 </div>
                 <div>

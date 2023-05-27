@@ -5,7 +5,7 @@ export default {
 			text:"",
 		}
 	},
-	props:['modalId','commentsList','user_id','post_id'],
+	props:['modal_id','comments_list','user_id','post_id'],
 
 	methods: {
 		async addComment(){
@@ -31,28 +31,39 @@ export default {
 				console.log(e.toString())
 			}
 		},
+
+		eliminateCommentToParent(value){
+			this.$emit('eliminateComment',value)
+		},
+
+		addCommentToParent(newCommentJSON){
+			this.$emit('addComment',newCommentJSON)
+		},
 	},
 }
 </script>
 
 <template>
-    <div class="modal fade my-modal-disp-none" :id="modalId" tabindex="-1" aria-hidden="true">
+    <div class="modal fade my-modal-disp-none" :id="modal_id" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog modal-dialog-scrollable ">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" :id="modalId">Comments</h1>
+                    <h1 class="modal-title fs-5" :id="modal_id">Comments</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <PostComment v-for="(comm,index) in commentsList" 
+                    <PostComment v-for="(comm,index) in comments_list" 
 					:key="index" 
 					:user_id="comm.user_id" 
 					:username="comm.username"
 					:comment_id="comm.comment_id"
 					:post_id="comm.post_id"
 					:text="comm.text"
+					
+
+					@eliminateComment="eliminateCommentToParent"
 					/>
 
                 </div>
@@ -62,7 +73,7 @@ export default {
                             <div class="mb-3 me-auto">
                                 
                                 <textarea class="form-control" id="exampleFormControlTextarea1" 
-								placeholder="Add a comment..." rows="1" maxLength="30" v-model="text"></textarea>
+								placeholder="Add a comment..." rows="1" maxLength="50" v-model="text"></textarea>
                             </div>
                         </div>
 

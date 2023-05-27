@@ -1,11 +1,11 @@
 <script>
 export default {
-	props: ['identifier','username'],
+	props: ['user_id','username'],
 
     methods:{
 
         clickedUser(){
-            this.$emit('clickedUser',this.identifier)
+            this.$emit('clickedUser',this.user_id)
         }
     },
 }
@@ -17,7 +17,7 @@ export default {
         <div class="col d-flex justify-content-center">
             <div class="user-mini-card card bg-transparent border-start">
                 <div class="card-body">
-                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center ">{{username}} @{{identifier}}</h5>
+                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center ">{{username }} @{{user_id }}</h5>
                 </div>
             </div>
         </div>
