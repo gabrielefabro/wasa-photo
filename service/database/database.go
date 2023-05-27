@@ -143,6 +143,7 @@ func createDatabase(db *sql.DB) error {
 			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			user_id VARCHAR(15) NOT NULL,
 			post_id INTEGER NOT NULL,
+			username VARCHAR(15),
 			text TEXT,
 			time_comment DATETIME,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
