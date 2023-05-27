@@ -144,7 +144,7 @@ func createDatabase(db *sql.DB) error {
 			user_id VARCHAR(15) NOT NULL,
 			post_id INTEGER NOT NULL,
 			text TEXT,
-			time_comment TIMESTAMP,
+			time_comment DATETIME,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS banned_users (

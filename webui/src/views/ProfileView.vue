@@ -8,7 +8,7 @@ export default {
       errormsg: null,
       userExists: false,
       banStatus: false,
-      userName: "",
+      username: "",
       followStatus: false,
       currentIsBanned: false,
       followerCnt: 0,
@@ -20,23 +20,6 @@ export default {
     };
   },
 
-  watch: {
-    currentPath(newid, oldid) {
-      if (newid !== oldid) {
-        this.loadInfo();
-      }
-    },
-  },
-
-  computed: {
-    currentPath() {
-      return this.$route.params.user_id;
-    },
-
-    sameUser() {
-      return this.$route.params.user_id === localStorage.getItem("token");
-    },
-  },
 
   methods: {
     async uploadFile() {
@@ -135,7 +118,7 @@ export default {
           this.userExists = false;
         }
 
-        this.userName = response.data.userName;
+        this.username = response.data.username;
         this.followerCnt = response.data.followers != null
           ? response.data.followers.length
           : 0;
@@ -160,10 +143,6 @@ export default {
       } catch (e) {
         this.currentIsBanned = true;
       }
-    },
-
-    goToSettings() {
-      this.$router.push(this.$route.params.user_id + "/settings");
     },
 
     removePhotoFromList(post_id) {
