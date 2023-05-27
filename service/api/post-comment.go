@@ -67,7 +67,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		TextComment{TextComment: comment.Text}.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("post-comment/db.CommentPhoto: failed to execute query for insertion")
+		ctx.Logger.WithError(err).Error("post-comment/db.CommentPost: failed to execute query for insertion")
 		return
 	}
 
