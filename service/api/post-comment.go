@@ -53,7 +53,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment/ParseInt: failed convert photo_id to int64")
+		ctx.Logger.WithError(err).Error("post-comment/ParseInt: failed convert post_id to int64")
 		return
 	}
 

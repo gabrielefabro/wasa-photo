@@ -115,7 +115,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 }
 
-// Function checks if the format of the photo is png or jpeg. Returns the format extension and an error
+// Function checks if the format of the post is png or jpeg. Returns the format extension and an error
 func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontext.RequestContext) error {
 
 	_, errJpg := jpeg.Decode(body)
