@@ -131,6 +131,7 @@ func createDatabase(db *sql.DB) error {
 			user_id VARCHAR(15),
 			username VARCHAR(15),
 			publication_time DATETIME,
+			photo_url TEXT,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS  likes (

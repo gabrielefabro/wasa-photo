@@ -10,7 +10,7 @@ func (db *appdbimpl) GetPosts(requestingUser User, targetUser User) ([]Post, err
 		return nil, err
 	}
 	defer func() { _ = rows.Close() }()
-
+ 
 	var posts []Post
 	for rows.Next() {
 		var post Post
