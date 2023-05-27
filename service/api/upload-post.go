@@ -108,6 +108,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		Comment:          nil,
 		Like:             nil,
 		User_id:          post.User_id,
+		Username:         post.Username,
 		Publication_time: post.Publication_time,
 		Post_id:          post.Post_id,
 	})

@@ -38,6 +38,23 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
+	// Create user's directories locally
+	err = createUserFolder(user.User_id, ctx)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error("session: can't create user's photo folder")
+		return
+	}
+
+	// Send the output to the user
+	w.WriteHeader(http.StatusCreated)
+	err = json.NewEncoder(w).Encode(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error("session: can't create response json")
+		return
+	}
+
 	// Send the output to the user
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(user)
