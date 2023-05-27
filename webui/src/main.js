@@ -25,7 +25,6 @@ app.component("LoadingSpinner", LoadingSpinner);
 app.component("Navbar", Navbar);
 app.component("Post", Post);
 app.component("UserMiniCard", UserMiniCard);
-app.component("PageNotFound", PageNotFound);
 app.component("LikeModal", LikeModal);
 app.component("CommentModal", CommentModal);
 app.component("PostComment", PostComment);
