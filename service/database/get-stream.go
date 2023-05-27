@@ -1,6 +1,6 @@
 package database
 
-// Function that gets the stream of a user (photos of people that are followed by the latter)
+// Function that gets the stream of a user (posts of people that are followed by the latter)
 func (db *appdbimpl) GetMyStream(user User) ([]Post, error) {
 
 	var query = "SELECT * FROM posts WHERE user_id IN (SELECT followed FROM followers WHERE follower = ?) ORDER BY publication_time DESC"

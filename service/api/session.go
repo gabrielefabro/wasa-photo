@@ -65,7 +65,7 @@ func createUserFolder(identifier string, ctx reqcontext.RequestContext) error {
 	// Create the path media/useridentifier/ inside the project dir
 	path := filepath.Join(photoFolder, identifier)
 
-	// To the previously created path add the "photos" subdir
+	// To the previously created path add the "posts" subdir
 	err := os.MkdirAll(filepath.Join(path, "posts"), os.ModePerm)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("session/createUserFolder:: error creating directories for user")
