@@ -16,7 +16,7 @@ type AppDatabase interface {
 	GetUserProfile(a User, b User) (Profile, int64, error)
 
 	// CreateUser create a new user
-	CreateUser(userId) error 
+	CreateUser(user_id string) error 
 
 	// GetUserName get the username of a user
 	GetUserName(user_id string) (string, error)
