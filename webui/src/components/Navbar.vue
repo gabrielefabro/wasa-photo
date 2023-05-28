@@ -23,26 +23,26 @@ export default {
     },
   },
 };
+
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg bg-light d-flex justify-content-between sticky-top mb-3 my-nav bg-transparent">
+  <nav class="navbar navbar-expand-lg bg-transparent d-flex justify-content-between sticky-top mb-3 my-nav">
     <div class="col-4">
       <a class="navbar-brand ms-2 d-flex" @click="goBackHome">
         <div class="brand-img">WASAPhoto</div>
       </a>
     </div>
 
-    <!-- -->
-    <div class="col-4">
-      <form class="form-inline my-2 my-lg-0 d-flex justify-content-center m-auto">
+    <div class="col-4 d-flex justify-content-center">
+      <form class="form-inline my-2 my-lg-0">
         <input
-          class="form-control mr-sm-2 w-50"
+          class="form-control mr-sm-2 w-100"
           v-model="textVar"
           type="search"
           placeholder="Search users"
         />
-        <button class="btn btn-light ms-2" type="submit" @click.prevent="searchFunc" style="display: none;">
+        <button class="btn btn-primary ms-2" type="submit" @click.prevent="searchFunc">
           Search
         </button>
       </form>
@@ -50,11 +50,11 @@ export default {
 
     <div class="col-4 d-flex justify-content-end">
       <button @click="myProfile" class="my-trnsp-btn me-2" type="button">
-        <i :class="'my-nav-icon-profile me-1 w-100 h-100 '+iconProfile+ ' fa-user'"></i>
+        <i :class="'my-nav-icon-profile me-1 '+iconProfile+ ' fa-user'"></i>
       </button>
 
       <button @click="logout" class="my-trnsp-btn me-2" type="button">
-        <i class="my-nav-icon-quit me-1 w-100 h-100 fa-solid fa-right-from-bracket"></i>
+        <i class="my-nav-icon-quit me-1 fa-right-from-bracket"></i>
       </button>
     </div>
   </nav>
@@ -70,13 +70,13 @@ export default {
 }
 
 .navbar-btn {
-  background-color: #3498db; 
+  background-color: #3498db;
   color: white;
   border-color: white;
 }
 
 .navbar-elements {
-  color: #e74c3c; 
+  color: #e74c3c;
 }
 
 .brand-img {
@@ -85,11 +85,12 @@ export default {
 }
 
 .my-nav-icon-profile {
-  color: #3498db; 
+  color: #3498db;
 }
 
 .my-nav-icon-quit {
-  color: #e74c3c; 
+  color: #e74c3c;
+  transition: all 0.3s;
 }
 
 .my-nav-icon-quit:hover {
