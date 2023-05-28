@@ -26,27 +26,7 @@ export default {
 
 <template>
 	<div class="container">
-	  <div class="row">
-		<div class="col d-flex justify-content-center mb-4">
-		  <h1>{{ this.$route.params.user_id }}'s Settings</h1>
-		</div>
-	  </div>
-  
-	  <div class="row">
-		<div class="col-12 d-flex justify-content-center">
-		  <p class="text-danger me-1">[Disclaimer]</p>
-		  <p>A user has the following structure:</p>
-		  <p class="text-success ms-1 me-1">username</p>
-		  <p>@identifier.</p>
-		</div>
-		<div class="col-12 d-flex justify-content-center">
-		  <p>You can only modify the part before the @ symbol (the <span class="text-success">Username</span>) and not the identifier of the user.</p>
-		</div>
-		<div class="col-12 d-flex justify-content-center">
-		  <p>The term "Username" refers to a nickname.</p>
-		</div>
-	  </div>
-  
+	  
 	  <div class="row mt-3">
 		<div class="col d-flex justify-content-center">
 		  <div class="input-group mb-3 w-50">
