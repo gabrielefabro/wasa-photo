@@ -1,5 +1,13 @@
 package database
 
+import (
+	"fmt"
+	"os"
+	"strconv"
+
+	"git.gabrielefabro.it/service/api/utils"
+)
+
 // Function that creates a post on the database
 func (db *appdbimpl) UploadPost(post Post, data []byte) (int64, error) {
 
@@ -11,25 +19,20 @@ func (db *appdbimpl) UploadPost(post Post, data []byte) (int64, error) {
 		return -1, err
 	}
 
-	tx, err := db.c.BeginTx(db.ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
-	if err != nil {
-		return -1, err
-	}
-
-	defer func() {
-		if err != nil {
-			err = tx.Rollback()
-		}
-		err = tx.Commit()
-	}()
-
 	post_id, err := res.LastInsertId()
 	if err != nil {
 		return -1, err
 	}
 
 	user_id := post.User_id
-	path := utils.GetPostPhotoPath(user_id, post_id)
+
+	user_id_i, err := strconv.Atoi(user_id)
+	if err != nil {
+		fmt.Println("Errore durante la conversione:", err)
+		return -1, err
+	}
+
+	path := utils.GetPostPhotoPath(user_id_i, post_id)
 
 	// Save the image
 	err = os.WriteFile(path, data, 0666)

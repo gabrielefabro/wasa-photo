@@ -2,8 +2,6 @@ package api
 
 import (
 	"net/http"
-	"os"
-	"path/filepath"
 	"strconv"
 
 	"git.gabrielefabro.it/service/api/reqcontext"

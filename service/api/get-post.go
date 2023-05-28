@@ -1,8 +1,8 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
-	"path/filepath"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
 
@@ -54,7 +54,8 @@ func (rt *_router) getPosts(w http.ResponseWriter, r *http.Request, ps httproute
 	}
 
 	// Get the posts from the database
-	dbPosts, err := rt.db.GetPosts(User{User_id: requestedUser}.ToDatabase())
+	dbPosts, err := rt.db.GetPosts(User{User_id: requestedUser}.ToDatabase(),
+		User{User_id: requestingUserId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("Error getting posts")
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

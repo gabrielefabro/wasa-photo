@@ -3,8 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"os"
-	"path/filepath"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
 
@@ -40,14 +38,6 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	// Create user's directories locally
-	err = createUserFolder(user.User_id, ctx)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("session: can't create user's post folder")
-		return
-	}
-
 	// Send the output to the user
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(user)
@@ -57,19 +47,4 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-}
-
-// Function that creates a new subdir for the specified user
-func createUserFolder(identifier string, ctx reqcontext.RequestContext) error {
-
-	// Create the path media/useridentifier/ inside the project dir
-	path := filepath.Join(photoFolder, identifier)
-
-	// To the previously created path add the "posts" subdir
-	err := os.MkdirAll(filepath.Join(path, "posts"), os.ModePerm)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("session/createUserFolder:: error creating directories for user")
-		return err
-	}
-	return nil
 }

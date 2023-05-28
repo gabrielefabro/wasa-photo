@@ -39,7 +39,6 @@ package api
 import (
 	"errors"
 	"net/http"
-	"path/filepath"
 
 	"git.gabrielefabro.it/service/database"
 	"github.com/julienschmidt/httprouter"

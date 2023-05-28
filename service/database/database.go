@@ -16,7 +16,7 @@ type AppDatabase interface {
 	GetUserProfile(a User, b User) (Profile, int64, error)
 
 	// CreateUser create a new user
-	CreateUser(user_id string) error 
+	CreateUser(user_id string) error
 
 	// GetUserName get the username of a user
 	GetUserName(user_id string) (string, error)
@@ -67,7 +67,7 @@ type AppDatabase interface {
 	DeletePost(User, PostId) error
 
 	// Uploadpost add a post on your post list
-	UploadPost(Post, data []byte) (int64, error)
+	UploadPost(post Post, data []byte) (int64, error)
 
 	// BannedCheck control if an user is banned by anotherone
 	BanCheck(a User, b User) (bool, error)

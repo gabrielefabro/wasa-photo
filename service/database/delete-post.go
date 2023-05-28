@@ -1,5 +1,13 @@
 package database
 
+import (
+	"fmt"
+	"os"
+	"strconv"
+
+	"git.gabrielefabro.it/service/api/utils"
+)
+
 // Database function that removes a photo from the database
 func (db *appdbimpl) DeletePost(user User, postId PostId) error {
 
@@ -10,8 +18,16 @@ func (db *appdbimpl) DeletePost(user User, postId PostId) error {
 		return err
 	}
 
+	user_id_i, err := strconv.Atoi(user.User_id)
+	if err != nil {
+		fmt.Println("Errore durante la conversione:", err)
+		return err
+	}
+
+	var post_id = postId.Post_id
+
 	// Delete file
-	err = os.Remove(utils.GetPostPhotoPath(user.User_id, post_id.Post_id))
+	err = os.Remove(utils.GetPostPhotoPath(user_id_i, int64(post_id)))
 	if err != nil {
 		return err
 	}
