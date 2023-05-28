@@ -90,12 +90,14 @@ export default {
 <template>
 	<div class="container-fluid mt-3 mb-5 ">
 
-        <LikeModal :modal_id="'like_modal'+post_id" 
+        <LikeModal 
+		:modal_id="'like_modal'+post_id" 
 		:likes="allLikes" />
 
-        <CommentModal :modal_id="'comment_modal'+post_id" 
+        <CommentModal 
+		:modal_id="'comment_modal'+post_id" 
 		:comments_list="allComments" 
-		:user_id="user_id" 
+		:owner_user_id="user_id" 
 		:post_id="post_id"
 
 		@eliminateComment="removeCommentFromList"
