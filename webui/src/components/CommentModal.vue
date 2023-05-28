@@ -12,6 +12,7 @@ export default {
 			try{
 				let response = await this.$axios.post("/users/"+ this.owner_user_id +"/posts/"+this.post_id+"/comments",{
 					user_id: localStorage.getItem('token'),
+					post_id: this.post_id,
 					text: this.comment
 				},{
 					headers:{
