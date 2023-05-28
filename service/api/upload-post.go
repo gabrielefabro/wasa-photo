@@ -1,16 +1,9 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
-	"image/jpeg"
-	"image/png"
 	"io"
 	"net/http"
-	"os"
-	"path/filepath"
-	"strconv"
 	"time"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
@@ -31,7 +24,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	username, err := rt.db.GetUserName(auth)
+	username, err := rt.db.GetUserName(user_id)
 	if err != nil {
 		return
 	}
@@ -66,19 +59,10 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	defer func() { err = file.Close() }()
 
-	// Get the user from the database
-	dbuser, err := rt.db.GetUserByID(user_id)
+	// Get the username from the database
+	username, err = rt.db.GetUserName(user_id)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("error getting user")
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-
-	// Parse the user from the database to the User struct in the api package
-	var user User
-	err = user.FromDatabase(dbuser)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("error parsing user")
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
@@ -91,17 +75,16 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	dbPost := post.ToDatabase()
-	
 
-	dbNewPost, err := rt.db.CreatePost(dbPost, data)
+	post_id, err := rt.db.UploadPost(dbPost, data)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("error creating post")
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-
+	post.Post_id = uint64(post_id)
 	// Parse the new post from the database package to the Post struct in the api package
-	err = newPost.FromDatabase(dbNewPost)
+	err = post.FromDatabase(dbPost)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("error parsing photo")
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -110,7 +93,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Return the new post
 	w.WriteHeader(http.StatusCreated)
-	if err := json.NewEncoder(w).Encode(newPost); err != nil {
+	if err := json.NewEncoder(w).Encode(post); err != nil {
 		ctx.Logger.WithError(err).Error("Error while encoding the post")
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
