@@ -5,13 +5,13 @@ export default {
             user: "",
         }
     },
-	props: ['content','author','photo_owner','comment_id','photo_id','nickname'],
+	props: ['text','author','photo_owner','comment_id','post_id','username'],
 
     methods:{
         async deleteComment(){
             try{
                 // Delete comment: "/users/:id/photos/:photo_id/comments/:comment_id"
-                await this.$axios.delete("/users/"+this.photo_owner+"/photos/"+this.photo_id+"/comments/"+this.comment_id)
+                await this.$axios.delete("/users/"+this.photo_owner+"/photos/"+this.post_id+"/comments/"+this.comment_id)
 
                 this.$emit('eliminateComment',this.comment_id)
 
@@ -34,7 +34,7 @@ export default {
         <hr>
         <div class="row">
             <div class="col-10">
-                <h5>{{nickname}} @{{author}}</h5>
+                <h5>{{username}} @{{author}}</h5>
             </div>
 
             <div class="col-2">
@@ -47,7 +47,7 @@ export default {
 
         <div class="row">
             <div class="col-12">
-                {{content}}
+                {{text}}
             </div>
 
         </div>

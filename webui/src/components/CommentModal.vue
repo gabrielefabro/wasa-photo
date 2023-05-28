@@ -5,12 +5,12 @@ export default {
 			comment:"",
 		}
 	},
-	props:['modal_id','comments_list','user_id','post_id'],
+	props:['modal_id','comments_list','owner_user_id','post_id'],
 
 	methods: {
 		async addComment(){
 			try{
-				let response = await this.$axios.post("/users/"+ this.user_id +"/posts/"+this.post_id+"/comments",{
+				let response = await this.$axios.post("/users/"+ this.owner_user_id +"/posts/"+this.post_id+"/comments",{
 					user_id: localStorage.getItem('token'),
 					text: this.comment
 				},{
@@ -57,11 +57,11 @@ export default {
                     <PostComment v-for="(comm,index) in comments_list" 
 					:key="index" 
 					:author="comm.user_id" 
-					:nickname="comm.username"
+					:username="comm.username"
 					:comment_id="comm.comment_id"
-					:photo_id="comm.post_id"
-					:content="comm.text"
-					:photo_owner="photo_owner"
+					:post_id="comm.post_id"
+					:text="comm.text"
+					:photo_owner="owner_user_id"
 					
 
 					@eliminateComment="eliminateCommentToParent"
@@ -74,14 +74,14 @@ export default {
                             <div class="mb-3 me-auto">
                                 
                                 <textarea class="form-control" id="exampleFormControlTextarea1" 
-								placeholder="Add a comment..." rows="1" maxLength="30" v-model="commentValue"></textarea>
+								placeholder="Add a comment..." rows="1" maxLength="30" v-model="comment"></textarea>
                             </div>
                         </div>
 
                         <div class="col-2 d-flex align-items-center">
                             <button type="button" class="btn btn-primary" 
 							@click.prevent="addComment" 
-							:disabled="commentValue.length < 1 || commentValue.length > 30">
+							:disabled="comment.length < 1 || commentlength > 30">
 							Send
 							</button>
                         </div>
