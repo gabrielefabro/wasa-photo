@@ -1,11 +1,11 @@
 package database
 
 // Function that adds a new user in the database
-func (db *appdbimpl) CreateUser(user User) error {
+func (db *appdbimpl) CreateUser(userId userId) error {
 
 	var query = "INSERT INTO users (user_id,username) VALUES (?, ?)"
 
-	_, err := db.c.Exec(query, user.User_id, user.Username)
+	_, err := db.c.Exec(query, userId, userId)
 
 	if err != nil {
 		return err
