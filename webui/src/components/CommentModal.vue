@@ -2,18 +2,17 @@
 export default {	
 	data(){
 		return{
-			commentValue:"",
+			comment:"",
 		}
 	},
-	props:['modal_id','comments_list','photo_owner','photo_id'],
+	props:['modal_id','comments_list','user_id','post_id'],
 
 	methods: {
 		async addComment(){
 			try{
-				// Comment post: /users/:id/photos/:photo_id/comments
-				let response = await this.$axios.post("/users/"+ this.photo_owner +"/photos/"+this.photo_id+"/comments",{
+				let response = await this.$axios.post("/users/"+ this.user_id +"/posts/"+this.post_id+"/comments",{
 					user_id: localStorage.getItem('token'),
-					text: this.commentValue
+					text: this.comment
 				},{
 					headers:{
 						'Content-Type': 'application/json'
@@ -24,9 +23,9 @@ export default {
 					comment_id: response.data.comment_id, 
 					post_id: this.photo_id, 
 					user_id: localStorage.getItem('token'), 
-					text: this.commentValue}
+					text: this.comment}
 				)
-				this.commentValue = ""
+				this.comment = ""
 				
 			}catch(e){
 				console.log(e.toString())
