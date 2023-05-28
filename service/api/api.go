@@ -46,9 +46,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Photo media folder
-var photoFolder = filepath.Join("/tmp", "media")
-
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {
 	// Logger where log entries are sent

@@ -40,17 +40,5 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	pathPhoto, err := getUserPhotoFolder(bearerAuth)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("post-delete/getUserPhotoFolder: error with directories")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = os.Remove(filepath.Join(pathPhoto, postIdStr))
-	if err != nil {
-		ctx.Logger.WithError(err).Error("post-delete/os.Remove: photo to be removed is missing")
-	}
-
 	w.WriteHeader(http.StatusNoContent)
 }

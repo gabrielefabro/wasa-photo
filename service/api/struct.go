@@ -129,6 +129,37 @@ func (post Post) ToDatabase() database.Post {
 	}
 }
 
+func (post *Post) FromDatabase(dbPost database.Post) error {
+	image64, err := utils.ImageToBase64(utils.GetPostPhotoPath(dbPost.User_id, dbPost.Post_id))
+	if err != nil {
+		return err
+	}
+
+	var apiUser User
+	err = apiUser.FromDatabase(dbPost.User)
+	if err != nil {
+		return err
+	}
+
+	post.Post_id = dbPost.PostID
+	post.User_id = apiUser
+	post.Photo_url = image64
+	post.Like= dbPost.Like
+	post.Comment = dbPost.Comment
+	post.Publication_time = dbPost.Publication_time
+	return nil
+}
+
+func (user *User) FromDatabase(dbUser database.User) error {
+	user.User_id = dbUser.User_id
+	user.Username = dbUser.Username
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
 // Converts a Comment from the api package to a Comment of the database package
 func (comment Comment) ToDatabase() database.Comment {
 	return database.Comment{

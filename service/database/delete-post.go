@@ -10,5 +10,11 @@ func (db *appdbimpl) DeletePost(user User, postId PostId) error {
 		return err
 	}
 
+	// Delete file
+	err = os.Remove(utils.GetPostPhotoPath(user.User_id, post_id.Post_id))
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

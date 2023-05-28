@@ -67,7 +67,7 @@ type AppDatabase interface {
 	DeletePost(User, PostId) error
 
 	// Uploadpost add a post on your post list
-	UploadPost(Post) (int64, error)
+	UploadPost(Post, data []byte) (int64, error)
 
 	// BannedCheck control if an user is banned by anotherone
 	BanCheck(a User, b User) (bool, error)
