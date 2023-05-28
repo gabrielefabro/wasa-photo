@@ -55,7 +55,7 @@ export default {
                 </div>
 
                 <div class="modal-body">
-                    <PhotoComment v-for="(comm,index) in comments_list" 
+                    <PostComment v-for="(comm,index) in comments_list" 
 					:key="index" 
 					:author="comm.user_id" 
 					:nickname="comm.username"
