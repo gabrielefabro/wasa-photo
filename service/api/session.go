@@ -25,9 +25,9 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
+	user_id = user.User_id
 	// Create the user in the database.
-	err = rt.db.CreateUser(user.User_id.ToDatabase())
+	err = rt.db.CreateUser(user_id)
 	if err != nil {
 		// In this case, there's a sql error since the resource already exists and can't be inserted again.
 		// The identifier is returned as expected.
