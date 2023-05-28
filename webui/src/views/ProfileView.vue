@@ -161,7 +161,7 @@ export default {
     },
 
     goToSettings() {
-      this.$router.push(this.$route.params.user_id+'settings')
+      this.$router.push(this.$route.params.user_id+'/settings')
     },
 
     removePhotoFromList(post_id) {
