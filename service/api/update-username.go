@@ -35,7 +35,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 		User{User_id: pathId}.ToDatabase(),
 		username.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("update-username: error executing update query")
+		ctx.Logger.WithError(err).Error("update-username/ModifyUsername: error executing update query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
