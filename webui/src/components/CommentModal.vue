@@ -74,14 +74,14 @@ export default {
                             <div class="mb-3 me-auto">
                                 
                                 <textarea class="form-control" id="exampleFormControlTextarea1" 
-								placeholder="Add a comment..." rows="1" maxLength="30" v-model="comment"></textarea>
+								placeholder="Add a comment..." rows="1" maxLength="50" v-model="comment"></textarea>
                             </div>
                         </div>
 
                         <div class="col-2 d-flex align-items-center">
                             <button type="button" class="btn btn-primary" 
 							@click.prevent="addComment" 
-							:disabled="comment.length < 1 || commentlength > 30">
+							:disabled="comment.length < 1 || comment.length > 50">
 							Send
 							</button>
                         </div>
