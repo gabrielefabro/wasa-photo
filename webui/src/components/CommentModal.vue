@@ -2,17 +2,18 @@
 export default {	
 	data(){
 		return{
-			text:"",
+			commentValue:"",
 		}
 	},
-	props:['modal_id','comments_list','user_id','post_id'],
+	props:['modal_id','comments_list','photo_owner','photo_id'],
 
 	methods: {
 		async addComment(){
 			try{
-				let response = await this.$axios.post("/users/"+ this.user_id +"/posts/"+this.post_id+"/comments",{
+				// Comment post: /users/:id/photos/:photo_id/comments
+				let response = await this.$axios.post("/users/"+ this.photo_owner +"/photos/"+this.photo_id+"/comments",{
 					user_id: localStorage.getItem('token'),
-					text: this.text
+					text: this.commentValue
 				},{
 					headers:{
 						'Content-Type': 'application/json'
@@ -21,11 +22,11 @@ export default {
 
 				this.$emit('addComment',{
 					comment_id: response.data.comment_id, 
-					post_id: this.post_id, 
+					post_id: this.photo_id, 
 					user_id: localStorage.getItem('token'), 
-					text: this.text}
+					text: this.commentValue}
 				)
-				this.text = ""
+				this.commentValue = ""
 				
 			}catch(e){
 				console.log(e.toString())
@@ -54,13 +55,14 @@ export default {
                 </div>
 
                 <div class="modal-body">
-                    <PostComment v-for="(comm,index) in comments_list" 
+                    <PhotoComment v-for="(comm,index) in comments_list" 
 					:key="index" 
-					:user_id="comm.user_id" 
-					:username="comm.username"
+					:author="comm.user_id" 
+					:nickname="comm.username"
 					:comment_id="comm.comment_id"
-					:post_id="comm.post_id"
-					:text="comm.text"
+					:photo_id="comm.post_id"
+					:content="comm.text"
+					:photo_owner="photo_owner"
 					
 
 					@eliminateComment="eliminateCommentToParent"
@@ -73,14 +75,14 @@ export default {
                             <div class="mb-3 me-auto">
                                 
                                 <textarea class="form-control" id="exampleFormControlTextarea1" 
-								placeholder="Add a comment..." rows="1" maxLength="50" v-model="text"></textarea>
+								placeholder="Add a comment..." rows="1" maxLength="30" v-model="commentValue"></textarea>
                             </div>
                         </div>
 
                         <div class="col-2 d-flex align-items-center">
                             <button type="button" class="btn btn-primary" 
 							@click.prevent="addComment" 
-							:disabled="text.length < 1 || text.length > 50">
+							:disabled="commentValue.length < 1 || commentValue.length > 30">
 							Send
 							</button>
                         </div>

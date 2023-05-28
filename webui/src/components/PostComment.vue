@@ -3,15 +3,15 @@ export default {
     data(){
         return {
             user: "",
-            text: "",
         }
     },
-	props: ['content','author','user_id','comment_id','post_id','username'],
+	props: ['content','author','photo_owner','comment_id','photo_id','nickname'],
 
     methods:{
         async deleteComment(){
             try{
-                await this.$axios.delete("/users/"+this.user_id+"/posts/"+this.post_id+"/comments/"+this.comment_id)
+                // Delete comment: "/users/:id/photos/:photo_id/comments/:comment_id"
+                await this.$axios.delete("/users/"+this.photo_owner+"/photos/"+this.photo_id+"/comments/"+this.comment_id)
 
                 this.$emit('eliminateComment',this.comment_id)
 
@@ -34,11 +34,11 @@ export default {
         <hr>
         <div class="row">
             <div class="col-10">
-                <h5>{{username}} @{{author}}</h5>
+                <h5>{{nickname}} @{{author}}</h5>
             </div>
 
             <div class="col-2">
-                <button v-if="user === author || user === user_id" class="btn my-btn-comm" @click="deleteComment">
+                <button v-if="user === author || user === photo_owner" class="btn my-btn-comm" @click="deleteComment">
                     <i class="fa-regular fa-trash-can my-trash-icon"></i>
                 </button>
             </div>
@@ -47,7 +47,7 @@ export default {
 
         <div class="row">
             <div class="col-12">
-                {{text}}
+                {{content}}
             </div>
 
         </div>
