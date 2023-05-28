@@ -270,10 +270,6 @@ export default {
   
   <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
   </div>
-  <div v-else class="h-25 ">
-      <PageNotFound />
-  </div>
-  
 
 </template>
 
