@@ -37,49 +37,28 @@ export default {
 		},
 	},
   methods: {
-    
     async uploadFile() {
-      const file = this.$refs.file.files[0];
+      let fileInput = document.getElementById("fileUploader");
 
-      // Check file type, only jpg and jpeg are allowed
-      const fileType = file.type;
-      if (fileType !== "image/jpeg") {
-        this.errorMsg = "File type not supported, only jpg and jpeg are allowed";
-        document.querySelector('.drag-drop-area').style.backgroundColor = "#FF8989";
-       return
-      }
+      const file = fileInput.files[0];
+      const reader = new FileReader();
 
-      // Check file size, max 5MB
-      const fileSize = file.size;
-      if (fileSize > 5242880) {
-        this.errorMsg = "File size is too big. Max size is 5MB";
-        document.querySelector('.drag-drop-area').style.backgroundColor = "#FF8989";
-        return
-      }
+      reader.readAsArrayBuffer(file);
 
-      // Convert file to base64
-      this.file64 = URL.createObjectURL(file);
+      reader.onload = async () => {
+        let response = await this.$axios.post(
+          "/users/" + this.$route.params.user_id + "/posts",
+          reader.result,
+          {
+            headers: {
+              "Content-Type": file.type,
+            },
+          }
+        );
+        this.posts.unshift(response.data);
+        this.postCnt += 1;
+      };
     },
-
-    async createPost(postData) {
-      const formData = new FormData();
-      formData.append("image", postData['imageFile']);
-      formData.append("caption", postData['caption']);
-
-      try {
-        let _ = await this.$axios.post("/users/" +
-              this.$route.params.user_id + "/posts/", formData, {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-        });
-                this.$emit('refresh-data')
-                setTimeout(this.$emit('exit-upload-form'), 1000);
-            } catch (e) {
-                this.errorMsg = this.$utils.errorToString(e);;
-                this.$emit('error-occurred', this.errorMsg);
-            }
-        },
 
     async followClick() {
       try {
