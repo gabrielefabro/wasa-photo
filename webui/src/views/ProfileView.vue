@@ -37,28 +37,6 @@ export default {
 		},
 	},
   methods: {
-    async uploadFile() {
-      let fileInput = document.getElementById("fileUploader");
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.readAsArrayBuffer(file);
-
-      reader.onload = async () => {
-        let response = await this.$axios.post(
-          "/users/" + this.$route.params.user_id + "/posts",
-          reader.result,
-          {
-            headers: {
-              "Content-Type": file.type,
-            },
-          }
-        );
-        this.posts.unshift(response.data);
-        this.postCnt += 1;
-      };
-    },
 
     async followClick() {
       try {
@@ -216,24 +194,30 @@ export default {
       </div>
     </div>
 
-    <div class="row">
-      <div class="container-fluid mt-3">
-        <div class="row">
-          <div class="col-12 d-flex justify-content-center">
-            <h2>Posts</h2>
-            <input id="fileUploader" type="file" class="profile-file-upload" @change="uploadFile" accept=".jpg, .png">
-            <label v-if="sameUser" class="btn my-btn-add-photo ms-2 d-flex align-items-center" for="fileUploader">Add</label>
-          </div>
+    <div class="upload-form-background" @click.self="this.$emit('exit-upload-form')">
+        <div class="upload-form-container" v-if="!file64">
+            <div class="drag-drop-area-container">
+                <button class="drag-drop-area" @click="this.$refs.file.click()">
+                    <input type="file" ref="file" accept=".jpg,.jpeg" @change="onChange" hidden />
+                    <span class="drag-drop-area-text">
+                        Drop your photo here
+                    </span>
+                    <span class="drag-drop-area-subtext">
+                        max size 5MB, only jpg, jpeg
+                    </span>
+
+                </button>
+            </div>
+            <div class="bottom-area">
+                <button @click="this.$refs.file.click()" class="upload-button">Choose File
+                    <input type="file" ref="file" accept=".jpg,.jpeg" @change="onChange" hidden />
+                </button>
+
+            </div>
         </div>
 
-        <div class="row">
-          <div class="col-3"></div>
-          <div class="col-6">
-            <hr class="border border-dark">
-          </div>
-          <div class="col-3"></div>
-        </div>
-      </div>
+        <EditorPost :image64="file64" :editorType="this.$props.photoType" v-if="file64"
+            @exit-upload-form="this.$emit('exit-upload-form')" @save-upload-form="saveData" />
     </div>
 
     <div class="row">
