@@ -14,6 +14,7 @@ export default {
       posts: [],
       following: [],
       followers: [],
+      file64: "",
     };
   },
 
