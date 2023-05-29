@@ -37,6 +37,7 @@ export default {
 		},
 	},
   methods: {
+    
     async uploadFile() {
       let fileInput = document.getElementById("fileUploader");
 
@@ -51,7 +52,7 @@ export default {
           reader.result,
           {
             headers: {
-              "Content-Type": file.type,
+              "Content-Type": 'multipart/form-data',
             },
           }
         );
