@@ -217,8 +217,6 @@ export default {
             </div>
         </div>
 
-        <EditorPost :image64="file64" :editorType="this.$props.photoType" v-if="file64"
-            @exit-upload-form="this.$emit('exit-upload-form')" @save-upload-form="saveData" />
     </div>
 
     <div class="row">
