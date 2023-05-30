@@ -14,18 +14,18 @@ func (db *appdbimpl) GetPosts(requestingUser UserId, targetUser UserId) ([]Post,
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err = rows.Scan( &post.User_id, &post.Post_id, &post.Publication_time)
+		err = rows.Scan(&post.User_id, &post.Post_id, &post.Publication_time)
 		if err != nil {
 			return nil, err
 		}
 
-		comments, err := db.GetComments(requestingUser, targetUser, PostId{Post_id: int64(post.Post_id)})
+		comments, err := db.GetComments(requestingUser, targetUser, PostId{Post_id: post.Post_id})
 		if err != nil {
 			return nil, err
 		}
 		post.Comment = comments
 
-		likes, err := db.GetLikes(requestingUser, targetUser, PostId{Post_id: int64(post.Post_id)})
+		likes, err := db.GetLikes(requestingUser, targetUser, PostId{Post_id: post.Post_id})
 		if err != nil {
 			return nil, err
 		}
