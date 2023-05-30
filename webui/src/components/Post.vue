@@ -39,7 +39,6 @@ export default {
 			try{
 				if (!this.liked){
 
-					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.put("/users/"+ this.user_id +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.push({
 						user_id: bearer,
@@ -47,7 +46,6 @@ export default {
 					})
 
 				}else{
-					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.delete("/users/"+ this.user_id  +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.pop()
 				}
