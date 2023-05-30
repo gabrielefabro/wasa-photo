@@ -13,19 +13,19 @@ export default {
 
 	methods:{
 		loadPhoto(){
-			this.photoURL = __API_URL__+ "/users/"+this.owner+"/posts/"+this.post_id 
+			this.photoURL = __API_URL__+ "/users/"+this.user_id+"/posts/"+this.post_id 
 		},
 
 		async deletePhoto(){
 			try{
-				await this.$axios.delete("/users/"+this.owner+"/posts/"+this.post_id)
+				await this.$axios.delete("/users/"+this.user_id+"/posts/"+this.post_id)
 				this.$emit("removePhoto",this.post_id)
 			}catch(e){
 			}
 		},
 
 		photoOwnerClick: function(){
-			this.$router.replace("/users/"+this.owner)
+			this.$router.replace("/users/"+this.user_id)
 		},
 
 		async toggleLike() {
@@ -40,7 +40,7 @@ export default {
 				if (!this.liked){
 
 					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
-					await this.$axios.put("/users/"+ this.owner +"/posts/"+this.post_id+"/likes/"+ bearer)
+					await this.$axios.put("/users/"+ this.user_id +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.push({
 						user_id: bearer,
 						username: bearer
@@ -48,7 +48,7 @@ export default {
 
 				}else{
 					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
-					await this.$axios.delete("/users/"+ this.owner  +"/posts/"+this.post_id+"/likes/"+ bearer)
+					await this.$axios.delete("/users/"+ this.user_id  +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.pop()
 				}
 
@@ -97,7 +97,7 @@ export default {
         <CommentModal 
 		:modal_id="'comment_modal'+post_id" 
 		:comments_list="allComments" 
-		:owner_user_id="owner" 
+		:owner_user_id="user_id" 
 		:post_id="photo_id"
 
 		@eliminateComment="removeCommentFromList"
@@ -126,7 +126,7 @@ export default {
                         <div class="d-flex flex-row justify-content-end align-items-center mb-2">
 
 							<button class="my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
-                            	<i> From {{owner}}</i>
+                            	<i> From {{user_id}}</i>
 							</button>
 
                             <button class="my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">

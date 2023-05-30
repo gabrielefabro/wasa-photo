@@ -2,7 +2,7 @@
 export default {	
 	data(){
 		return{
-			comment:"",
+			text:"",
 		}
 	},
 	props:['modal_id','comments_list','owner_user_id','post_id'],
@@ -12,7 +12,7 @@ export default {
 			try{
 				let response = await this.$axios.post("/users/"+ this.owner_user_id +"/posts/"+this.post_id+"/comments",{
 					user_id: localStorage.getItem('token'),
-					text: this.comment
+					text: this.text
 				},{
 					headers:{
 						'Content-Type': 'application/json'
@@ -23,9 +23,9 @@ export default {
 					comment_id: response.data.comment_id, 
 					post_id: this.post_id, 
 					user_id: localStorage.getItem('token'), 
-					text: this.comment}
+					text: this.text}
 				)
-				this.comment = ""
+				this.text = ""
 				
 			}catch(e){
 				console.log(e.toString())
