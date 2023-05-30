@@ -15,7 +15,7 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 	pathBannedId := ps.ByName("banned_id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
-	// Check the user's identity for the operation (only owner of the account can add a banned user to that account list)
+	// Check the user's identity for the operation 
 	valid := validateRequestingUser(pathId, requestingUserId)
 	if valid != 0 {
 		w.WriteHeader(valid)
