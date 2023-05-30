@@ -69,7 +69,7 @@ func (rt *_router) uploadPost(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	photoId := strconv.FormatInt(photoIdInt, 10)
+	postId := strconv.FormatInt(photoIdInt, 10)
 
 	// Create the user's folder locally to save his/her images
 	PhotoPath, err := getUserPhotoFolder(auth)
@@ -80,7 +80,7 @@ func (rt *_router) uploadPost(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	// Create an empty file for storing the body content (image)
-	out, err := os.Create(filepath.Join(PhotoPath, photoId))
+	out, err := os.Create(filepath.Join(PhotoPath, postId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("photo-upload: error creating local photo file")
@@ -134,7 +134,7 @@ func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontex
 func getUserPhotoFolder(user_id string) (UserPhotoFoldrPath string, err error) {
 
 	// Path of the photo dir "./media/user_id/photos/"
-	photoPath := filepath.Join(photoFolder, user_id, "photos")
+	photoPath := filepath.Join(photoFolder, user_id, "posts")
 
 	return photoPath, nil
 }
