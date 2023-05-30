@@ -21,8 +21,8 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	banned, err := rt.db.BanCheck(
-		User{User_id: requestingUserId}.ToDatabase(),
-		User{User_id: postAuthor}.ToDatabase())
+		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: postAuthor}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-comment/db.BanCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -34,7 +34,6 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
-	post_id_u64 := uint64(post_id_64)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("remove-like/ParseInt: error converting post_id to uint64")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -43,8 +42,8 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 
 	// Insert the like in the db via db function
 	err = rt.db.UnlikePost(
-		PostId{Post_id: post_id_u64}.ToDatabase(),
-		User{User_id: requestingUserId}.ToDatabase())
+		PostId{Post_id: post_id_64}.ToDatabase(),
+		UserId{User_id: requestingUserId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("remove-like/db.UnlikePhoto: error executing insert query")
 		w.WriteHeader(http.StatusInternalServerError)

@@ -23,8 +23,8 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	banned, err := rt.db.BanCheck(
-		User{User_id: requestingUserId}.ToDatabase(),
-		User{User_id: postAuthor}.ToDatabase())
+		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: postAuthor}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-comment/db.BannedUserCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -42,16 +42,15 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
-	post_id_u64 := uint64(post_id_64)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("put-like: error converting path param photo_id")
+		ctx.Logger.WithError(err).Error("put-like: error converting path param post_id")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	err = rt.db.LikePost(
-		PostId{Post_id: post_id_u64}.ToDatabase(),
-		User{User_id: pathLikeId}.ToDatabase())
+		PostId{Post_id: post_id_64}.ToDatabase(),
+		UserId{User_id: pathLikeId}.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusNoContent)
 		return

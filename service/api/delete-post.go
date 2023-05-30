@@ -30,8 +30,8 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 
 	// Call to the db function to remove the post
 	err = rt.db.DeletePost(
-		User{User_id: bearerAuth}.ToDatabase(),
-		PostId{Post_id: uint64(postInt)}.ToDatabase())
+		UserId{User_id: bearerAuth}.ToDatabase(),
+		PostId{Post_id: postInt}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-delete/RemovePhoto: error coming from database")
 		w.WriteHeader(http.StatusInternalServerError)

@@ -32,7 +32,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 
 	// Modify the username with the db function
 	err = rt.db.ModifyUserName(
-		User{User_id: pathId}.ToDatabase(),
+		UserId{User_id: pathId}.ToDatabase(),
 		username.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("update-username/ModifyUsername: error executing update query")

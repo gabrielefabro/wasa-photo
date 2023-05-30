@@ -27,13 +27,13 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	identificator := r.URL.Query().Get("user_id")
 
 	// Search the user in the database (with the query parameter as a filter)
-	res, err := rt.db.SearchUser(User{User_id: identifier}.ToDatabase(), User{User_id: identificator}.ToDatabase())
+	res, err := rt.db.SearchUser(UserId{User_id: identifier}.ToDatabase(), UserId{User_id: identificator}.ToDatabase())
 	if err != nil {
 		// In this case, there's an error coming from the database. Return an empty json
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("Database has encountered an error")
 		// controllaerrore
-		_ = json.NewEncoder(w).Encode([]User{})
+		_ = json.NewEncoder(w).Encode([]UserId{})
 		return
 	}
 
@@ -42,7 +42,7 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	// Send the output to the user. Instead of giving null for no matches return and empty slice of Users
 	if len(res) == 0 {
 		// controllaerrore
-		_ = json.NewEncoder(w).Encode([]User{})
+		_ = json.NewEncoder(w).Encode([]UserId{})
 		return
 	}
 	// controllaerrore

@@ -1,7 +1,7 @@
 package database
 
 // Function that check if an targetUser exists
-func (db *appdbimpl) CheckUser(targetUser User) (bool, error) {
+func (db *appdbimpl) CheckUser(targetUser UserId) (bool, error) {
 
 	var count int
 	var query = "SELECT COUNT(*) FROM users WHERE user_id = ?"
@@ -12,7 +12,6 @@ func (db *appdbimpl) CheckUser(targetUser User) (bool, error) {
 		return true, err
 	}
 
-	// If the counter is 1 then the user exists
 	if count == 1 {
 		return true, nil
 	}

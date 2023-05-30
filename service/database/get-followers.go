@@ -1,7 +1,7 @@
 package database
 
 // Function that return the list of followers of a user
-func (db *appdbimpl) GetFollowers(requestinUser User) ([]User, error) {
+func (db *appdbimpl) GetFollowers(requestinUser UserId) ([]UserId, error) {
 
 	var query = "SELECT follower FROM followers WHERE followed = ?"
 
@@ -12,9 +12,9 @@ func (db *appdbimpl) GetFollowers(requestinUser User) ([]User, error) {
 
 	defer func() { _ = rows.Close() }()
 
-	var followers []User
+	var followers []UserId
 	for rows.Next() {
-		var follower User
+		var follower UserId
 		err = rows.Scan(&follower.User_id)
 		if err != nil {
 			return nil, err

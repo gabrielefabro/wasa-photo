@@ -38,19 +38,22 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:user_id/posts/:post_id/likes/:like_id", rt.wrap(rt.deleteLike))
 
 	// Return Post
-	rt.router.GET("/users/:user_id/posts/:post_id", rt.wrap(rt.getPosts))
+	rt.router.GET("/users/:user_id/posts/:post_id", rt.wrap(rt.getPhoto))
 
 	// Delete Post
 	rt.router.DELETE("/users/:user_id/posts/:post_id", rt.wrap(rt.deletePost))
 
 	// Post
-	rt.router.POST("/users/:user_id/posts", rt.wrap(rt.postPhoto))
+	rt.router.POST("/users/:user_id/posts", rt.wrap(rt.uploadPost))
 
 	// Comment Post
 	rt.router.POST("/users/:user_id/posts/:post_id/comments", rt.wrap(rt.postComment))
 
 	// Uncomment Post
 	rt.router.DELETE("/users/:user_id/posts/:post_id/comments/:comment_id", rt.wrap(rt.deleteComment))
+
+	// Search
+	rt.router.GET("/users", rt.wrap(rt.getUsersQuery))
 
 	// Special routes
 	rt.router.GET("/liveness", rt.liveness)

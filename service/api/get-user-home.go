@@ -22,7 +22,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	followers, err := rt.db.GetFollowings(User.ToDatabase(User{User_id: identifier}))
+	followers, err := rt.db.GetFollowings(UserId{User_id: identifier}.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -32,8 +32,8 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	for _, follower := range followers {
 
 		followerPost, err := rt.db.GetPosts(
-			User.ToDatabase(User{}),
-			follower)
+			UserId{User_id: identifier}.ToDatabase(),
+			UserId{User_id: follower.User_id}.ToDatabase())
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return

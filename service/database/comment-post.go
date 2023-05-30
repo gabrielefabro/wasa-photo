@@ -1,13 +1,12 @@
 package database
 
 // Function that adds a comment of a user to a post
-func (db *appdbimpl) CommentPost(postId PostId, user User, text TextComment) (int64, error) {
+func (db *appdbimpl) CommentPost(postId PostId, UserId UserId, text TextComment) (int64, error) {
 
-	var query = "INSERT INTO comments (post_id,username,user_id,text) VALUES (?, ?, ?, ?)"
+	var query = "INSERT INTO comments (post_id,user_id,text) VALUES (?, ?, ?)"
 
-	res, err := db.c.Exec(query, postId.Post_id, user.Username, user.User_id, text.TextComment)
+	res, err := db.c.Exec(query, postId.Post_id, UserId.User_id, text.TextComment)
 	if err != nil {
-		// Error executing query
 		return -1, err
 	}
 

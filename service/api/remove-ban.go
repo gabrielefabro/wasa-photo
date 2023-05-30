@@ -29,8 +29,8 @@ func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Remove the follower in the db via db function
 	err := rt.db.UnbanUser(
-		User{User_id: pathId}.ToDatabase(),
-		User{User_id: userToUnban}.ToDatabase())
+		UserId{User_id: pathId}.ToDatabase(),
+		UserId{User_id: userToUnban}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("remove-ban: error executing delete query")
 		w.WriteHeader(http.StatusInternalServerError)

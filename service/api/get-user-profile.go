@@ -16,12 +16,12 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 	requestedUser := ps.ByName("user_id")
 
-	var followers []database.User
-	var following []database.User
+	var followers []database.UserId
+	var following []database.UserId
 	var posts []database.Post
 
-	userBanned, err := rt.db.BanCheck(User{User_id: requestingUserId}.ToDatabase(),
-		User{User_id: requestedUser}.ToDatabase())
+	userBanned, err := rt.db.BanCheck(UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.BanCheck/userBanned: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -32,8 +32,8 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	requestedProfileBanned, err := rt.db.BanCheck(User{User_id: requestedUser}.ToDatabase(),
-		User{User_id: requestingUserId}.ToDatabase())
+	requestedProfileBanned, err := rt.db.BanCheck(UserId{User_id: requestedUser}.ToDatabase(),
+		UserId{User_id: requestingUserId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.BanCheck/requestedProfileBanned: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -44,7 +44,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	userExists, err := rt.db.CheckUser(User{User_id: requestedUser}.ToDatabase())
+	userExists, err := rt.db.CheckUser(UserId{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.CheckUser: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -55,28 +55,28 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	followers, err = rt.db.GetFollowers(User{User_id: requestedUser}.ToDatabase())
+	followers, err = rt.db.GetFollowers(UserId{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetMyFollowers: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	following, err = rt.db.GetFollowings(User{User_id: requestedUser}.ToDatabase())
+	following, err = rt.db.GetFollowings(UserId{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetMyFollowings: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	posts, err = rt.db.GetPosts(User{User_id: requestingUserId}.ToDatabase(), User{User_id: requestedUser}.ToDatabase())
+	posts, err = rt.db.GetPosts(UserId{User_id: requestingUserId}.ToDatabase(), UserId{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetPosts: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	username, err := rt.db.GetUserName(requestedUser)
+	username, err := rt.db.GetUserName(UserId{User_id: requestedUser}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("getUserProfile/db.GetuserName: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)

@@ -23,8 +23,8 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	banned, err := rt.db.BanCheck(
-		User{User_id: requestingUserId}.ToDatabase(),
-		User{User_id: postUserId}.ToDatabase())
+		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: postUserId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-comment/db.BanCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -50,20 +50,18 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	// Convert the photo identifier from string to int64
 	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment/ParseInt: failed convert post_id to int64")
+		ctx.Logger.WithError(err).Error("post-comment/ParseInt: failed convert photo_id to int64")
 		return
 	}
 
-	// cast to make a variable int64 to uint64
-	post_id_u64 := uint64(post_id_64)
-
 	// Function call to db for comment creation
 	commentId, err := rt.db.CommentPost(
-		PostId{Post_id: post_id_u64}.ToDatabase(),
-		User{User_id: requestingUserId}.ToDatabase(),
+		PostId{Post_id: post_id_64}.ToDatabase(),
+		UserId{User_id: requestingUserId}.ToDatabase(),
 		TextComment{TextComment: comment.Text}.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -73,11 +71,8 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 
 	w.WriteHeader(http.StatusCreated)
 
-	// cast to make a variable int64 to uint64
-	commentIdU := uint64(commentId)
-
 	// The response body will contain the unique id of the comment
-	err = json.NewEncoder(w).Encode(CommentId{Comment_id: commentIdU})
+	err = json.NewEncoder(w).Encode(CommentId{Comment_id: commentId})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("post-comment/Encode: failed convert post_id to int64")

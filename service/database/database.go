@@ -12,71 +12,71 @@ var ErrUserBanned = errors.New("user is banned")
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
-	// getUserProfile return the profile from the id passed as argument
-	GetUserProfile(a User, b User) (Profile, int64, error)
-
 	// CreateUser create a new user
-	CreateUser(user_id string) error
+	CreateUser(UserId) error
 
 	// GetUserName get the username of a user
-	GetUserName(user_id string) (string, error)
+	GetUserName(UserId) (string, error)
 
 	// ModifyUserName set a new Username for an existing profile
-	ModifyUserName(User, Username) error
+	ModifyUserName(UserId, Username) error
 
 	// GetMyStream returns the stream of the id passed as argoument
-	GetMyStream(User) ([]Post, error)
+	GetMyStream(UserId) ([]Post, error)
 
 	// GetFollowers returns the followers list
-	GetFollowers(User) ([]User, error)
+	GetFollowers(UserId) ([]UserId, error)
 
 	// GetFollowings returns the followings list
-	GetFollowings(User) ([]User, error)
+	GetFollowings(UserId) ([]UserId, error)
 
 	// GetPosts return all the post from one profile
-	GetPosts(a User, b User) ([]Post, error)
+	GetPosts(requestingUser UserId, targetUser UserId) ([]Post, error)
 
-	// GetPhoto return a single post from a profile
-	GetPhoto(User, PostId) (Post, error)
+	// GetComments return all the comments from one post
+	GetComments(requestingUser UserId, requestedUser UserId, postId PostId) ([]Comment, error)
+
+	// GetLikes return all the like from on post
+	GetLikes(requestingUser UserId, requestedUser UserId, postId PostId) ([]User, error)
 
 	// FollowUser adds one profile from the followers list
-	FollowUser(a User, b User) error
+	FollowUser(followed UserId, follower UserId) error
 
 	// UnfollowUser removes one profile from the followers list
-	UnfollowUser(a User, b User) error
+	UnfollowUser(followed UserId, follower UserId) error
 
 	// BanUser adds one profile from the bans list
-	BanUser(a User, b User) error
+	BanUser(banned UserId, banner UserId) error
 
 	// UnbanUser remove one profile from the bans list
-	UnbanUser(a User, b User) error
+	UnbanUser(banned UserId, banner UserId) error
 
 	// LikePost add a like to the likes list
-	LikePost(PostId, User) error
+	LikePost(PostId, UserId) error
 
 	// UnlikePost removes a like to the Unlikes list
-	UnlikePost(PostId, User) error
+	UnlikePost(PostId, UserId) error
 
 	// CommentPost adds a comment in the comments list
-	CommentPost(PostId, User, TextComment) (int64, error)
+	CommentPost(PostId, UserId, TextComment) (int64, error)
 
 	// UncommentPost adds a comment in the comments list
-	UncommentPost(PostId, User, CommentId) error
+	UncommentPost(PostId, UserId, CommentId) error
 
 	// DeletePost deletes a post by his id
-	DeletePost(User, PostId) error
+	DeletePost(UserId, PostId) error
 
-	// Uploadpost add a post on your post list
-	UploadPost(post Post, data []byte) (int64, error)
+	// CreatePost create a new post in the database
+	CreatePost(Post) (int64, error)
 
 	// BannedCheck control if an user is banned by anotherone
-	BanCheck(a User, b User) (bool, error)
+	BanCheck(banned UserId, banner UserId) (bool, error)
 
 	// CheckUser control if an user exist
-	CheckUser(User) (bool, error)
+	CheckUser(UserId) (bool, error)
 
 	// SearchUser searches all the users that match the given name
-	SearchUser(searcher User, userToSearch User) ([]User, error)
+	SearchUser(searcher UserId, userToSearch UserId) ([]User, error)
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
@@ -123,14 +123,13 @@ func (db *appdbimpl) Ping() error {
 func createDatabase(db *sql.DB) error {
 	tables := [6]string{
 		`CREATE TABLE IF NOT EXISTS users (
-			user_id VARCHAR(15) PRIMARY KEY,
-			username VARCHAR(15)
+			user_id VARCHAR(15) NOT NULLPRIMARY KEY,
+			username VARCHAR(15) NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS posts (
 			post_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			user_id VARCHAR(15),
-			username VARCHAR(15),
-			publication_time DATETIME,
+			user_id VARCHAR(15) NOT NULL,
+			publication_time DATETIME NOT NULL,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS  likes (
@@ -143,10 +142,8 @@ func createDatabase(db *sql.DB) error {
 			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			user_id VARCHAR(15) NOT NULL,
 			post_id INTEGER NOT NULL,
-			username VARCHAR(15),
-			text TEXT,
-			time_comment DATETIME,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+			FOREIGN KEY(post_id) REFERENCES posts (post_id) ON DELETE CASCADE,
 			);`,
 		`CREATE TABLE IF NOT EXISTS banned_users (
 			banner VARCHAR(15) NOT NULL,

@@ -1,11 +1,11 @@
 package database
 
 // Function that gets the stream of a user (posts of people that are followed by the latter)
-func (db *appdbimpl) GetMyStream(user User) ([]Post, error) {
+func (db *appdbimpl) GetMyStream(userId UserId) ([]Post, error) {
 
 	var query = "SELECT * FROM posts WHERE user_id IN (SELECT followed FROM followers WHERE follower = ?) ORDER BY publication_time DESC"
 
-	rows, err := db.c.Query(query, user.User_id)
+	rows, err := db.c.Query(query, userId.User_id)
 	if err != nil {
 		return nil, err
 	}
@@ -19,12 +19,6 @@ func (db *appdbimpl) GetMyStream(user User) ([]Post, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		username, err := db.GetUserName(post.User_id)
-		if err != nil {
-			return nil, err
-		}
-		post.Username = username
 
 		res = append(res, post)
 	}

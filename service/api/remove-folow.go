@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
-	"git.gabrielefabro.it/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -29,8 +28,8 @@ func (rt *_router) deleteFollow(w http.ResponseWriter, r *http.Request, ps httpr
 	}
 
 	banned, err := rt.db.BanCheck(
-		database.User{User_id: requestingUserId},
-		database.User{User_id: userPostId})
+		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: userPostId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-comment/rt.db.BanCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -43,8 +42,8 @@ func (rt *_router) deleteFollow(w http.ResponseWriter, r *http.Request, ps httpr
 
 	// Remove the follower in the db via db function
 	err = rt.db.UnfollowUser(
-		User{User_id: oldFollower}.ToDatabase(),
-		User{User_id: userPostId}.ToDatabase())
+		UserId{User_id: oldFollower}.ToDatabase(),
+		UserId{User_id: userPostId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("remove-follow: error executing delete query")
 		w.WriteHeader(http.StatusInternalServerError)

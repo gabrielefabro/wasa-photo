@@ -1,12 +1,12 @@
 package database
 
 // Function that gets a user's nickname
-func (db *appdbimpl) GetUserName(user_id string) (string, error) {
+func (db *appdbimpl) GetUserName(userId UserId) (string, error) {
 
 	var username string
 	var query = "SELECT username FROM users WHERE user_id = ?"
 
-	err := db.c.QueryRow(query, user_id).Scan(&username)
+	err := db.c.QueryRow(query, userId).Scan(&username)
 	if err != nil {
 		return "", err
 	}

@@ -1,7 +1,7 @@
 package database
 
 // Fuction that removes an user from the banned list of another one
-func (db *appdbimpl) UnbanUser(banner User, banned User) error {
+func (db *appdbimpl) UnbanUser(banner UserId, banned UserId) error {
 
 	var query = "DELETE FROM banned_users WHERE (banner = ? AND banned = ?)"
 

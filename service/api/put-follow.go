@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"git.gabrielefabro.it/service/api/reqcontext"
-	"git.gabrielefabro.it/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -29,23 +28,22 @@ func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Check if the requesting user wasn't banned by the photo owner
 	banned, err := rt.db.BanCheck(
-		database.User{User_id: requestingUserId},
-		database.User{User_id: userToFollowId})
+		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: userToFollowId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("post-comment/rt.db.BanCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	if banned {
-		// User was banned, can't perform the follow action
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
 	// Add the new follower in the db via db function
 	err = rt.db.FollowUser(
-		User{User_id: requestingUserId}.ToDatabase(),
-		User{User_id: userToFollowId}.ToDatabase())
+		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: userToFollowId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("put-follow: error executing insert query")
 		w.WriteHeader(http.StatusInternalServerError)
