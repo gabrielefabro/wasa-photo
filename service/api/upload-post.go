@@ -25,7 +25,7 @@ func (rt *_router) uploadPost(w http.ResponseWriter, r *http.Request, ps httprou
 	auth := extractBearer(r.Header.Get("Authorization"))
 
 	// Check the user's identity for the operation
-	valid := validateRequestingUser(ps.ByName("id"), auth)
+	valid := validateRequestingUser(ps.ByName("user_id"), auth)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
