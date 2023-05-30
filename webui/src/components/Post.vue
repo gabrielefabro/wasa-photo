@@ -98,7 +98,7 @@ export default {
 		:modal_id="'comment_modal'+post_id" 
 		:comments_list="allComments" 
 		:owner_user_id="user_id" 
-		:post_id="photo_id"
+		:post_id="post_id"
 
 		@eliminateComment="removeCommentFromList"
 		@addComment="addCommentToList"
