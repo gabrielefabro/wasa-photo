@@ -20,7 +20,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/users/:user_id/home", rt.wrap(rt.getMyStream))
 
 	// Follow User
-	rt.router.PUT("/users/:user_id/followings/:following_id", rt.wrap(rt.putFollow))
+	rt.router.PUT("/users/:user_id/followers/:follower_id", rt.wrap(rt.putFollow))
 
 	// Unfollow User
 	rt.router.DELETE("/users/:user_id/followings/:following_id", rt.wrap(rt.deleteFollow))
