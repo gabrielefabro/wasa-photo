@@ -123,7 +123,7 @@ func (db *appdbimpl) Ping() error {
 func createDatabase(db *sql.DB) error {
 	tables := [6]string{
 		`CREATE TABLE IF NOT EXISTS users (
-			user_id VARCHAR(15) NOT NULLPRIMARY KEY,
+			user_id VARCHAR(15) NOT NULL PRIMARY KEY,
 			username VARCHAR(15) NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS posts (
@@ -142,8 +142,8 @@ func createDatabase(db *sql.DB) error {
 			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			user_id VARCHAR(15) NOT NULL,
 			post_id INTEGER NOT NULL,
-			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
-			FOREIGN KEY(post_id) REFERENCES posts (post_id) ON DELETE CASCADE,
+			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+			FOREIGN KEY(post_id) REFERENCES posts (post_id) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS banned_users (
 			banner VARCHAR(15) NOT NULL,
