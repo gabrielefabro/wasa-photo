@@ -16,13 +16,12 @@ func (db *appdbimpl) GetComments(requestingUser UserId, requestedUser UserId, po
 	var comments []Comment
 	for rows.Next() {
 		var comment Comment
-		var user User
 		err = rows.Scan(&comment.Comment_id, &comment.User_id, &comment.Post_id, &comment.Text)
 		if err != nil {
 			return nil, err
 		}
 
-		username, err := db.GetUserName(UserId{User_id: user.User_id})
+		username, err := db.GetUserName(UserId{User_id: comment.User_id})
 		if err != nil {
 			return nil, err
 		}
