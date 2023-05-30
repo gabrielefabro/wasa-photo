@@ -59,7 +59,7 @@ export default {
                     'Content-Type': file.type
                     },
                 })
-                this.photos.unshift(response.data)
+                this.posts.unshift(response.data)
                 this.postCnt += 1
             };
         },
