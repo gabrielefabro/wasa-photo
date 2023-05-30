@@ -67,7 +67,7 @@ export default {
 		async followClick(){
             try{
                 if (this.followStatus){ 
-                    await this.$axios.delete("/users/"+this.$route.params.user_id+"/followers/"+ localStorage.getItem('token'));
+                    await this.$axios.delete("/users/"+this.$route.params.user_id+"/followings/"+ localStorage.getItem('token'));
                     this.followerCnt -=1
                 }else{
                     await this.$axios.put("/users/"+this.$route.params.user_id+"/followers/"+ localStorage.getItem('token'));
