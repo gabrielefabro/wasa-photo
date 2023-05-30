@@ -101,8 +101,7 @@ export default {
             }
 
 			try{
-                // Get user profile: /users/:id
-				let response = await this.$axios.get("/users/"+this.$route.params.use_id);
+				let response = await this.$axios.get("/users/"+this.$route.params.user_id);
 
                 this.banStatus = false
                 this.userExists = true
