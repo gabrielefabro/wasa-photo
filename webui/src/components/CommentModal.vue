@@ -12,7 +12,6 @@ export default {
 			try{
 				let response = await this.$axios.post("/users/"+ this.owner_user_id +"/posts/"+this.post_id+"/comments",{
 					user_id: localStorage.getItem('token'),
-					post_id: this.post_id,
 					text: this.comment
 				},{
 					headers:{
@@ -22,7 +21,7 @@ export default {
 
 				this.$emit('addComment',{
 					comment_id: response.data.comment_id, 
-					post_id: this.photo_id, 
+					post_id: this.post_id, 
 					user_id: localStorage.getItem('token'), 
 					text: this.comment}
 				)
@@ -75,14 +74,14 @@ export default {
                             <div class="mb-3 me-auto">
                                 
                                 <textarea class="form-control" id="exampleFormControlTextarea1" 
-								placeholder="Add a comment..." rows="1" maxLength="50" v-model="comment"></textarea>
+								placeholder="Add a comment..." rows="1" maxLength="50" v-model="text"></textarea>
                             </div>
                         </div>
 
                         <div class="col-2 d-flex align-items-center">
                             <button type="button" class="btn btn-primary" 
 							@click.prevent="addComment" 
-							:disabled="comment.length < 1 || comment.length > 50">
+							:disabled="text.length < 1 || text.length > 50">
 							Send
 							</button>
                         </div>

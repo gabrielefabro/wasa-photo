@@ -39,13 +39,13 @@ export default {
 	<div class="container-fluid">
 		<ErrorMsg v-if="errorMsg" :msg="errorMsg" @close-error="errorMsg = ''"></ErrorMsg>
 		<div class="row">
-			<post
+			<Post
 				v-for="(post,index) in posts"
 				:key="index"
-				:username="post.username"
-				:postId="post.postId"
-				:comments="post.comments != nil ? post.comments : []"
-				:likes="post.likes != nil ? post.likes : []"
+				:user_id="post.user_id"
+				:post_id="post.post_id"
+				:comments="post.comment != nil ? post.comment : []"
+				:likes="post.like != nil ? post.like : []"
 				:pubblication_time="post.pubblication_time"
 			/>
 		</div>

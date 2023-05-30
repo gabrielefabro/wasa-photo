@@ -23,31 +23,20 @@ export default {
   </template>
   
   <style>
-  .user {
-    color: #333;
-  }
-  
-  .user-mini-card {
-    color: #333;
+.user{
+    color: var(--color-text);
+}
+
+.user-mini-card{
+    color: black;
     width: 25%;
     border: none;
-    border-color: #333;
-    transition: all 0.3s;
-  }
-  
-  .user-mini-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .user-mini-card-title {
+    border-color: black;
+}
+
+.user-mini-card-title:hover{
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.3s;
-  }
-  
-  .user-mini-card-title:hover {
-    color: #007bff;
-  }
-  </style>
+}
+</style>
   

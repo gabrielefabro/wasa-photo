@@ -13,20 +13,19 @@ export default {
 
 	methods:{
 		loadPhoto(){
-			this.photoURL = __API_URL__+ "/users/"+this.user_id+"/posts/"+this.post_id 
+			this.photoURL = __API_URL__+ "/users/"+this.owner+"/posts/"+this.post_id 
 		},
 
 		async deletePhoto(){
 			try{
-				await this.$axios.delete("/users/"+this.user_id+"/posts/"+this.post_id)
+				await this.$axios.delete("/users/"+this.owner+"/posts/"+this.post_id)
 				this.$emit("removePhoto",this.post_id)
 			}catch(e){
-				//
 			}
 		},
 
 		photoOwnerClick: function(){
-			this.$router.replace("/users/"+this.user_id)
+			this.$router.replace("/users/"+this.owner)
 		},
 
 		async toggleLike() {
@@ -40,14 +39,16 @@ export default {
 			try{
 				if (!this.liked){
 
-					await this.$axios.put("/users/"+ this.user_id +"/posts/"+this.post_id+"/likes/"+ bearer)
+					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
+					await this.$axios.put("/users/"+ this.owner +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.push({
 						user_id: bearer,
 						username: bearer
 					})
 
 				}else{
-					await this.$axios.delete("/users/"+ this.user_id  +"/posts/"+this.post_id+"/likes/"+ bearer)
+					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
+					await this.$axios.delete("/users/"+ this.owner  +"/posts/"+this.post_id+"/likes/"+ bearer)
 					this.allLikes.pop()
 				}
 
@@ -90,15 +91,14 @@ export default {
 <template>
 	<div class="container-fluid mt-3 mb-5 ">
 
-        <LikeModal 
-		:modal_id="'like_modal'+post_id" 
+        <LikeModal :modal_id="'like_modal'+post_id" 
 		:likes="allLikes" />
 
         <CommentModal 
 		:modal_id="'comment_modal'+post_id" 
 		:comments_list="allComments" 
-		:owner_user_id="user_id" 
-		:post_id="post_id"
+		:owner_user_id="owner" 
+		:post_id="photo_id"
 
 		@eliminateComment="removeCommentFromList"
 		@addComment="addCommentToList"
@@ -110,6 +110,7 @@ export default {
                 <div class="d-flex justify-content-end">
 
                     <button v-if="isOwner" class="my-trnsp-btn my-dlt-btn me-2" @click="deletePhoto">
+						<!--Delete-->
 						<i class="fa-solid fa-trash w-100 h-100"></i>
 					</button>
 
@@ -125,7 +126,7 @@ export default {
                         <div class="d-flex flex-row justify-content-end align-items-center mb-2">
 
 							<button class="my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
-                            	<i> From {{user_id}}</i>
+                            	<i> From {{owner}}</i>
 							</button>
 
                             <button class="my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
