@@ -17,7 +17,7 @@ func (db *appdbimpl) GetComments(requestingUser UserId, requestedUser UserId, po
 	for rows.Next() {
 		var comment Comment
 		var user User
-		err = rows.Scan(&comment.User_id, &comment.Post_id, &comment.Text, &comment.Comment_id)
+		err = rows.Scan(&comment.Comment_id, &comment.User_id, &comment.Post_id, &comment.Text)
 		if err != nil {
 			return nil, err
 		}

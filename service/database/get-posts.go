@@ -14,7 +14,7 @@ func (db *appdbimpl) GetPosts(requestingUser UserId, targetUser UserId) ([]Post,
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err = rows.Scan(&post.User_id, &post.Post_id, &post.Publication_time)
+		err = rows.Scan(&post.Post_id, &post.User_id, &post.Publication_time)
 		if err != nil {
 			return nil, err
 		}

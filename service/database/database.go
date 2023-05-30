@@ -142,7 +142,7 @@ func createDatabase(db *sql.DB) error {
 			comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			user_id VARCHAR(15) NOT NULL,
 			post_id INTEGER NOT NULL,
-			text VARCHAR(50),
+			text VARCHAR(50) NOT NULL,
 			FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
 			FOREIGN KEY(post_id) REFERENCES posts (post_id) ON DELETE CASCADE
 			);`,
