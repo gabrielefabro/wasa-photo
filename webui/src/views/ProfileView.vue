@@ -223,7 +223,7 @@ export default {
                     :user_id="this.$route.params.user_id" 
                     :post_id="post.post_id" 
                     :comments="post.comment" 
-                    :likes="post.like" 
+                    :like="post.like" 
                     :publication_time="post.publication_time" 
                     :isOwner="sameUser" 
                     

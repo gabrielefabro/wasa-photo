@@ -55,7 +55,7 @@ export default {
 							type="text" 
 							class="form-control" 
 							v-model="identifier" 
-							maxlength="16"
+							maxlength="15"
 							minlength="1"
 							placeholder="Your user id" 
 						/>

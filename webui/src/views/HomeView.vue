@@ -45,7 +45,7 @@ export default {
 				:user_id="post.user_id"
 				:post_id="post.post_id"
 				:comments="post.comment != nil ? post.comment : []"
-				:likes="post.like != nil ? post.like : []"
+				:like="post.like != nil ? post.like : []"
 				:publication_time="post.publication_time"
 			/>
 		</div>

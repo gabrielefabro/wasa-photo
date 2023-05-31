@@ -9,7 +9,7 @@ export default {
 		}
 	},
 
-	props: ['user_id','likes','comments',"publication_time","post_id","isOwner"], 
+	props: ['user_id','like','comments',"publication_time","post_id","isOwner"], 
 
 	methods:{
 		loadPhoto(){
@@ -69,11 +69,11 @@ export default {
 	mounted(){
 		this.loadPhoto()
 
-		if (this.likes != null){
-			this.allLikes = this.likes
+		if (this.like != null){
+			this.allLikes = this.like
 		}
 
-		if (this.likes != null){
+		if (this.like != null){
 			this.liked = this.allLikes.some(obj => obj.user_id === localStorage.getItem('token'))
 		}
 		if (this.comments != null){
@@ -90,7 +90,7 @@ export default {
 	<div class="container-fluid mt-3 mb-5 ">
 
         <LikeModal :modal_id="'like_modal'+post_id" 
-		:likes="allLikes" />
+		:like="allLikes" />
 
         <CommentModal 
 		:modal_id="'comment_modal'+post_id" 

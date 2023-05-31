@@ -1,7 +1,7 @@
 <script>
 export default {	
 
-	props:['modal_id','likes'],
+	props:['modal_id','like'],
 
 }
 </script>
@@ -15,7 +15,7 @@ export default {
 			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
 		<div class="modal-body">
-			<UserMiniCard v-for="(user,index) in likes" 
+			<UserMiniCard v-for="(user,index) in like" 
 			:key="index" 
 			:user_id="user.user_id"
 			:username="user.username"
