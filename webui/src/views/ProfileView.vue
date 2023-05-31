@@ -139,8 +139,8 @@ export default {
 		},
 	},
 
-	async mounted(){
-		await this.loadInfo()
+	mounted(){
+		this.loadInfo()
 	},
 
 }

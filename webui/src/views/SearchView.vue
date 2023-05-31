@@ -44,11 +44,11 @@ export default {
 		}
 	},
 
-	async mounted(){
+	mounted(){
 		if (!localStorage.getItem('token')){
 			this.$router.replace("/login")
 		}
-		await this.loadSearchedUsers()
+		this.loadSearchedUsers()
 		
 	},
 }

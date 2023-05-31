@@ -66,8 +66,8 @@ export default {
 		},
 	},
 	
-	async mounted(){
-		await this.loadPhoto()
+	mounted(){
+		this.loadPhoto()
 
 		if (this.likes != null){
 			this.allLikes = this.likes
