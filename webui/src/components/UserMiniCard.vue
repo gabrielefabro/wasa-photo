@@ -1,42 +1,59 @@
+
 <script>
 export default {
-	props: ['user_id','username'],
+  props: ['user_id', 'username'],
 
-    methods:{
-
-        clickedUser(){
-            this.$emit('clickedUser',this.user_id)
-        }
+  methods: {
+    clickedUser() {
+      this.$emit('clickedUser', this.user_id);
     },
-}
+  },
+};
 </script>
+
 <template>
-    <div class="row mb-2 mt-2">
-      <div class="col d-flex justify-content-center">
-        <div class="user-mini-card card bg-light border-start">
-          <div class="card-body">
-            <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center">{{ username }} @{{ user_id }}</h5>
+  <div class="row mb-2 mt-2">
+    <div class="col d-flex justify-content-center">
+      <div class="user-mini-card card bg-light border-start">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <img
+              class="profile-pic"
+              src="../assets/photo/pixelfactory-instagram-cover.jpg" 
+              alt="Profile Picture"
+            />
+            <h5 @click="clickedUser" class="user-mini-card-title ml-2">
+              <span class="username">{{ username }}</span> @{{ user_id }}
+            </h5>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <style>
-.user{
-    color: var(--color-text);
+  </div>
+</template>
+
+<style>
+.user {
+  color: var(--color-text);
 }
 
-.user-mini-card{
-    color: black;
-    width: 25%;
-    border: none;
-    border-color: black;
+.user-mini-card {
+  color: black;
+  width: 40%; 
+  height: auto; 
+  border: none;
+  border-color: black;
 }
 
-.user-mini-card-title:hover{
-    cursor: pointer;
-    font-weight: bold;
+.user-mini-card-title:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
-  
