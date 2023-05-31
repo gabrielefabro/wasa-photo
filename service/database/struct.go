@@ -16,8 +16,8 @@ type Post struct {
 	User_id          string    `json:"user_id"`
 	Post_id          int64     `json:"post_id"`
 	Publication_time time.Time `json:"publication_time"`
-	Like             []User    `json:"likes"`
-	Comment          []Comment `json:"comments"`
+	Like             []User    `json:"like"`
+	Comment          []Comment `json:"comment"`
 }
 
 // Comment struct represent a comment
