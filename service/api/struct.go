@@ -32,7 +32,7 @@ type Profile struct {
 type Post struct {
 	User_id          string             `json:"user_id"`
 	Post_id          int64              `json:"post_id"`
-	Publication_time time.Time          `json:"pubblication_time"`
+	Publication_time time.Time          `json:"publication_time"`
 	Like             []database.User    `json:"likes"`
 	Comment          []database.Comment `json:"comments"`
 }
