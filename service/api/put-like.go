@@ -9,52 +9,44 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// Function that add a like of a user to a photo
+// Function that adds a user's like to a photo
 func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	postAuthor := ps.ByName("user_id")
-	requestingUserId := extractBearer(r.Header.Get("Authorization"))
-	pathLikeId := ps.ByName("like_id")
-
-	// Check if the user is logged
-	if isNotLogged(requestingUserId) {
-		w.WriteHeader(http.StatusForbidden)
+	postID, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
+	if err != nil {
+		handleError(w, http.StatusInternalServerError, "Failed to convert post_id to int64")
 		return
 	}
 
+	requestingUserID := extractBearer(r.Header.Get("Authorization"))
+
+	if isNotLogged(requestingUserID) {
+		handleError(w, http.StatusForbidden, "User is not logged in")
+		return
+	}
+
+	postAuthor := ps.ByName("user_id")
+
 	banned, err := rt.db.BanCheck(
-		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: requestingUserID}.ToDatabase(),
 		UserId{User_id: postAuthor}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-comment/db.BannedUserCheck: error executing query")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Failed to check if user is banned")
 		return
 	}
 	if banned {
-		w.WriteHeader(http.StatusForbidden)
-		return
-	}
-
-	// Follower id is not consistent with requesting user bearer token
-	if pathLikeId != requestingUserId {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("put-like: error converting path param post_id")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusForbidden, "User is banned")
 		return
 	}
 
 	err = rt.db.LikePost(
-		PostId{Post_id: post_id_64}.ToDatabase(),
-		UserId{User_id: pathLikeId}.ToDatabase())
+		PostId{Post_id: postID}.ToDatabase(),
+		UserId{User_id: requestingUserID}.ToDatabase())
 	if err != nil {
-		w.WriteHeader(http.StatusNoContent)
+		handleError(w, http.StatusInternalServerError, "Failed to execute query: LikePost")
 		return
 	}
 
+	// Return a successful response with status code 204 (No Content)
 	w.WriteHeader(http.StatusNoContent)
 }

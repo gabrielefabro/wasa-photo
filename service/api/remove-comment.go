@@ -12,22 +12,23 @@ import (
 // Function that removes a comment from a photo
 func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	w.Header().Set("Content-Type", "application/json")
-	requestingUserId := extractBearer(r.Header.Get("Authorization"))
+	requestingUserID := extractBearer(r.Header.Get("Authorization"))
+	userID := ps.ByName("user_id")
+	postIDStr := ps.ByName("post_id")
+	commentIDStr := ps.ByName("comment_id")
 
-	// Check if the user isn't logged
-	if isNotLogged(requestingUserId) {
+	// Check if the user is not logged in
+	if isNotLogged(requestingUserID) {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
-	// Check if the requesting user wasn't banned by the photo owner
+	// Check if the requesting user is banned by the photo owner
 	banned, err := rt.db.BanCheck(
-		UserId{User_id: requestingUserId}.ToDatabase(),
-		UserId{User_id: ps.ByName("user_id")}.ToDatabase())
+		UserId{User_id: requestingUserID}.ToDatabase(),
+		UserId{User_id: userID}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-comment/db.BanCheck: error executing query")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Failed to execute query: BanCheck")
 		return
 	}
 	if banned {
@@ -35,31 +36,29 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
+	// Get the post ID from the path parameters
+	postID, err := strconv.ParseInt(postIDStr, 10, 64)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
+		handleError(w, http.StatusBadRequest, "Failed to convert post_id to int64")
 		return
 	}
 
-	// Convert the comment identifier from string to int64
-	comment_id_64, err := strconv.ParseInt(ps.ByName("comment_id"), 10, 64)
+	// Get the comment ID from the path parameters
+	commentID, err := strconv.ParseInt(commentIDStr, 10, 64)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment: failed convert comment_id to int64")
+		handleError(w, http.StatusBadRequest, "Failed to convert comment_id to int64")
 		return
 	}
 
-	// Function call to db for comment removal (only authors can remove their comments)
 	err = rt.db.UncommentPost(
-		PostId{Post_id: post_id_64}.ToDatabase(),
-		UserId{User_id: requestingUserId}.ToDatabase(),
-		CommentId{Comment_id: comment_id_64}.ToDatabase())
+		PostId{Post_id: postID}.ToDatabase(),
+		UserId{User_id: requestingUserID}.ToDatabase(),
+		CommentId{Comment_id: commentID}.ToDatabase())
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("delete-comment: failed to execute query for insertion")
+		handleError(w, http.StatusInternalServerError, "Failed to execute query: UncommentPost")
 		return
 	}
 
+	// Return a successful response with status code 204 (No Content)
 	w.WriteHeader(http.StatusNoContent)
 }

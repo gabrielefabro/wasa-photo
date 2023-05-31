@@ -8,34 +8,33 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// Function that removes a user from the banned list of another
+// Function that removes a user from another user's banned list
 func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	bearerToken := extractBearer(r.Header.Get("Authorization"))
-	pathId := ps.ByName("user_id")
-	userToUnban := ps.ByName("banned_id")
+	requestingUserID := extractBearer(r.Header.Get("Authorization"))
+	pathUserID := ps.ByName("user_id")
+	bannedUserID := ps.ByName("banned_id")
 
-	valid := validateRequestingUser(pathId, bearerToken)
+	valid := validateRequestingUser(pathUserID, requestingUserID)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
 	}
 
-	// Users can't ban themselfes
-	if userToUnban == bearerToken {
+	// Users cannot unban themselves
+	if bannedUserID == requestingUserID {
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 
-	// Remove the follower in the db via db function
 	err := rt.db.UnbanUser(
-		UserId{User_id: pathId}.ToDatabase(),
-		UserId{User_id: userToUnban}.ToDatabase())
+		UserId{User_id: pathUserID}.ToDatabase(),
+		UserId{User_id: bannedUserID}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("remove-ban: error executing delete query")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Failed to execute delete query: UnbanUser")
 		return
 	}
 
+	// Return a successful response with status code 204 (No Content)
 	w.WriteHeader(http.StatusNoContent)
 }

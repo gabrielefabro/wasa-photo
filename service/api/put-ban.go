@@ -8,58 +8,41 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// Function that adds a user to banned list of another
+// Function that adds a user to the banned list of another user
 func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+	pathID := ps.ByName("user_id")
+	pathBannedID := ps.ByName("banned_id")
+	requestingUserID := extractBearer(r.Header.Get("Authorization"))
 
-	pathId := ps.ByName("user_id")
-	pathBannedId := ps.ByName("banned_id")
-	requestingUserId := extractBearer(r.Header.Get("Authorization"))
-
-	// Check the user's identity for the operation 
-	valid := validateRequestingUser(pathId, requestingUserId)
-	if valid != 0 {
+	// Check the user's identity for the operation
+	if valid := validateRequestingUser(pathID, requestingUserID); valid != 0 {
 		w.WriteHeader(valid)
 		return
 	}
 
-	// Check if the user is trying to ban himself/herself
-	if requestingUserId == pathBannedId {
+	// Check if the user is trying to ban themselves
+	if requestingUserID == pathBannedID {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	// Add the new banned user in the db via db function
-	err := rt.db.BanUser(
-		UserId{User_id: pathId}.ToDatabase(),
-		UserId{User_id: pathBannedId}.ToDatabase())
-	if err != nil {
-		ctx.Logger.WithError(err).Error("put-ban/db.BanUser: error executing insert query")
-
-		// Something  didn't work internally
-		w.WriteHeader(http.StatusInternalServerError)
+	// Add the new banned user in the database
+	if err := rt.db.BanUser(UserId{User_id: pathID}.ToDatabase(), UserId{User_id: pathBannedID}.ToDatabase()); err != nil {
+		handleError(w, http.StatusInternalServerError, "Failed to execute insert query: put-ban/db.BanUser")
 		return
 	}
 
-	// Ban implies removing the follow (if exists)
-	err = rt.db.UnfollowUser(
-		UserId{User_id: requestingUserId}.ToDatabase(),
-		UserId{User_id: pathBannedId}.ToDatabase())
-	if err != nil {
-		ctx.Logger.WithError(err).Error("put-ban/db.UnfollowUser1: error executing insert query")
-		w.WriteHeader(http.StatusInternalServerError)
+	// Remove the follow relationship (if it exists) between the users
+	if err := rt.db.UnfollowUser(UserId{User_id: requestingUserID}.ToDatabase(), UserId{User_id: pathBannedID}.ToDatabase()); err != nil {
+		handleError(w, http.StatusInternalServerError, "Failed to execute insert query: put-ban/db.UnfollowUser1")
 		return
 	}
 
-	// The banned user will not follow the user anymore or else will have the banner in his home
-	err = rt.db.UnfollowUser(
-		UserId{User_id: pathBannedId}.ToDatabase(),
-		UserId{User_id: requestingUserId}.ToDatabase())
-	if err != nil {
-		ctx.Logger.WithError(err).Error("put-ban/db.UnfollowUser2: error executing insert query")
-		w.WriteHeader(http.StatusInternalServerError)
+	// Remove the follow relationship (if it exists) between the users in the reverse direction
+	if err := rt.db.UnfollowUser(UserId{User_id: pathBannedID}.ToDatabase(), UserId{User_id: requestingUserID}.ToDatabase()); err != nil {
+		handleError(w, http.StatusInternalServerError, "Failed to execute insert query: put-ban/db.UnfollowUser2")
 		return
 	}
 
-	// Respond with 204 http status
-	w.WriteHeader(http.StatusNoContent)
+	handleSuccess(w, http.StatusNoContent, nil)
 }

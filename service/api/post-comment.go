@@ -12,70 +12,51 @@ import (
 
 // Function that adds a comment to a photo and sends a response containing the unique id of the created comment
 func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-
 	w.Header().Set("Content-Type", "application/json")
-	postUserId := ps.ByName("user_id")
-	requestingUserId := extractBearer(r.Header.Get("Authorization"))
+	postUserID := ps.ByName("user_id")
+	requestingUserID := extractBearer(r.Header.Get("Authorization"))
 
-	if isNotLogged(requestingUserId) {
-		w.WriteHeader(http.StatusForbidden)
+	if isNotLogged(requestingUserID) {
+		handleError(w, http.StatusForbidden, "")
 		return
 	}
 
-	banned, err := rt.db.BanCheck(
-		UserId{User_id: requestingUserId}.ToDatabase(),
-		UserId{User_id: postUserId}.ToDatabase())
+	banned, err := rt.db.BanCheck(UserId{User_id: requestingUserID}.ToDatabase(), UserId{User_id: postUserID}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-comment/db.BanCheck: error executing query")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Error executing query: post-comment/db.BanCheck")
 		return
 	}
 	if banned {
-		w.WriteHeader(http.StatusForbidden)
+		handleError(w, http.StatusForbidden, "")
 		return
 	}
 
 	var comment Comment
 	err = json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment/Decode: failed to decode request body json")
+		handleError(w, http.StatusBadRequest, "Failed to decode request body JSON: post-comment/Decode")
 		return
 	}
 
-	// Check if the comment has a valid lenght (<=50)
+	// Check if the comment has a valid length (<=50)
 	if len(comment.Text) > 50 {
-		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment: comment longer than 50 characters")
+		handleError(w, http.StatusBadRequest, "Comment longer than 50 characters: post-comment")
 		return
 	}
 
-	// Convert the photo identifier from string to int64
-	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
+	// Convert the post identifier from string to int64
+	postID, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment/ParseInt: failed convert photo_id to int64")
+		handleError(w, http.StatusBadRequest, "Failed to convert post_id to int64: post-comment/ParseInt")
 		return
 	}
 
-	// Function call to db for comment creation
-	commentId, err := rt.db.CommentPost(
-		PostId{Post_id: post_id_64}.ToDatabase(),
-		UserId{User_id: requestingUserId}.ToDatabase(),
-		TextComment{TextComment: comment.Text}.ToDatabase())
+	// Call the database function to create the comment
+	commentID, err := rt.db.CommentPost(PostId{Post_id: postID}.ToDatabase(), UserId{User_id: requestingUserID}.ToDatabase(), TextComment{TextComment: comment.Text}.ToDatabase())
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("post-comment/db.CommentPost: failed to execute query for insertion")
+		handleError(w, http.StatusInternalServerError, "Failed to execute query for comment insertion: post-comment/db.CommentPost")
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-
-	// The response body will contain the unique id of the comment
-	err = json.NewEncoder(w).Encode(CommentId{Comment_id: commentId})
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("post-comment/Encode: failed convert post_id to int64")
-		return
-	}
+	handleSuccess(w, http.StatusCreated, CommentId{Comment_id: commentID})
 }

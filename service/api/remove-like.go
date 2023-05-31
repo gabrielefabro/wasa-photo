@@ -13,19 +13,20 @@ import (
 func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	postAuthor := ps.ByName("user_id")
-	requestingUserId := extractBearer(r.Header.Get("Authorization"))
+	requestingUserID := extractBearer(r.Header.Get("Authorization"))
 
-	if isNotLogged(requestingUserId) {
+	// Check if the user is logged
+	if isNotLogged(requestingUserID) {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
+	// Check if the requesting user is banned by the photo owner
 	banned, err := rt.db.BanCheck(
-		UserId{User_id: requestingUserId}.ToDatabase(),
+		UserId{User_id: requestingUserID}.ToDatabase(),
 		UserId{User_id: postAuthor}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-comment/db.BanCheck: error executing query")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Failed to execute query: BanCheck")
 		return
 	}
 	if banned {
@@ -33,22 +34,21 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	post_id_64, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
+	postID, err := strconv.ParseInt(ps.ByName("post_id"), 10, 64)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("remove-like/ParseInt: error converting post_id to uint64")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Failed to convert post_id to int64")
 		return
 	}
 
-	// Insert the like in the db via db function
+	// Remove the like from the database
 	err = rt.db.UnlikePost(
-		PostId{Post_id: post_id_64}.ToDatabase(),
-		UserId{User_id: requestingUserId}.ToDatabase())
+		PostId{Post_id: postID}.ToDatabase(),
+		UserId{User_id: requestingUserID}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("remove-like/db.UnlikePhoto: error executing insert query")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Failed to execute query: UnlikePost")
 		return
 	}
 
+	// Return a successful response with status code 204 (No Content)
 	w.WriteHeader(http.StatusNoContent)
 }

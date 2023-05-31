@@ -9,7 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// Function that retrives all the users matching the query parameter and sends the response containing all the matches
+// Function that retrieves all the users matching the query parameter and sends the response containing all the matches
 func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -17,34 +17,33 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	// Get the user identifier (from Bearer)
 	identifier := extractBearer(r.Header.Get("Authorization"))
 
-	// If the user is not logged in then respond with a 403 http status
+	// If the user is not logged in, respond with a 403 HTTP status
 	if identifier == "" {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
 	// Extract the query parameter from the URL
-	identificator := r.URL.Query().Get("user_id")
+	queryParam := r.URL.Query().Get("user_id")
 
-	// Search the user in the database (with the query parameter as a filter)
-	res, err := rt.db.SearchUser(UserId{User_id: identifier}.ToDatabase(), UserId{User_id: identificator}.ToDatabase())
+	// Search the user in the database using the query parameter as a filter
+	users, err := rt.db.SearchUser(UserId{User_id: identifier}.ToDatabase(), UserId{User_id: queryParam}.ToDatabase())
 	if err != nil {
-		// In this case, there's an error coming from the database. Return an empty json
-		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("Database has encountered an error")
-		// controllaerrore
-		_ = json.NewEncoder(w).Encode([]UserId{})
+		// If there's an error from the database, return an empty JSON response
+		handleError(w, http.StatusInternalServerError, "Database error")
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 
 	// Send the output to the user. Instead of giving null for no matches return and empty slice of Users
-	if len(res) == 0 {
-		// controllaerrore
+	if len(users) == 0 {
 		_ = json.NewEncoder(w).Encode([]UserId{})
 		return
 	}
-	// controllaerrore
-	_ = json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(users)
+	if err != nil {
+		handleError(w, http.StatusInternalServerError, "Failed to encode response")
+		return
+	}
 }

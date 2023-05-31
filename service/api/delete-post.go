@@ -11,7 +11,6 @@ import (
 
 // Function that deletes a post
 func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-
 	bearerAuth := extractBearer(r.Header.Get("Authorization"))
 	postIdStr := ps.ByName("post_id")
 
@@ -23,18 +22,13 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 
 	postInt, err := strconv.ParseInt(postIdStr, 10, 64)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-delete/ParseInt: error converting photoId to int")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Error converting post ID to int")
 		return
 	}
 
-	// Call to the db function to remove the post
-	err = rt.db.DeletePost(
-		UserId{User_id: bearerAuth}.ToDatabase(),
-		PostId{Post_id: postInt}.ToDatabase())
+	err = rt.db.DeletePost(UserId{User_id: bearerAuth}.ToDatabase(), PostId{Post_id: postInt}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-delete/RemovePhoto: error coming from database")
-		w.WriteHeader(http.StatusInternalServerError)
+		handleError(w, http.StatusInternalServerError, "Database error while deleting the post")
 		return
 	}
 
