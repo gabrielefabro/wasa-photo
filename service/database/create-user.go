@@ -1,6 +1,6 @@
 package database
 
-// Function that adds a new user in the database
+// Function that adds a new user in the Database
 func (db *appdbimpl) CreateUser(userId UserId) error {
 
 	var query = "INSERT INTO users (user_id,username) VALUES (?, ?)"

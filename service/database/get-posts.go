@@ -1,7 +1,7 @@
 package database
 
 // Function that return the list of post of a user
-func (db *appdbimpl) GetPosts(requestingUser UserId, targetUser UserId) ([]Post, error) { // requestinUser User,
+func (db *appdbimpl) GetPosts(requestingUser UserId, targetUser UserId) ([]Post, error) {
 
 	var query = "SELECT * FROM posts WHERE user_id = ? ORDER BY publication_time DESC"
 

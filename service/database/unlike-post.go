@@ -1,6 +1,6 @@
 package database
 
-// Function that removes a like of a user from a photo
+// Function that removes a like of a user from a post
 func (db *appdbimpl) UnlikePost(postId PostId, userId UserId) error {
 
 	var query = "DELETE FROM likes WHERE(post_id = ? AND user_id = ?)"

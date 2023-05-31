@@ -1,11 +1,11 @@
 package database
 
 // Function that filters the users by a parameter
-func (db *appdbimpl) SearchUser(searcher UserId, userToSearch UserId) ([]User, error) {
+func (db *appdbimpl) SearchUser(searcher UserId, searched UserId) ([]User, error) {
 
 	var query = "SELECT * FROM users WHERE ((user_id LIKE ?) OR (username LIKE ?)) AND user_id NOT IN (SELECT banner FROM banned_users WHERE banned = ?)"
 
-	rows, err := db.c.Query(query, userToSearch.User_id, userToSearch.User_id, searcher.User_id)
+	rows, err := db.c.Query(query, searched.User_id, searched.User_id, searcher.User_id)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,7 @@
 package database
 
 // Function that modifies a user's username
-func (db *appdbimpl) ModifyUserName(userId UserId, newUserName Username) error {
+func (db *appdbimpl) ChangeUserName(userId UserId, newUserName Username) error {
 
 	var query = "UPDATE users SET username = ? WHERE user_id = ?"
 

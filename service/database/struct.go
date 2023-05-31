@@ -29,7 +29,7 @@ type Comment struct {
 	Comment_id int64  `json:"comment_id"`
 }
 
-// User represent the couple ID and UserName
+// User represent the couple User_id and UserName
 type User struct {
 	User_id  string `json:"user_id"`
 	Username string `json:"username"`

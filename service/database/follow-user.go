@@ -1,6 +1,6 @@
 package database
 
-// Database function that adds a follower to a user
+// Function that adds a follower to a user
 func (db *appdbimpl) FollowUser(follower UserId, followed UserId) error {
 
 	_, err := db.c.Exec("INSERT INTO followers (follower,followed) VALUES (?, ?)",

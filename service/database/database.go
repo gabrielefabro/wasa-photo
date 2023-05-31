@@ -19,7 +19,7 @@ type AppDatabase interface {
 	GetUserName(UserId) (string, error)
 
 	// ModifyUserName set a new Username for an existing profile
-	ModifyUserName(UserId, Username) error
+	ChangeUserName(UserId, Username) error
 
 	// GetMyStream returns the stream of the id passed as argoument
 	GetMyStream(UserId) ([]Post, error)

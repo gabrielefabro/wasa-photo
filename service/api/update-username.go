@@ -31,7 +31,7 @@ func (rt *_router) setMyUserName(w http.ResponseWriter, r *http.Request, ps http
 	}
 
 	// Modify the username with the db function
-	err = rt.db.ModifyUserName(
+	err = rt.db.ChangeUserName(
 		UserId{User_id: pathId}.ToDatabase(),
 		username.ToDatabase())
 	if err != nil {

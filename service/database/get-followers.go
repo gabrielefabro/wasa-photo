@@ -1,6 +1,6 @@
 package database
 
-// Function that return the list of followers of a user
+// Function that return the list of followers
 func (db *appdbimpl) GetFollowers(requestinUser UserId) ([]UserId, error) {
 
 	var query = "SELECT follower FROM followers WHERE followed = ?"

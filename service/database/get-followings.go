@@ -1,11 +1,11 @@
 package database
 
 // Function that return the list of users followed by the user
-func (db *appdbimpl) GetFollowings(requestinUser UserId) ([]UserId, error) {
+func (db *appdbimpl) GetFollowings(requestingUser UserId) ([]UserId, error) {
 
 	var query = "SELECT followed FROM followers WHERE follower = ?"
 
-	rows, err := db.c.Query(query, requestinUser.User_id)
+	rows, err := db.c.Query(query, requestingUser.User_id)
 	if err != nil {
 		return nil, err
 	}

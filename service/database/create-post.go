@@ -1,6 +1,6 @@
 package database
 
-// Database function that creates a photo on the database and returns the unique photo id
+// Function that creates a post on the database
 func (db *appdbimpl) CreatePost(post Post) (int64, error) {
 
 	res, err := db.c.Exec("INSERT INTO posts (user_id,publication_time) VALUES (?,?)",

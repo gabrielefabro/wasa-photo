@@ -1,6 +1,6 @@
 package database
 
-// Function that removes a follower from a user
+// Function that removes a follower from a speficif user
 func (db *appdbimpl) UnfollowUser(follower UserId, followed UserId) error {
 
 	var query = "DELETE FROM followers WHERE(follower = ? AND followed = ?)"

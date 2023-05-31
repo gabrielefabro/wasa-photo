@@ -1,6 +1,6 @@
 package database
 
-// Function that adds a comment of a user to a post
+// Function that adds a comment of a user to a specific post
 func (db *appdbimpl) CommentPost(postId PostId, UserId UserId, text TextComment) (int64, error) {
 
 	var query = "INSERT INTO comments (post_id,user_id,text) VALUES (?, ?, ?)"

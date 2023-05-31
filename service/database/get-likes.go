@@ -1,6 +1,6 @@
 package database
 
-// Function that retrieves the list of users that liked a photo
+// Function that retrieves the list of like
 func (db *appdbimpl) GetLikes(requestingUser UserId, requestedUser UserId, postId PostId) ([]User, error) {
 
 	var query = "SELECT user_id FROM likes WHERE post_id = ? AND user_id NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) " +

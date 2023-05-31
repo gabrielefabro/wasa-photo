@@ -1,6 +1,6 @@
 package database
 
-// Function that return a specific post
+// Function that return a requested post
 func (db *appdbimpl) GetPhoto(requestinUser UserId, targetPost PostId) (Post, error) {
 
 	var post Post

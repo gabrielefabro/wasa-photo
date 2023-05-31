@@ -1,6 +1,6 @@
 package database
 
-// Function that return the list of comments of a post
+// Function that return the list of comments
 func (db *appdbimpl) GetComments(requestingUser UserId, requestedUser UserId, postId PostId) ([]Comment, error) {
 
 	var query = "SELECT * FROM comments WHERE post_id = ? AND user_id NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) " +

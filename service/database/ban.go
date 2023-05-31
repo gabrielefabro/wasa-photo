@@ -1,6 +1,6 @@
 package database
 
-// Fuction that allow to an user to ban another user
+// Fuction that allow to an user to ban anotherone
 func (db *appdbimpl) BanUser(banner UserId, banned UserId) error {
 
 	var query = "INSERT INTO banned_users (banner,banned) VALUES (?, ?)"

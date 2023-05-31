@@ -1,6 +1,6 @@
 package database
 
-// Function that gets a user's nickname
+// Function that gets a user's username
 func (db *appdbimpl) GetUserName(userId UserId) (string, error) {
 
 	var username string
