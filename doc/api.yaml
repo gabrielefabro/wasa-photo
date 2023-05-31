@@ -142,7 +142,7 @@ components:
         id: { $ref: "#/components/schemas/UserName" }
         auth: { $ref: "#/components/schemas/Authorization" }
     PublicationTime: 
-      title: Pubblication Time 
+      title: Publication Time 
       description: Publication time of post or somenthing similar
       type: string
       format: date-time
