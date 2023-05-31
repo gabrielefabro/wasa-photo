@@ -46,7 +46,7 @@ export default {
 				:post_id="post.post_id"
 				:comments="post.comment != nil ? post.comment : []"
 				:likes="post.like != nil ? post.like : []"
-				:pubblication_time="post.pubblication_time"
+				:publication_time="post.publication_time"
 			/>
 		</div>
 		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet, </span>

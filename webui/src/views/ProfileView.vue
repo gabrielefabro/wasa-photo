@@ -7,7 +7,7 @@ export default {
 			userExists: false,
 			banStatus: false,
 
-      username: "",
+            username: "",
 
 
 			followStatus: false,
@@ -18,8 +18,8 @@ export default {
 			postCnt:0,
 
 			posts: [],
-      following: [],
-      followers: [],
+            following: [],
+            followers: [],
 		}
 	},
 
@@ -116,14 +116,14 @@ export default {
 					this.userExists = false
 				}
 				
-        this.username = response.data.username
-				this.followerCnt = response.data.follower != null ? response.data.follower.length : 0
-				this.followingCnt = response.data.following != null? response.data.following.length : 0
-				this.postCnt = response.data.posts != null ? response.data.posts.length : 0
+                this.username = response.data.username
+		        this.followerCnt = response.data.follower != null ? response.data.follower.length : 0
+		        this.followingCnt = response.data.following != null? response.data.following.length : 0
+				this.postCnt = response.data.post != null ? response.data.post.length : 0
 				this.followStatus = response.data.follower != null ? response.data.follower.find(obj => obj.user_id === localStorage.getItem('token')) : false
-        this.posts = response.data.posts != null ? response.data.posts : []
-        this.follower = response.data.follower != null ? response.data.follower : []
-        this.following = response.data.following != null ? response.data.following : []
+                this.posts = response.data.post != null ? response.data.post : []
+                this.follower = response.data.follower != null ? response.data.follower : []
+                this.following = response.data.following != null ? response.data.following : []
 
 			}catch(e){
 				this.currentIsBanned = true
