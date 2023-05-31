@@ -166,10 +166,9 @@ export default {
                                 <button v-if="!sameUser" @click="banClick" class="btn btn-danger ms-2">
                                     {{banStatus ? "Unban" : "Ban"}}
                                 </button>
-
-                                <button v-else class="my-trnsp-btn ms-2" @click="goToSettings">
-                                    <i class="my-nav-icon-gear fa-solid fa-gear"></i>
-                                </button>
+                                <button class="settings-button" @click="goToSettings">
+			                        <i class="fa fa-cog"></i>
+		                        </button>
                             </div>
                         </div>
                     </div>
@@ -266,6 +265,21 @@ export default {
     color: white;
     background-color: green;
     border-color: grey;
+}
+.settings-button {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #fff;
+	border: none;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
+.settings-button i {
+	font-size: 20px;
 }
 
 </style>

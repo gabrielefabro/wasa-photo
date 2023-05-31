@@ -78,10 +78,11 @@ export default {
 		}
 		if (this.comments != null){
 			this.allComments = this.comments
-		}
-		
-		
+		}		
 	},
+	aftermounted() {
+		this.photoURL = ""
+	}
 
 }
 </script>
@@ -103,7 +104,6 @@ export default {
 		<div class="card my-card">
 		  <div class="d-flex justify-content-end">
 			<button v-if="isOwner" class="my-trnsp-btn my-dlt-btn me-2" @click="deletePhoto">
-			  <!-- Delete -->
 			  <i class="fa-solid fa-trash w-100 h-100"></i>
 			</button>
 		  </div>

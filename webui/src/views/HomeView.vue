@@ -49,10 +49,25 @@ export default {
 				:publication_time="post.publication_time"
 			/>
 		</div>
-		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet, </span>
-		<span v-if="posts.length == 0" class="no-posts-text fw-500 fs-6"> start to follow someone!</span>
+		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet, start to follow someone!!</span>
 	</div>
 </template>
 
 <style>
+.no-posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+}
+
+.no-posts-text {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: #555555;
+  margin-bottom: 8px;
+}
 </style>
