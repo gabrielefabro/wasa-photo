@@ -3,7 +3,7 @@ export default {
 	data: function() {
 		return {
 			errorMsg: null,
-			identifier: "",
+			userLogIn: "",
 			disabled: true,
 		}
 	},
@@ -12,7 +12,7 @@ export default {
 			this.errormsg = null;
 			try {
 				let response = await this.$axios.post("/session",{
-					user_id: this.identifier.trim()
+					user_id: this.userLogIn.trim()
 				});
 
 				localStorage.setItem('token',response.data.user_id);
@@ -54,7 +54,7 @@ export default {
 						<input 
 							type="text" 
 							class="form-control" 
-							v-model="identifier" 
+							v-model="userLogIn" 
 							maxlength="15"
 							minlength="1"
 							placeholder="Your user id" 
@@ -66,7 +66,7 @@ export default {
 					<div class="col">
 						<button 
 							class="btn btn-primary" 
-							:disabled="identifier == null || identifier.length >16 || identifier.length <1 || identifier.trim().length<1"
+							:disabled="userLogIn == null || userLogIn.length >16 || userLogIn.length <1 || userLogIn.trim().length<1"
 						> 
 							Register/Login 
 						</button>

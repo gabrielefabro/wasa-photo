@@ -49,12 +49,12 @@ export default {
 				:publication_time="post.publication_time"
 			/>
 		</div>
-		<span v-if="posts.length == 0" class="no-posts-text"> There are no posts yet, start to follow someone!!</span>
+		<span v-if="posts.length == 0" class="box-no-posts-text"> No one of your followers has posted yet, or maybe you just need to follow someone!! </span>
 	</div>
 </template>
 
 <style>
-.no-posts-container {
+.box-no-posts-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,7 +63,7 @@ export default {
   text-align: center;
 }
 
-.no-posts-text {
+.box-no-posts-text {
   font-size: 24px;
   font-weight: bold;
   font-family: Arial, sans-serif;

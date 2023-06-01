@@ -29,9 +29,9 @@ export default {
 <template>
   <nav class="navbar navbar-expand-lg bg-light d-flex justify-content-between sticky-top mb-3 my-nav bg-transparent">
     <div class="col-4">
-      <a class="navbar-brand ms-2 d-flex" @click="goBackHome">
-        <div>WASAPhoto</div>
-      </a>
+      <button @click="goBackHome" class="my-trnsp-btn me-2" type="button">
+        <i class="my-nav-icon-profile fas fa-home"></i>
+      </button>
     </div>
 
     <!-- -->
@@ -46,13 +46,10 @@ export default {
       <button @click="myProfile" class="my-trnsp-btn me-2" type="button">
         <!--Profile-->
         <i :class="'my-nav-icon-profile me-1 w-100 h-100 '+iconProfile+ ' fa-user'"></i>
-        <span class="navbar-elements">My Profile</span>
       </button>
 
       <button @click="logout" class="my-trnsp-btn me-2" type="button">
-        <!--Logout-->
         <i class="my-nav-icon-quit me-1 w-100 h-100 fa-solid fa-right-from-bracket"></i>
-        <span class="navbar-elements">Logout</span>
       </button>
     </div>
   </nav>
@@ -103,5 +100,14 @@ export default {
   width: 100%;
   height: 40px;
   font-size: 1rem;
+}
+.my-nav-icon-profile {
+  color: black;
+  font-size: 1.5rem;
+  transition: transform 0.3s;
+}
+
+.my-nav-icon-profile:hover {
+  transform: scale(1.2);
 }
 </style>

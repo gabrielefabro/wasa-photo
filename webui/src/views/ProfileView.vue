@@ -232,7 +232,7 @@ export default {
                 </div>
                 
                 <div v-else class="mt-5 ">
-                    <h2 class="d-flex justify-content-center" style="color: white;">No posts yet</h2>
+                    <h2 class="d-flex justify-content-center" style="color: white;">You should post something or your followers will be sad</h2>
                 </div>
 
             </div>

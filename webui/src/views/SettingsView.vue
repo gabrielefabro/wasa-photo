@@ -8,7 +8,7 @@ export default {
 	},
 
 	methods:{
-		async modifyNickname(){
+		async changeUsername(){
 			try{
 				let resp = await this.$axios.put("/users/"+this.$route.params.user_id,{
 					username: this.username,
@@ -41,7 +41,7 @@ export default {
 			<div class="input-group-append">
 			  <button
 				class="btn btn-primary"
-				@click="modifyNickname"
+				@click="changeUsername"
 				:disabled="!username || username.length > 15 || username.length < 1 || username.trim().length === 0"
 			  >
 				Modify
