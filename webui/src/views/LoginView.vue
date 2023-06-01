@@ -66,7 +66,7 @@ export default {
 					<div class="col">
 						<button 
 							class="btn btn-primary" 
-							:disabled="identifier == null || identifier.length >16 || identifier.length <1 || this.identifier.includes(' ') || identifier.trim().length<1"
+							:disabled="userLogIn == null || userLogIn.length >16 || userLogIn.length <1 || this.userLogIn.includes(' ') || userLogIn.trim().length<1"
 						> 
 							Register/Login 
 						</button>
