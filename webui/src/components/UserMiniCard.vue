@@ -15,11 +15,11 @@ export default {
   <div class="row mb-2 mt-2">
     <div class="col d-flex justify-content-center">
       <div class="user-mini-card card bg-light border-start">
-        <div class="card-body">
+        <div class="card-body text-center"> 
           <div class="d-flex align-items-center">
             <img
               class="profile-pic"
-              src="../assets/photo/pixelfactory-instagram-cover.jpg" 
+              src="../assets/photo/vettore-icona-profilo-avatar-predefinito-foto-utente-social-media-183042379.jpg" 
               alt="Profile Picture"
             />
             <h5 @click="clickedUser" class="user-mini-card-title ml-2">
