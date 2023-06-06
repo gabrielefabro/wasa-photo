@@ -30,10 +30,6 @@ export default {
 
 		async toggleLike() {
 
-			if(this.isOwner){ 
-				return
-			}
-
 			const bearer = localStorage.getItem('token')
 
 			try{
