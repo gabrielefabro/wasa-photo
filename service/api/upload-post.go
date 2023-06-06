@@ -34,7 +34,7 @@ func (rt *_router) uploadPost(w http.ResponseWriter, r *http.Request, ps httprou
 	// Initialize post struct
 	post := Post{
 		User_id:          auth,
-		Publication_time: time.Now().UTC(),
+		Publication_time: time.Now().Local(),
 	}
 
 	// Create a copy of the body
