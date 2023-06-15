@@ -6,6 +6,12 @@ import (
 	"strings"
 )
 
+// Function that verifies if the identifier of a user has the right lenght
+func validIdentifier(identifier string) bool {
+	var trimmedId = strings.TrimSpace(identifier)
+	return len(identifier) >= 3 && len(identifier) <= 16 && trimmedId != "" && !strings.ContainsAny(trimmedId, "?_")
+}
+
 // Function that extracts the bearer token from the Authorization header
 func extractBearer(authorization string) string {
 	var tokens = strings.Split(authorization, " ")

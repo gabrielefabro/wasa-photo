@@ -20,6 +20,10 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		// The body was not a parseable JSON, reject it
 		w.WriteHeader(http.StatusBadRequest)
 		return
+	} else if !validIdentifier(userId.User_id) {
+		// Here we checked the user identifier and we discovered that it's not valid
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 	// Create the user in the database.
 	err = rt.db.CreateUser(userId.ToDatabase())
